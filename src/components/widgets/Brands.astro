@@ -22,13 +22,13 @@ const {
   <Headline title={title} subtitle={subtitle} tagline={tagline} />
 
   <div class="flex flex-wrap justify-center gap-x-6 sm:gap-x-12 lg:gap-x-24">
-    {icons && icons.map((icon) => <Icon name={icon} class="py-3 lg:py-5 w-12 h-auto mx-auto sm:mx-0 text-gray-500" />)}
+    {icons && icons.map((icon) => <Icon name={icon} class="mx-auto h-auto w-12 py-3 text-gray-500 sm:mx-0 lg:py-5" />)}
     {
       images &&
         images.map(
           (image) =>
             image.src && (
-              <div class="flex justify-center col-span-1 my-2 lg:my-4 py-1 px-3 rounded-md dark:bg-gray-200">
+              <div class="col-span-1 my-2 flex justify-center rounded-md px-3 py-1 dark:bg-gray-200 lg:my-4">
                 <Image src={image.src} alt={image.alt || ''} class="max-h-12" width={120} height={48} layout="fixed" />
               </div>
             )

@@ -18,20 +18,20 @@ const {
 } = Astro.props;
 ---
 
-<section class="relative md:-mt-[76px] not-prose" {...id ? { id } : {}}>
-  <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+<section class="not-prose relative md:-mt-[76px]" {...id ? { id } : {}}>
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
     <slot name="bg">
       {bg ? <Fragment set:html={bg} /> : null}
     </slot>
   </div>
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="pt-0 md:pt-[76px] pointer-events-none"></div>
-    <div class="py-12 md:py-20 lg:py-0 lg:flex lg:items-center lg:h-screen lg:gap-8">
-      <div class="basis-1/2 text-center lg:text-left pb-10 md:pb-16 mx-auto">
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6">
+    <div class="pointer-events-none pt-0 md:pt-[76px]"></div>
+    <div class="py-12 md:py-20 lg:flex lg:h-screen lg:items-center lg:gap-8 lg:py-0">
+      <div class="mx-auto basis-1/2 pb-10 text-center md:pb-16 lg:text-left">
         {
           tagline && (
             <p
-              class="text-base text-secondary dark:text-blue-200 font-bold tracking-wide uppercase intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter"
+              class="intersect-once intersect-quarter text-base font-bold uppercase tracking-wide text-secondary dark:text-blue-200 motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
               set:html={tagline}
             />
           )
@@ -39,16 +39,16 @@ const {
         {
           title && (
             <h1
-              class="text-5xl md:text-6xl font-bold leading-tighter tracking-tighter mb-4 font-heading dark:text-gray-200 intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter"
+              class="leading-tighter intersect-once intersect-quarter mb-4 font-heading text-5xl font-bold tracking-tighter dark:text-gray-200 md:text-6xl motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
               set:html={title}
             />
           )
         }
-        <div class="max-w-3xl mx-auto lg:max-w-none">
+        <div class="mx-auto max-w-3xl lg:max-w-none">
           {
             subtitle && (
               <p
-                class="text-xl text-muted mb-6 dark:text-slate-300 intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter"
+                class="intersect-once intersect-quarter mb-6 text-xl text-muted dark:text-slate-300 motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
                 set:html={subtitle}
               />
             )
@@ -56,7 +56,7 @@ const {
 
           {
             actions && (
-              <div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4 lg:justify-start lg:m-0 lg:max-w-7xl intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
+              <div class="intersect-once intersect-quarter m-auto flex max-w-xs flex-col flex-nowrap gap-4 sm:max-w-md sm:flex-row sm:justify-center motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade lg:m-0 lg:max-w-7xl lg:justify-start">
                 {Array.isArray(actions) ? (
                   actions.map((action) => (
                     <div class="flex w-full sm:w-auto">
@@ -75,12 +75,12 @@ const {
       <div class="basis-1/2">
         {
           image && (
-            <div class="relative m-auto max-w-5xl intersect-once intercept-no-queue motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0 intersect-quarter">
+            <div class="intersect-once intercept-no-queue intersect-quarter relative m-auto max-w-5xl motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
               {typeof image === 'string' ? (
                 <Fragment set:html={image} />
               ) : (
                 <Image
-                  class="mx-auto rounded-md w-full"
+                  class="mx-auto w-full rounded-md"
                   widths={[400, 768, 1024, 2040]}
                   sizes="(max-width: 767px) 400px, (max-width: 1023px) 768px, (max-width: 2039px) 1024px, 2040px"
                   loading="eager"
