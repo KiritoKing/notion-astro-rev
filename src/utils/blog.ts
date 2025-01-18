@@ -4,6 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 import type { Post } from '~/types';
 import { APP_BLOG } from 'astrowind:config';
 import { cleanSlug, trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
+import { getNotionPostList } from './notion';
 
 const generatePermalink = async ({
   id,
@@ -101,8 +102,9 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
 };
 
 const load = async function (): Promise<Array<Post>> {
-  const posts = await getCollection('post');
-  const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
+  const localPosts = await getCollection('post');
+  const notionPosts = await getNotionPostList();
+  const normalizedPosts = [...localPosts.map(async (post) => await getNormalizedPost(post)), ...notionPosts];
 
   const results = (await Promise.all(normalizedPosts))
     .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
