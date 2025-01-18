@@ -2,6 +2,7 @@ import { z, defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { notionLoader } from 'notion-astro-loader';
 import rehypePrism from 'rehype-prism';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 
 const metadataDefinition = () =>
   z
@@ -79,7 +80,7 @@ const database = defineCollection({
       },
     },
     sorts: [{ property: 'date', direction: 'descending' }],
-    rehypePlugins: [rehypePrism],
+    rehypePlugins: [rehypePrism, rehypeAutolinkHeadings],
   }),
 });
 
