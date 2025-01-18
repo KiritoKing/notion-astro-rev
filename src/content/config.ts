@@ -72,13 +72,13 @@ const database = defineCollection({
     auth: import.meta.env.NOTION_TOKEN,
     database_id: import.meta.env.NOTION_DATABASE_ID,
     // Use Notion sorting and filtering
-    // filter: {
-    //   property: 'status',
-    //   select: {
-    //     equals: 'Published',
-    //   },
-    // },
-    // sorts: [{ property: 'date', direction: 'descending' }],
+    filter: {
+      property: 'status',
+      select: {
+        equals: 'Published',
+      },
+    },
+    sorts: [{ property: 'date', direction: 'descending' }],
     rehypePlugins: [rehypePrism],
   }),
 });
