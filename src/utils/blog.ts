@@ -1,12 +1,11 @@
 import type { PaginateFunction } from 'astro';
-import { getCollection, render } from 'astro:content';
-import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import type { Post } from '~/types';
 import { APP_BLOG } from 'astrowind:config';
-import { cleanSlug, trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
-import { getNotionPostList } from './notion';
+import { trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
+import { notionToPost } from './notion';
 
-const generatePermalink = async ({
+export const generatePermalink = async ({
   id,
   slug,
   publishDate,
@@ -41,74 +40,71 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> => {
-  const { id, data } = post;
-  const { Content, remarkPluginFrontmatter } = await render(post);
+// const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> => {
+//   const { id, data } = post;
+//   const { Content, remarkPluginFrontmatter } = await render(post);
 
-  const {
-    publishDate: rawPublishDate = new Date(),
-    updateDate: rawUpdateDate,
-    title,
-    excerpt,
-    image,
-    tags: rawTags = [],
-    category: rawCategory,
-    author,
-    draft = false,
-    metadata = {},
-  } = data;
+//   const {
+//     publishDate: rawPublishDate = new Date(),
+//     updateDate: rawUpdateDate,
+//     title,
+//     excerpt,
+//     image,
+//     tags: rawTags = [],
+//     category: rawCategory,
+//     author,
+//     draft = false,
+//     metadata = {},
+//   } = data;
 
-  const slug = cleanSlug(id); // cleanSlug(rawSlug.split('/').pop());
-  const publishDate = new Date(rawPublishDate);
-  const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
+//   const slug = cleanSlug(id); // cleanSlug(rawSlug.split('/').pop());
+//   const publishDate = new Date(rawPublishDate);
+//   const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
 
-  const category = rawCategory
-    ? {
-        slug: cleanSlug(rawCategory),
-        title: rawCategory,
-      }
-    : undefined;
+//   const category = rawCategory
+//     ? {
+//         slug: cleanSlug(rawCategory),
+//         title: rawCategory,
+//       }
+//     : undefined;
 
-  const tags = rawTags.map((tag: string) => ({
-    slug: cleanSlug(tag),
-    title: tag,
-  }));
+//   const tags = rawTags.map((tag: string) => ({
+//     slug: cleanSlug(tag),
+//     title: tag,
+//   }));
 
-  return {
-    id: id,
-    slug: slug,
-    permalink: await generatePermalink({ id, slug, publishDate, category: category?.slug }),
+//   return {
+//     id: id,
+//     slug: slug,
+//     permalink: await generatePermalink({ id, slug, publishDate, category: category?.slug }),
 
-    publishDate: publishDate,
-    updateDate: updateDate,
+//     publishDate: publishDate,
+//     updateDate: updateDate,
 
-    title: title,
-    excerpt: excerpt,
-    image: image,
+//     title: title,
+//     excerpt: excerpt,
+//     image: image,
 
-    category: category,
-    tags: tags,
-    author: author,
+//     category: category,
+//     tags: tags,
+//     author: author,
 
-    draft: draft,
+//     draft: draft,
 
-    metadata,
+//     metadata,
 
-    Content: Content,
-    // or 'content' in case you consume from API
+//     Content: Content,
+//     // or 'content' in case you consume from API
 
-    readingTime: remarkPluginFrontmatter?.readingTime,
-  };
-};
+//     readingTime: remarkPluginFrontmatter?.readingTime,
+//   };
+// };
 
 const load = async function (): Promise<Array<Post>> {
-  const localPosts = await getCollection('post');
-  const notionPosts = await getNotionPostList();
-  const normalizedPosts = [...localPosts.map(async (post) => await getNormalizedPost(post)), ...notionPosts];
+  const database = await getCollection('notion');
+  const posts = await Promise.all(database.map(notionToPost));
 
-  const results = (await Promise.all(normalizedPosts))
-    .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
-    .filter((post) => !post.draft);
+  const results = posts.sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf()).filter((post) => !post.draft);
 
   return results;
 };
