@@ -33,6 +33,7 @@
     "limax": "4.1.0",
     "lodash.merge": "^4.6.2",
     "notion-astro-loader": "^0.4.0",
+    "rehype-autolink-headings": "^7.1.0",
     "rehype-prism": "^2.3.3",
     "unpic": "^3.22.0"
   },

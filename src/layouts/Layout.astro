@@ -1,5 +1,6 @@
 ---
 import '~/assets/styles/tailwind.css';
+import '~/assets/styles/notion.css';
 
 import { I18N } from 'astrowind:config';
 
@@ -26,7 +27,7 @@ const { language, textDirection } = I18N;
 ---
 
 <!doctype html>
-<html lang={language} dir={textDirection} class="2xl:text-[20px]">
+<html lang={language} dir={textDirection}>
   <head>
     <CommonMeta />
     <Favicons />

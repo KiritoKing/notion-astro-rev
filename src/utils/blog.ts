@@ -40,66 +40,6 @@ export const generatePermalink = async ({
     .join('/');
 };
 
-// const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> => {
-//   const { id, data } = post;
-//   const { Content, remarkPluginFrontmatter } = await render(post);
-
-//   const {
-//     publishDate: rawPublishDate = new Date(),
-//     updateDate: rawUpdateDate,
-//     title,
-//     excerpt,
-//     image,
-//     tags: rawTags = [],
-//     category: rawCategory,
-//     author,
-//     draft = false,
-//     metadata = {},
-//   } = data;
-
-//   const slug = cleanSlug(id); // cleanSlug(rawSlug.split('/').pop());
-//   const publishDate = new Date(rawPublishDate);
-//   const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
-
-//   const category = rawCategory
-//     ? {
-//         slug: cleanSlug(rawCategory),
-//         title: rawCategory,
-//       }
-//     : undefined;
-
-//   const tags = rawTags.map((tag: string) => ({
-//     slug: cleanSlug(tag),
-//     title: tag,
-//   }));
-
-//   return {
-//     id: id,
-//     slug: slug,
-//     permalink: await generatePermalink({ id, slug, publishDate, category: category?.slug }),
-
-//     publishDate: publishDate,
-//     updateDate: updateDate,
-
-//     title: title,
-//     excerpt: excerpt,
-//     image: image,
-
-//     category: category,
-//     tags: tags,
-//     author: author,
-
-//     draft: draft,
-
-//     metadata,
-
-//     Content: Content,
-//     // or 'content' in case you consume from API
-
-//     readingTime: remarkPluginFrontmatter?.readingTime,
-//   };
-// };
-
 const load = async function (): Promise<Array<Post>> {
   const database = await getCollection('notion');
   const posts = await Promise.all(database.map(notionToPost));
