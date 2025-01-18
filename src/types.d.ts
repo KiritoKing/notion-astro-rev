@@ -1,3 +1,4 @@
+import type { MarkdownHeading } from 'astro';
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import type { HTMLAttributes, ImageMetadata } from 'astro/types';
 
@@ -42,6 +43,8 @@ export interface Post {
 
   /**  */
   readingTime?: number;
+
+  headings?: MarkdownHeading[];
 }
 
 export interface Taxonomy {

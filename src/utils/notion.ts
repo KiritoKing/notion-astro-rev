@@ -29,7 +29,7 @@ export const notionToPost = async (notionItem: NotionItem): Promise<Post> => {
   const slug = richTextToPlainText(props.slug.rich_text);
   const date = dateToDateObjects(props.date?.date)?.start ?? new Date();
 
-  const { Content: renderedContent } = await render(notionItem);
+  const { Content: renderedContent, headings } = await render(notionItem);
 
   return {
     id: notionItem.id,
@@ -42,5 +42,6 @@ export const notionToPost = async (notionItem: NotionItem): Promise<Post> => {
     updateDate: new Date(props.updateAt.last_edited_time),
     Content: renderedContent,
     content: notionItem.rendered?.html,
+    headings,
   };
 };
