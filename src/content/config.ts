@@ -1,5 +1,7 @@
 import { z, defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { notionLoader } from 'notion-astro-loader';
+import rehypePrism from 'rehype-prism';
 
 const metadataDefinition = () =>
   z
@@ -65,6 +67,23 @@ const postCollection = defineCollection({
   }),
 });
 
+const database = defineCollection({
+  loader: notionLoader({
+    auth: import.meta.env.NOTION_TOKEN,
+    database_id: import.meta.env.NOTION_DATABASE_ID,
+    // Use Notion sorting and filtering
+    // filter: {
+    //   property: 'status',
+    //   select: {
+    //     equals: 'Published',
+    //   },
+    // },
+    // sorts: [{ property: 'date', direction: 'descending' }],
+    rehypePlugins: [rehypePrism],
+  }),
+});
+
 export const collections = {
   post: postCollection,
+  notion: database,
 };
