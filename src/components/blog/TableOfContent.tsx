@@ -1,11 +1,13 @@
 import type { MarkdownHeading } from 'astro';
 import { useEffect, useState } from 'react';
+import { cn } from '~/utils/utils';
 
 interface Props {
+  className?: string;
   headings: MarkdownHeading[];
 }
 
-const TableOfContent: React.FC<Props> = ({ headings }) => {
+const TableOfContent: React.FC<Props> = ({ headings, className }) => {
   const [activeSlugs, setActiveSlugs] = useState<string[]>([]);
 
   useEffect(() => {
@@ -35,11 +37,21 @@ const TableOfContent: React.FC<Props> = ({ headings }) => {
   }, [headings]);
 
   return (
-    <aside className="fixed right-2 top-1/4">
-      <nav className="p-2">
+    <aside className={cn('h-fit px-3 py-2', className)}>
+      <h2 className="mb-1 mb-2 text-xl font-bold">目录</h2>
+      <nav>
         <ol className="space-y-1">
           {headings?.map((h) => (
-            <li key={h.slug} style={{ marginLeft: `${h.depth / 2}rem` }}>
+            <li
+              key={h.slug}
+              style={{ marginLeft: `${h.depth / 2}rem` }}
+              className={cn(
+                'transition-all',
+                activeSlugs.includes(h.slug)
+                  ? 'font-bold text-purple-700 underline underline-offset-4 dark:text-purple-300'
+                  : ''
+              )}
+            >
               <a href={`#${h.slug}`}>{h.text}</a>
             </li>
           ))}
