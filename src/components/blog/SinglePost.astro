@@ -9,6 +9,7 @@ import { getPermalink } from '~/utils/permalinks';
 import { getFormattedDate } from '~/utils/utils';
 
 import type { Post } from '~/types';
+import TableOfContent from './TableOfContent';
 
 export interface Props {
   post: Post;
@@ -16,6 +17,8 @@ export interface Props {
 }
 
 const { post, url } = Astro.props;
+
+console.log(post.headings);
 ---
 
 <section class="mx-auto py-8 sm:py-16 lg:py-20">
@@ -95,6 +98,7 @@ const { post, url } = Astro.props;
     >
       <slot />
     </div>
+    {post.headings && <TableOfContent client:load headings={post.headings} />}
     <div class="mx-auto mt-8 flex max-w-3xl flex-col justify-between px-6 sm:flex-row sm:px-6">
       <PostTags tags={post.tags} class="mr-5 rtl:ml-5 rtl:mr-0" />
       <SocialShare url={url} text={post.title} class="mt-5 align-middle text-gray-500 dark:text-slate-600 sm:mt-1" />

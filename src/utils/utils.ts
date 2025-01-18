@@ -1,5 +1,12 @@
 import { I18N } from 'astrowind:config';
 
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
 export const formatter: Intl.DateTimeFormat = new Intl.DateTimeFormat(I18N?.language, {
   year: 'numeric',
   month: 'short',
