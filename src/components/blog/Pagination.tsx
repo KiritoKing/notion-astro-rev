@@ -123,11 +123,20 @@ const Pagination: React.FC<Props> = ({ prevUrl, nextUrl, currentPage = 1, totalP
 
   return (
     <PaginationRoot>
-      <PaginationContent>
+      <PaginationContent className="hidden lg:flex">
         <PaginationItem>
           <PaginationPrevious href={prevUrl} aria-disabled={!prevUrl} />
         </PaginationItem>
         {renderPaginationItems()}
+        <PaginationItem>
+          <PaginationNext href={nextUrl} aria-disabled={!nextUrl} />
+        </PaginationItem>
+      </PaginationContent>
+      {/* 小屏不显示完整页码 */}
+      <PaginationContent className="flex lg:hidden">
+        <PaginationItem>
+          <PaginationPrevious href={prevUrl} aria-disabled={!prevUrl} />
+        </PaginationItem>
         <PaginationItem>
           <PaginationNext href={nextUrl} aria-disabled={!nextUrl} />
         </PaginationItem>
