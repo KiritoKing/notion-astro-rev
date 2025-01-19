@@ -74,6 +74,71 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            // 标题相关配置
+            h1: {
+              fontFamily: theme('fontFamily.heading'),
+              fontWeight: theme('fontWeight.bold'),
+              letterSpacing: theme('letterSpacing.tighter'),
+              lineHeight: theme('lineHeight.tighter'),
+              scrollMarginTop: '80px',
+            },
+            h2: {
+              fontFamily: theme('fontFamily.heading'),
+              fontWeight: theme('fontWeight.bold'),
+              letterSpacing: theme('letterSpacing.tighter'),
+              lineHeight: theme('lineHeight.tighter'),
+              scrollMarginTop: '80px',
+            },
+            h3: {
+              // ... 其他标题级别可以相同配置
+            },
+
+            // 链接配置
+            a: {
+              color: theme('colors.primary'),
+              '&:hover': {
+                color: theme('colors.primary'),
+              },
+            },
+
+            // 列表项配置
+            li: {
+              marginTop: '0',
+              marginBottom: '0',
+            },
+
+            // 图片配置
+            img: {
+              borderRadius: theme('borderRadius.md'),
+              boxShadow: theme('boxShadow.lg'),
+              cursor: 'zoom-in',
+            },
+          },
+        },
+        // 暗色模式配置
+        invert: {
+          css: {
+            h1: {
+              color: theme('colors.slate.300'),
+            },
+            h2: {
+              color: theme('colors.slate.300'),
+            },
+            h3: {
+              color: theme('colors.slate.300'),
+            },
+            a: {
+              color: theme('colors.blue.400'),
+              '&:hover': {
+                color: theme('colors.blue.400'),
+              },
+            },
+          },
+        },
+      }),
     },
   },
   plugins: [
