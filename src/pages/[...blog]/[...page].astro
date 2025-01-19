@@ -3,11 +3,12 @@ import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 
 import Layout from '~/layouts/PageLayout.astro';
 import BlogList from '~/components/blog/List.astro';
-import Pagination from '~/components/blog/Pagination.astro';
+import Pagination from '~/components/blog/Pagination';
 import PostTags from '~/components/blog/Tags.astro';
 
 import { blogListRobots, getRecommendPosts, getStaticPathsBlogList, getCategoryMap, getTagMap } from '~/utils/blog';
 import RecommendBlogPosts from '~/components/blog/RecommendBlogPosts';
+import { getBlogPermalink } from '~/utils/permalinks';
 
 export const prerender = true;
 
@@ -47,7 +48,14 @@ const metadata = {
       </div>
       <div class="w-full min-w-0 max-w-4xl">
         <BlogList posts={page.data} />
-        <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+        <Pagination
+          prevUrl={page.url.prev}
+          nextUrl={page.url.next}
+          currentPage={currentPage}
+          totalPages={page.lastPage}
+          baseUrl={page.url.prev?.replace(/\d+\/?$/, '') || page.url.next?.replace(/\d+\/?$/, '') || getBlogPermalink()}
+          client:load
+        />
       </div>
     </div>
   </section>
