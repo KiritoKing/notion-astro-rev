@@ -13,7 +13,6 @@ const TableOfContent: React.FC<Props> = ({ headings, className }) => {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        console.log(entry);
         const id = entry.target.id;
         if (entry.isIntersecting) {
           setActiveSlugs((prev) => [...prev, id]);
@@ -38,7 +37,7 @@ const TableOfContent: React.FC<Props> = ({ headings, className }) => {
 
   return (
     <aside className={cn('h-fit px-3 py-2', className)}>
-      <h2 className="mb-1 mb-2 text-xl font-bold">目录</h2>
+      <h2 className="mb-1 font-bold xl:text-xl">目录</h2>
       <nav>
         <ol className="space-y-1">
           {headings?.map((h) => (

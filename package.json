@@ -35,6 +35,7 @@
     "astro-icon": "^1.1.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
     "limax": "4.1.0",
     "lodash.merge": "^4.6.2",
     "lucide-react": "^0.473.0",

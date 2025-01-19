@@ -1,20 +1,12 @@
-import { I18N } from 'astrowind:config';
-
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import dayjs from 'dayjs';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const formatter: Intl.DateTimeFormat = new Intl.DateTimeFormat(I18N?.language, {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-  timeZone: 'UTC',
-});
-
-export const getFormattedDate = (date: Date): string => (date ? formatter.format(date) : '');
+export const getFormattedDate = (date: Date, format = 'YYYY-MM-DD'): string => dayjs(date).format(format);
 
 export const trim = (str = '', ch?: string) => {
   let start = 0,
