@@ -32,6 +32,6 @@ const metadata = {
   <section class="mx-auto max-w-4xl px-4 py-12 sm:py-16 md:px-6 lg:py-20">
     <Headline>Tag: {tag.title}</Headline>
     <BlogList posts={page.data} />
-    <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+    <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} currentPage={currentPage} totalPages={page.lastPage} />
   </section>
 </Layout>
