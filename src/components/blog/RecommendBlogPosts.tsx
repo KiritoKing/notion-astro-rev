@@ -24,8 +24,8 @@ const RecommendBlogPosts: React.FC<IProps> = ({ posts, className }) => {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselNext />
-      <CarouselPrevious />
+      <CarouselNext className="hidden lg:flex" />
+      <CarouselPrevious className="hidden lg:flex" />
     </Carousel>
   );
 };
