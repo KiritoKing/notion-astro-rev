@@ -17,60 +17,18 @@ export interface Props {
 }
 
 const { post, url } = Astro.props;
-
-console.log(post.headings);
 ---
 
-<section class="mx-auto flex max-w-7xl gap-x-2 py-8 sm:py-16 lg:py-20">
-  <article class="flex-1">
+<section class="mx-auto flex max-w-7xl gap-x-8 py-8 sm:py-16 lg:py-20">
+  <!-- class `min-w-0` is really important to avoid overflow -->
+  <article class="min-w-0 max-w-full flex-1">
     <header
       class={post.image
         ? 'intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade'
         : 'intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade'}
     >
-      <div class="mx-auto mb-2 mt-0 flex flex-col justify-between px-2 sm:flex-row sm:items-center">
-        <p>
-          <Icon name="tabler:clock" class="-mt-0.5 inline-block h-4 w-4 dark:text-gray-400" />
-          <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
-          {
-            post.author && (
-              <>
-                {' '}
-                · <Icon name="tabler:user" class="-mt-0.5 inline-block h-4 w-4 dark:text-gray-400" />
-                <span class="inline-block">{post.author}</span>
-              </>
-            )
-          }
-          {
-            post.category && (
-              <>
-                {' '}
-                ·{' '}
-                <a class="inline-block hover:underline" href={getPermalink(post.category.slug, 'category')}>
-                  {post.category.title}
-                </a>
-              </>
-            )
-          }
-          {
-            post.readingTime && (
-              <>
-                &nbsp;· <span>{post.readingTime}</span> min read
-              </>
-            )
-          }
-        </p>
-      </div>
-
-      <h1 class="leading-tighter mx-auto px-2 font-heading text-4xl font-bold tracking-tighter md:text-5xl">
-        {post.title}
-      </h1>
-      <p class="mx-auto mb-8 mt-4 px-2 text-justify text-xl text-muted dark:text-slate-400 md:text-2xl">
-        {post.excerpt}
-      </p>
-
       {
-        post.image ? (
+        post.image && (
           <Image
             src={post.image}
             class="mx-auto mb-6 max-w-full bg-gray-400 dark:bg-slate-700 sm:rounded-md lg:max-w-[900px]"
@@ -82,12 +40,35 @@ console.log(post.headings);
             loading="eager"
             decoding="async"
           />
-        ) : (
-          <div class="mx-auto px-4 sm:px-6">
-            <div class="border-t dark:border-slate-700" />
-          </div>
         )
       }
+      <h1 class="leading-tighter mx-auto px-2 font-heading text-4xl font-bold tracking-tighter">
+        {post.title}
+      </h1>
+      <div class="mx-auto my-2 flex flex-wrap items-center gap-4 px-2">
+        <div>
+          <Icon name="tabler:clock" class="-mt-0.5 inline-block h-4 w-4 dark:text-gray-400" />
+          <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
+        </div>
+        {
+          post.category && (
+            <div>
+              <Icon name="tabler:archive" class="-mt-0.5 inline-block h-4 w-4 dark:text-gray-400" />
+              <a class="inline-block hover:underline" href={getPermalink(post.category.slug, 'category')}>
+                {post.category.title}
+              </a>
+            </div>
+          )
+        }
+      </div>
+      {post.tags?.length && <PostTags tags={post.tags} class="mt-4 px-2 text-sm" />}
+
+      <p class="mx-auto mb-8 mt-4 px-2 text-justify text-muted dark:text-slate-400">
+        {post.excerpt}
+      </p>
+      <div class="mx-auto px-2">
+        <div class="border-t dark:border-slate-700"></div>
+      </div>
     </header>
     <div
       class="prose-headings:leading-tighter prose mx-auto mt-8 max-w-none px-2 dark:prose-invert prose-headings:scroll-mt-[80px] prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tighter prose-a:text-primary prose-li:my-0 prose-img:rounded-md prose-img:shadow-lg dark:prose-headings:text-slate-300 dark:prose-a:text-blue-400"
@@ -95,9 +76,12 @@ console.log(post.headings);
       <slot />
     </div>
     <div class="mx-auto mt-8 flex flex-col justify-between px-2 sm:flex-row">
-      <PostTags tags={post.tags} class="mr-5 rtl:ml-5 rtl:mr-0" />
       <SocialShare url={url} text={post.title} class="mt-5 align-middle text-gray-500 dark:text-slate-600 sm:mt-1" />
     </div>
   </article>
-  {post.headings && <TableOfContent client:load className="w-[200px] sticky top-20" headings={post.headings} />}
+  {
+    post.headings && (
+      <TableOfContent client:load className="w-[200px] sticky top-20 hidden xl:block" headings={post.headings} />
+    )
+  }
 </section>
