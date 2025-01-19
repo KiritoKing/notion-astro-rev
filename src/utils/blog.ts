@@ -1,9 +1,10 @@
-import type { PaginateFunction } from 'astro';
+import type { ImageMetadata, PaginateFunction } from 'astro';
 import { getCollection } from 'astro:content';
-import type { Post } from '~/types';
+import type { Post, Taxonomy } from '~/types';
 import { APP_BLOG } from 'astrowind:config';
 import { trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
 import { notionToPost } from './notion';
+import { findImage } from './images';
 
 export const generatePermalink = async ({
   id,
@@ -216,4 +217,63 @@ export async function getRelatedPosts(originalPost: Post, maxResults: number = 4
   }
 
   return selectedPosts;
+}
+
+export interface PostWithCover extends Post {
+  cover: ImageMetadata;
+}
+
+export async function getRecommendPosts(maxResults = 3): Promise<PostWithCover[]> {
+  const posts = await fetchPosts();
+
+  const processedPosts = posts.map(async (post) => {
+    if (!post.image) return null;
+    const image = (await findImage(post.image)) as ImageMetadata | undefined;
+    if (!image) return null;
+
+    return { ...post, image };
+  });
+
+  return (await Promise.all(processedPosts)).filter((post) => !!post).slice(0, maxResults) as PostWithCover[];
+}
+
+export interface CollectionMapType {
+  [slug: string]: {
+    entity: Taxonomy;
+    children: Post[];
+  };
+}
+
+export async function getCategoryMap(): Promise<CollectionMapType> {
+  const posts = await fetchPosts();
+  const categoryMap: CollectionMapType = {};
+
+  posts.forEach((post) => {
+    if (post.category?.slug) {
+      if (!categoryMap[post.category.slug]) {
+        categoryMap[post.category.slug] = { entity: post.category, children: [] };
+      }
+      categoryMap[post.category.slug].children.push(post);
+    }
+  });
+
+  return categoryMap;
+}
+
+export async function getTagMap(): Promise<CollectionMapType> {
+  const posts = await fetchPosts();
+  const tagMap: CollectionMapType = {};
+
+  posts.forEach((post) => {
+    if (Array.isArray(post.tags)) {
+      post.tags.forEach((tag) => {
+        if (!tagMap[tag.slug]) {
+          tagMap[tag.slug] = { entity: tag, children: [] };
+        }
+        tagMap[tag.slug].children.push(post);
+      });
+    }
+  });
+
+  return tagMap;
 }

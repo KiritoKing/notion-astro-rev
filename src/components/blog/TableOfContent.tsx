@@ -1,6 +1,6 @@
 import type { MarkdownHeading } from 'astro';
 import { useEffect, useState } from 'react';
-import { cn } from '~/utils/utils';
+import { cn } from '~/lib/utils';
 
 interface Props {
   className?: string;

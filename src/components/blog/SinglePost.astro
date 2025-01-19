@@ -23,7 +23,7 @@ const { post, url } = Astro.props;
 
 <section class="mx-auto flex max-w-6xl gap-x-8 py-8 sm:py-16 lg:py-20">
   <!-- class `min-w-0` is really important to avoid overflow -->
-  <article id="post-container" class="min-w-0 max-w-full flex-1">
+  <article id="post-container" class="min-w-0 max-w-full flex-1 p-2 xl:p-0">
     <header class="intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
       {
         post.image && (
@@ -86,7 +86,7 @@ const { post, url } = Astro.props;
   {
     post.headings && (
       <TableOfContent
-        client:load
+        client:idle
         className="w-[210px] sticky top-20 hidden xl:block"
         headings={post.headings}
         title={post.title}
