@@ -1,0 +1,53 @@
+---
+import dayjs from 'dayjs';
+import { cn } from '~/utils/utils';
+
+// LicenseCard.astro
+interface Props {
+  class?: string;
+  title: string;
+  author?: string;
+  publishDate: Date;
+  updateDate?: Date;
+  link: string;
+}
+
+const { title, author, publishDate, updateDate, link, class: className } = Astro.props;
+
+const createDateStr = dayjs(publishDate).format('YYYY-MM-DD HH:mm:ss');
+const updateDateStr = updateDate ? dayjs(updateDate).format('YYYY-MM-DD HH:mm:ss') : null;
+---
+
+<div class={cn('rounded-lg bg-gray-50 p-6 shadow-sm dark:bg-gray-800', className)}>
+  <div class="space-y-2">
+    <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+      标题: {title}
+    </h2>
+    {author && <p class="text-gray-600 dark:text-gray-400">作者: {author}</p>}
+
+    <div class="space-y-1">
+      <p class="text-gray-600 dark:text-gray-400">创建于: {createDateStr}</p>
+      {updateDateStr && <p class="text-gray-600 dark:text-gray-400">更新于: {updateDateStr}</p>}
+    </div>
+
+    <div class="space-y-1">
+      <p class="text-gray-600 dark:text-gray-400">
+        链接:
+        <a href={link} class="break-all text-blue-600 hover:underline dark:text-blue-400">
+          {link}
+        </a>
+      </p>
+    </div>
+
+    <p class="text-gray-600 dark:text-gray-400">
+      版权声明: 本文章采用
+      <a
+        href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"
+        class="text-blue-600 hover:underline dark:text-blue-400"
+      >
+        CC BY-NC-SA 4.0
+      </a>
+      进行许可。
+    </p>
+  </div>
+</div>
