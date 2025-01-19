@@ -3,11 +3,11 @@ import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
 
 import Layout from '~/layouts/PageLayout.astro';
 import BlogList from '~/components/blog/List.astro';
-import Headline from '~/components/blog/Headline.astro';
 import Pagination from '~/components/blog/Pagination.astro';
-// import PostTags from "~/components/blog/Tags.astro";
+import PostTags from '~/components/blog/Tags.astro';
 
-import { blogListRobots, getStaticPathsBlogList } from '~/utils/blog';
+import { blogListRobots, getRecommendPosts, getStaticPathsBlogList, getCategoryMap, getTagMap } from '~/utils/blog';
+import RecommendBlogPosts from '~/components/blog/RecommendBlogPosts';
 
 export const prerender = true;
 
@@ -20,8 +20,10 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { page } = Astro.props as Props;
 const currentPage = page.currentPage ?? 1;
 
-// const allCategories = await findCategories();
-// const allTags = await findTags();
+const carouselData = await getRecommendPosts();
+
+const allCategories = Object.values(await getCategoryMap()).map((category) => category.entity);
+const allTags = Object.values(await getTagMap()).map((tag) => tag.entity);
 
 const metadata = {
   title: `Blog${currentPage > 1 ? ` — Page ${currentPage}` : ''}`,
@@ -36,17 +38,17 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <section class="mx-auto max-w-4xl px-6 py-12 sm:px-6 sm:py-16 lg:py-20">
-    <Headline
-      subtitle="A statically generated blog example with news, tutorials, resources and other interesting content related to AstroWind"
-    >
-      The Blog
-    </Headline>
-    <BlogList posts={page.data} />
-    <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
-    <!--
-      <PostTags tags={allCategories} class="mb-2" title="Search by Categories:" isCategory />
-      <PostTags tags={allTags}  title="Search by Tags:" />
-    -->
+  <section class="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:py-20">
+    <RecommendBlogPosts client:idle posts={carouselData} className="mb-20" />
+    <div class="flex gap-10">
+      <div class="flex-1">
+        <PostTags tags={allCategories} class="mb-8" title="所有分类" isCategory />
+        <PostTags tags={allTags} title="所有标签" />
+      </div>
+      <div class="w-full min-w-0 max-w-4xl">
+        <BlogList posts={page.data} />
+        <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+      </div>
+    </div>
   </section>
 </Layout>

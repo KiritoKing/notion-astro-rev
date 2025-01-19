@@ -19,9 +19,9 @@ const { tags, class: className = 'text-sm', title = undefined, isCategory = fals
   tags && Array.isArray(tags) && (
     <>
       {title !== undefined && (
-        <span class="align-super font-normal underline decoration-2 underline-offset-4 dark:text-slate-400">
+        <h5 class="mb-4 align-super font-normal underline decoration-2 underline-offset-4 dark:text-slate-400">
           {title}
-        </span>
+        </h5>
       )}
       <ul class={className}>
         {tags.map((tag) => (

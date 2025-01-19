@@ -1,5 +1,5 @@
 site:
-  name: AstroWind
+  name: ChlorineC's Blog
   site: 'https://chlorinec.top'
   base: '/'
   trailingSlash: false
@@ -10,14 +10,14 @@ site:
 # Default SEO metadata
 metadata:
   title:
-    default: AstroWind
-    template: '%s — AstroWind'
-  description: "\U0001F680 Suitable for Startups, Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs."
+    default: ChlorineC's Blog
+    template: "%s — ChlorineC's Blog"
+  description: "A web developer's blog, focused on web development, llm agent and more."
   robots:
     index: true
     follow: true
   openGraph:
-    site_name: AstroWind
+    site_name: ChlorineC's Blog
     images:
       - url: '~/assets/images/default.png'
         width: 1200
@@ -29,7 +29,7 @@ metadata:
     cardType: summary_large_image
 
 i18n:
-  language: en
+  language: zh
   textDirection: ltr
 
 apps:
