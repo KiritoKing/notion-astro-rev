@@ -4,10 +4,11 @@ import { cn } from '~/utils/utils';
 
 interface Props {
   className?: string;
+  title?: string;
   headings: MarkdownHeading[];
 }
 
-const TableOfContent: React.FC<Props> = ({ headings, className }) => {
+const TableOfContent: React.FC<Props> = ({ headings, className, title }) => {
   const [activeSlugs, setActiveSlugs] = useState<string[]>([]);
 
   useEffect(() => {
@@ -37,7 +38,8 @@ const TableOfContent: React.FC<Props> = ({ headings, className }) => {
 
   return (
     <aside className={cn('h-fit px-3 py-2', className)}>
-      <h2 className="mb-1 font-bold xl:text-xl">目录</h2>
+      <h2 className="mb-1 font-bold">目录</h2>
+      {title && <h1 className="mb-4 text-xl font-bold">{title}</h1>}
       <nav>
         <ol className="space-y-1">
           {headings?.map((h) => (
@@ -45,7 +47,7 @@ const TableOfContent: React.FC<Props> = ({ headings, className }) => {
               key={h.slug}
               style={{ marginLeft: `${h.depth / 2}rem` }}
               className={cn(
-                'transition-all',
+                'text-sm transition-all',
                 activeSlugs.includes(h.slug) ? 'font-bold text-primary underline underline-offset-4' : ''
               )}
             >
