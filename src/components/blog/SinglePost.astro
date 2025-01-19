@@ -5,11 +5,13 @@ import Image from '~/components/common/Image.astro';
 import PostTags from '~/components/blog/Tags.astro';
 import SocialShare from '~/components/common/SocialShare.astro';
 
-import { getPermalink } from '~/utils/permalinks';
+import { getCanonical, getPermalink } from '~/utils/permalinks';
 import { getFormattedDate } from '~/utils/utils';
 
 import type { Post } from '~/types';
 import TableOfContent from './TableOfContent';
+import LicenseCard from './LicenseCard.astro';
+import { SITE } from 'astrowind:config';
 
 export interface Props {
   post: Post;
@@ -69,6 +71,14 @@ const { post, url } = Astro.props;
     <div class="prose mx-auto mt-8 max-w-none px-2 dark:prose-invert">
       <slot />
     </div>
+    <LicenseCard
+      title={post.title}
+      author={post.author ?? SITE.owner}
+      publishDate={post.publishDate}
+      updateDate={post.updateDate}
+      link={getCanonical(post.permalink).toString()}
+      class="my-8"
+    />
     <div class="mx-auto mt-8 flex flex-col justify-between px-2 sm:flex-row">
       <SocialShare url={url} text={post.title} class="mt-5 align-middle text-gray-500 dark:text-slate-600 sm:mt-1" />
     </div>
@@ -86,16 +96,25 @@ const { post, url } = Astro.props;
 </section>
 
 <script>
-  import Viewer from 'viewerjs';
+  import type Viewer from 'viewerjs';
 
-  const article = document.getElementById('post-container');
+  let instance: Viewer | null = null;
 
-  if (article) {
-    new Viewer(article, {
-      button: false, // 隐藏右上角的关闭图标
-      toolbar: false, // 隐藏工具栏
-      loop: false, // 取消循环
-      movable: false, // 取消拖动
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.prose img').forEach((image) => {
+      image.addEventListener('click', async (e) => {
+        if (!instance) {
+          const Viewer = (await import('viewerjs')).default;
+          e.preventDefault();
+          instance = new Viewer(document.getElementById('post-container')!, {
+            button: false, // 隐藏右上角的关闭图标
+            toolbar: false, // 隐藏工具栏
+            loop: false, // 取消循环
+            movable: false, // 取消拖动
+          });
+        }
+        instance.show();
+      });
     });
-  }
+  });
 </script>
