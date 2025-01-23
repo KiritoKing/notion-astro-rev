@@ -3,26 +3,30 @@ import Layout from '~/layouts/Layout.astro';
 import Header from '~/components/widgets/Header.astro';
 import Footer from '~/components/widgets/Footer.astro';
 
-import { headerData, footerData } from '~/navigation';
+import { headerData, socialLinks } from '~/navigation';
 
 import type { MetaData } from '~/types';
 
 export interface Props {
   metadata?: MetaData;
+  headerProps?: {
+    isSticky?: boolean;
+    class?: string;
+  };
 }
 
-const { metadata } = Astro.props;
+const { metadata, headerProps = {} } = Astro.props;
 ---
 
 <Layout metadata={metadata}>
   <slot name="announcement" />
   <slot name="header">
-    <Header {...headerData} isSticky showRssFeed showToggleTheme />
+    <Header {...headerData} isSticky showRssFeed showToggleTheme {...headerProps} />
   </slot>
   <main>
     <slot />
   </main>
   <slot name="footer">
-    <Footer {...footerData} />
+    <Footer socialLinks={socialLinks} />
   </slot>
 </Layout>

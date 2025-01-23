@@ -5,6 +5,7 @@ import { APP_BLOG } from 'astrowind:config';
 import { trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
 import { notionToPost } from './notion';
 import { findImage } from './images';
+import urlMap from 'migration/url-map.json' with { type: 'json' };
 
 export const generatePermalink = async ({
   id,
@@ -124,12 +125,31 @@ export const getStaticPathsBlogList = async ({ paginate }: { paginate: PaginateF
 /** */
 export const getStaticPathsBlogPost = async () => {
   if (!isBlogEnabled || !isBlogPostRouteEnabled) return [];
-  return (await fetchPosts()).flatMap((post) => ({
+  const posts = (await fetchPosts()).flatMap((post) => ({
     params: {
       blog: post.permalink,
     },
     props: { post },
   }));
+
+  const migratedPostLinks = Object.keys(urlMap)
+    .map((key) => {
+      const post = posts.find((post) => {
+        return post.params.blog === key;
+      });
+      if (!post) return null;
+      const aliases = urlMap[key].map((url: string) => url) as string[];
+      return aliases.map((alias) => ({
+        params: {
+          blog: alias,
+        },
+        props: { post: post.props.post },
+      }));
+    })
+    .filter((el): el is NonNullable<typeof el> => !!el)
+    .flat();
+
+  return [...posts, ...migratedPostLinks];
 };
 
 /** */
