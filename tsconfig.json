@@ -5,7 +5,8 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": ["src/*"],
+      "migration/*": ["migration/*"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"

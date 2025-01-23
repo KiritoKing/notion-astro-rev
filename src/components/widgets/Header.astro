@@ -21,6 +21,7 @@ interface MenuLink extends Link {
 }
 
 export interface Props {
+  class?: string;
   id?: string;
   links?: Array<MenuLink>;
   actions?: Array<CallToAction>;
@@ -33,6 +34,7 @@ export interface Props {
 }
 
 const {
+  class: className,
   id = 'header',
   links = [],
   actions = [],
@@ -51,6 +53,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
   class:list={[
     { sticky: isSticky, relative: !isSticky, dark: isDark },
     'top-0 z-40 mx-auto w-full flex-none border-b border-gray-50/0 transition-[opacity] ease-in-out',
+    className,
   ]}
   {...isSticky ? { 'data-aw-sticky-header': true } : {}}
   {...id ? { id } : {}}

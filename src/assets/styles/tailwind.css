@@ -18,6 +18,44 @@
   .text-muted {
     color: var(--aw-color-text-muted);
   }
+
+  @keyframes typing {
+    0% {
+      width: 0%;
+      visibility: hidden;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+    100% {
+      border-color: white;
+    }
+  }
+
+  .animate-typing {
+    animation:
+      typing 2s steps(12) infinite alternate,
+      blink 0.7s infinite;
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
 }
 
 @layer components {
