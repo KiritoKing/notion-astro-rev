@@ -75,7 +75,7 @@ export default defineConfig({
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**.amazonaws.com',
+        hostname: '*.amazonaws.com',
       },
       {
         protocol: 'https',
@@ -86,6 +86,11 @@ export default defineConfig({
         hostname: '**.unsplash.com',
       },
     ],
+    domains: ['amazonaws.com'],
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+      config: {},
+    },
   },
 
   markdown: {
