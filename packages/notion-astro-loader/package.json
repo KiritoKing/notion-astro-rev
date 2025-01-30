@@ -1,0 +1,74 @@
+{
+  "name": "notion-astro-loader",
+  "description": "Notion loader for the Astro Content Layer API. It allows you to load pages from a Notion database then render them as pages in a collection.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./schemas": {
+      "import": "./dist/schemas/index.js",
+      "types": "./dist/schemas/index.d.ts"
+    },
+    "./schemas/raw-properties": {
+      "import": "./dist/schemas/raw-properties.js",
+      "types": "./dist/schemas/raw-properties.d.ts"
+    },
+    "./schemas/transformed-properties": {
+      "import": "./dist/schemas/transformed-properties.js",
+      "types": "./dist/schemas/transformed-properties.d.ts"
+    },
+    "./schemas/page": {
+      "import": "./dist/schemas/page.js",
+      "types": "./dist/schemas/page.d.ts"
+    }
+  },
+  "version": "0.4.0",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "astro": "^4.14.0 || ^5.0.0"
+  },
+  "dependencies": {
+    "@jsdevtools/rehype-toc": "^3.0.2",
+    "@notionhq/client": "^2.2.0",
+    "notion-rehype-k": "^1.1.6",
+    "rehype-katex": "^6.0.0",
+    "rehype-slug": "^6.0.0",
+    "rehype-stringify": "^10.0.0",
+    "slug": "^9.1.0",
+    "unified": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/slug": "^5.0.9",
+    "astro": "^4.14.2",
+    "crossrm": "^1.0.0",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "scripts": {
+    "clean": "crossrm dist tsconfig.tsbuildinfo",
+    "build": "tsc --build",
+    "build:watch": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "test": "vitest"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "bugs": {
+    "url": "https://github.com/NotWoods/travel/issues",
+    "email": "contact@tigeroakes.com"
+  },
+  "homepage": "https://github.com/NotWoods/travel/tree/main/packages/notion-astro-loader#readme",
+  "repository": "github:NotWoods/travel",
+  "keywords": [
+    "astro-loader",
+    "astro",
+    "notion"
+  ]
+}

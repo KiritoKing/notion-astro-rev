@@ -5,6 +5,7 @@ import { richTextToPlainText } from 'notion-astro-loader';
 import type { Post, Taxonomy } from '~/types';
 import { generatePermalink } from './blog';
 import { cleanSlug } from './permalinks';
+import { getImage } from 'astro:assets';
 
 export type NotionItem = CollectionEntry<'notion'>;
 
@@ -14,14 +15,15 @@ const getCoverImage = async (
   if (!notionFile) {
     return undefined;
   }
+  const imageAsset = await fileToImageAsset(notionFile);
 
-  const { src, options } = await fileToImageAsset(notionFile);
+  console.log(imageAsset);
 
-  //@ts-expect-error: this is a simple hack to make notion image work with Astro <Image />
   return {
-    ...options,
-    src,
-  };
+    ...imageAsset.options,
+    src: typeof imageAsset.options.src === 'string' ? imageAsset.options.src : imageAsset.src,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any;
 };
 
 const getTaxonomy = (raw: string | null | undefined): Taxonomy | undefined => {
