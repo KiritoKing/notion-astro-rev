@@ -1,24 +1,14 @@
-import { Client, isFullPage, iteratePaginatedAPI } from "@notionhq/client";
-import type { RehypePlugins } from "astro";
-import type { Loader } from "astro/loaders";
-import { propertiesSchemaForDatabase } from "./database-properties.js";
-import {
-  buildProcessor,
-  NotionPageRenderer,
-  type RehypePlugin,
-} from "./render.js";
-import { notionPageSchema } from "./schemas/page.js";
-import type { ClientOptions, QueryDatabaseParameters } from "./types.js";
+import { Client, isFullPage, iteratePaginatedAPI } from '@notionhq/client';
+import type { RehypePlugins } from 'astro';
+import type { Loader } from 'astro/loaders';
+import { propertiesSchemaForDatabase } from './database-properties.js';
+import { buildProcessor, NotionPageRenderer, type RehypePlugin } from './render.js';
+import { notionPageSchema } from './schemas/page.js';
+import type { ClientOptions, QueryDatabaseParameters } from './types.js';
 
 export interface NotionLoaderOptions
-  extends Pick<
-      ClientOptions,
-      "auth" | "timeoutMs" | "baseUrl" | "notionVersion" | "fetch" | "agent"
-    >,
-    Pick<
-      QueryDatabaseParameters,
-      "database_id" | "filter_properties" | "sorts" | "filter" | "archived"
-    > {
+  extends Pick<ClientOptions, 'auth' | 'timeoutMs' | 'baseUrl' | 'notionVersion' | 'fetch' | 'agent'>,
+    Pick<QueryDatabaseParameters, 'database_id' | 'filter_properties' | 'sorts' | 'filter' | 'archived'> {
   /**
    * Pass rehype plugins to customize how the Notion output HTML is processed.
    * You can import and apply the plugin function (recommended), or pass the plugin name as a string.
@@ -70,26 +60,22 @@ export function notionLoader({
         plugin = config;
       }
 
-      if (typeof plugin === "string") {
-        plugin = (await import(/* @vite-ignore */ plugin))
-          .default as RehypePlugin;
+      if (typeof plugin === 'string') {
+        plugin = (await import(/* @vite-ignore */ plugin)).default as RehypePlugin;
       }
       return [plugin, options] as const;
-    }),
+    })
   );
   const processor = buildProcessor(resolvedRehypePlugins);
 
   return {
-    name: "notion-loader",
+    name: 'notion-loader',
     schema: async () =>
       notionPageSchema({
-        properties: await propertiesSchemaForDatabase(
-          notionClient,
-          database_id,
-        ),
+        properties: await propertiesSchemaForDatabase(notionClient, database_id),
       }),
     async load({ store, logger, parseData }) {
-      logger.info("Loading notion pages");
+      logger.info('Loading notion pages');
 
       const existingPageIds = new Set<string>(store.keys());
       const renderPromises: Promise<void>[] = [];

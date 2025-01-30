@@ -24,12 +24,12 @@ const { post, url } = Astro.props;
 <section class="mx-auto flex max-w-6xl gap-x-8 py-8 sm:py-16 lg:py-20">
   <!-- class `min-w-0` is really important to avoid overflow -->
   <article id="post-container" class="min-w-0 max-w-full flex-1 p-2 xl:p-0">
-    <header class="intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
+    <header class="intersect-once intersect-quarter motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0">
       {
         post.image && (
           <Image
             src={post.image}
-            class="mx-auto mb-6 max-w-full bg-gray-400 dark:bg-slate-700 sm:rounded-md lg:max-w-[900px]"
+            class="mx-auto mb-6 max-w-full bg-gray-400 sm:rounded-md lg:max-w-[900px] dark:bg-slate-700"
             widths={[400, 900]}
             sizes="(max-width: 900px) 400px, 900px"
             alt={post?.excerpt || ''}
@@ -40,7 +40,7 @@ const { post, url } = Astro.props;
           />
         )
       }
-      <h1 class="leading-tighter mx-auto px-2 font-heading text-4xl font-bold tracking-tighter">
+      <h1 class="leading-tighter font-heading mx-auto px-2 text-4xl font-bold tracking-tighter">
         {post.title}
       </h1>
       <div class="mx-auto my-2 flex flex-wrap items-center gap-4 px-2">
@@ -61,14 +61,14 @@ const { post, url } = Astro.props;
       </div>
       {post.tags && post.tags.length > 0 && <PostTags tags={post.tags} class="mt-4 px-2 text-sm" />}
 
-      <p class="mx-auto mb-8 mt-4 px-2 text-justify text-muted dark:text-slate-400">
+      <p class="text-muted mx-auto mb-8 mt-4 px-2 text-justify dark:text-slate-400">
         {post.excerpt}
       </p>
       <div class="mx-auto px-2">
         <div class="border-t dark:border-slate-700"></div>
       </div>
     </header>
-    <div class="prose mx-auto mt-8 max-w-none px-2 dark:prose-invert">
+    <div class="prose dark:prose-invert mx-auto mt-8 max-w-none px-2">
       <slot />
     </div>
     <LicenseCard
@@ -80,7 +80,7 @@ const { post, url } = Astro.props;
       class="my-8"
     />
     <div class="mx-auto mt-8 flex flex-col justify-between px-2 sm:flex-row">
-      <SocialShare url={url} text={post.title} class="mt-5 align-middle text-gray-500 dark:text-slate-600 sm:mt-1" />
+      <SocialShare url={url} text={post.title} class="mt-5 align-middle text-gray-500 sm:mt-1 dark:text-slate-600" />
     </div>
   </article>
   {

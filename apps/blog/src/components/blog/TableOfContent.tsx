@@ -48,7 +48,7 @@ const TableOfContent: React.FC<Props> = ({ headings, className, title }) => {
               style={{ marginLeft: `${h.depth / 2}rem` }}
               className={cn(
                 'text-sm transition-all',
-                activeSlugs.includes(h.slug) ? 'font-bold text-primary underline underline-offset-4' : ''
+                activeSlugs.includes(h.slug) ? 'text-primary font-bold underline underline-offset-4' : ''
               )}
             >
               <a href={`#${h.slug}`}>{h.text}</a>

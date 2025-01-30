@@ -18,7 +18,7 @@ const { socialLinks = [], footNote = '', theme = 'light' } = Astro.props;
 <footer class:list={[{ dark: theme === 'dark' }, 'not-prose relative border-t border-gray-200 dark:border-slate-800']}>
   <div class="dark:bg-dark pointer-events-none absolute inset-0" aria-hidden="true"></div>
   <div
-    class="intersect-once intersect-quarter intercept-no-queue relative mx-auto max-w-7xl px-4 dark:text-slate-300 sm:px-6 motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+    class="intersect-once intersect-quarter intercept-no-queue motion-safe:md:intersect:animate-fade relative mx-auto max-w-7xl px-4 sm:px-6 motion-safe:md:opacity-0 dark:text-slate-300"
   >
     <div class="py-6 md:flex md:items-center md:justify-between md:py-8">
       {
@@ -27,7 +27,7 @@ const { socialLinks = [], footNote = '', theme = 'light' } = Astro.props;
             {socialLinks.map(({ name, url, icon }) => (
               <li>
                 <a
-                  class="inline-flex items-center rounded-lg p-2.5 text-sm text-muted hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                  class="text-muted inline-flex items-center rounded-lg p-2.5 text-sm hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                   aria-label={name}
                   href={url}
                 >
@@ -41,7 +41,7 @@ const { socialLinks = [], footNote = '', theme = 'light' } = Astro.props;
         )
       }
 
-      <div class="mr-4 text-sm dark:text-muted">
+      <div class="dark:text-muted mr-4 text-sm">
         {
           footNote ? (
             <Fragment set:html={footNote} />

@@ -1,23 +1,18 @@
-import { z } from "astro/zod";
-import { externalPropertyResponse, filePropertyResponse } from "./file.js";
+import { z } from 'astro/zod';
+import { externalPropertyResponse, filePropertyResponse } from './file.js';
 
 export const pageObjectSchema = z.object({
   icon: z
-    .discriminatedUnion("type", [
+    .discriminatedUnion('type', [
       externalPropertyResponse,
       filePropertyResponse,
       z.object({
-        type: z.literal("emoji"),
+        type: z.literal('emoji'),
         emoji: z.string(),
       }),
     ])
     .nullable(),
-  cover: z
-    .discriminatedUnion("type", [
-      externalPropertyResponse,
-      filePropertyResponse,
-    ])
-    .nullable(),
+  cover: z.discriminatedUnion('type', [externalPropertyResponse, filePropertyResponse]).nullable(),
   archived: z.boolean(),
   in_trash: z.boolean(),
   url: z.string().url(),
@@ -28,7 +23,7 @@ export const pageObjectSchema = z.object({
         type: z.string(),
         id: z.string(),
       })
-      .passthrough(),
+      .passthrough()
   ),
 });
 
@@ -42,10 +37,6 @@ export const pageObjectSchema = z.object({
  *   }
  * });
  */
-export function notionPageSchema<Schema extends z.ZodTypeAny>({
-  properties,
-}: {
-  properties: Schema;
-}) {
+export function notionPageSchema<Schema extends z.ZodTypeAny>({ properties }: { properties: Schema }) {
   return pageObjectSchema.extend({ properties });
 }

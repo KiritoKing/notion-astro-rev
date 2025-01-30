@@ -33,7 +33,7 @@ const {
       )}
     >
       {items.map(({ title, description, icon, callToAction, classes: itemClasses = {} }) => (
-        <div class="intersect-once motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
+        <div class="intersect-once motion-safe:md:intersect:animate-fade motion-safe:md:opacity-0">
           <div class={twMerge('flex max-w-md flex-row', panelClass, itemClasses?.panel)}>
             <div class="flex justify-center">
               {(icon || defaultIcon) && (

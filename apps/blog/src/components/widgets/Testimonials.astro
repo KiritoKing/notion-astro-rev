@@ -26,8 +26,8 @@ const {
     {
       testimonials &&
         testimonials.map(({ title, testimonial, name, job, image }) => (
-          <div class="intersect-once intersect-quarter flex h-auto motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
-            <div class="flex flex-col rounded-md p-4 shadow-xl dark:border dark:border-slate-600 dark:shadow-none md:p-6">
+          <div class="intersect-once intersect-quarter motion-safe:md:intersect:animate-fade flex h-auto motion-safe:md:opacity-0">
+            <div class="flex flex-col rounded-md p-4 shadow-xl md:p-6 dark:border dark:border-slate-600 dark:shadow-none">
               {title && <h2 class="pb-4 text-lg font-medium leading-6">{title}</h2>}
               {testimonial && (
                 <blockquote class="flex-auto">
@@ -57,7 +57,7 @@ const {
 
                 <div class="ml-3 grow rtl:ml-0 rtl:mr-3">
                   {name && <p class="text-base font-semibold">{name}</p>}
-                  {job && <p class="text-xs text-muted">{job}</p>}
+                  {job && <p class="text-muted text-xs">{job}</p>}
                 </div>
               </div>
             </div>

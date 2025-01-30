@@ -40,7 +40,7 @@ const posts = APP_BLOG.isEnabled ? await findLatestPosts({ count }) : [];
         {title && (
           <div class="md:max-w-sm">
             <h2
-              class="group mb-2 font-heading text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none"
+              class="font-heading group mb-2 text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none"
               set:html={title}
             />
             {APP_BLOG.list.isEnabled && linkText && linkUrl && (
@@ -52,7 +52,7 @@ const posts = APP_BLOG.isEnabled ? await findLatestPosts({ count }) : [];
           </div>
         )}
 
-        {information && <p class="text-muted dark:text-slate-400 lg:max-w-md lg:text-sm" set:html={information} />}
+        {information && <p class="text-muted lg:max-w-md lg:text-sm dark:text-slate-400" set:html={information} />}
       </div>
 
       <Grid posts={posts} />

@@ -1,6 +1,6 @@
-import type { GetImageResult } from "astro";
-import { getImage } from "astro:assets";
-import type { FileObject } from "./types.js";
+import type { GetImageResult } from 'astro';
+import { getImage } from 'astro:assets';
+import type { FileObject } from './types.js';
 
 /**
  * Extract a plain string from a list of rich text items.
@@ -10,10 +10,8 @@ import type { FileObject } from "./types.js";
  * @example
  * richTextToPlainText(page.properties.Name.title)
  */
-export function richTextToPlainText(
-  data: ReadonlyArray<{ plain_text: string }>,
-): string {
-  return data.map((text) => text.plain_text).join("");
+export function richTextToPlainText(data: ReadonlyArray<{ plain_text: string }>): string {
+  return data.map((text) => text.plain_text).join('');
 }
 
 /**
@@ -25,9 +23,9 @@ export function fileToUrl(file: FileObject): string;
 export function fileToUrl(file: FileObject | null): string | undefined;
 export function fileToUrl(file: FileObject | null): string | undefined {
   switch (file?.type) {
-    case "external":
+    case 'external':
       return file.external.url;
-    case "file":
+    case 'file':
       return file.file.url;
     default:
       return undefined;
@@ -38,9 +36,7 @@ export function fileToUrl(file: FileObject | null): string | undefined {
  * Extract and locally cache the image from a file object.
  * @see https://developers.notion.com/reference/file-object
  */
-export async function fileToImageAsset(
-  file: FileObject,
-): Promise<GetImageResult> {
+export async function fileToImageAsset(file: FileObject): Promise<GetImageResult> {
   return getImage({
     src: fileToUrl(file),
     inferSize: true,
@@ -57,7 +53,7 @@ export function dateToDateObjects(
     start: string;
     end: string | null;
     time_zone: string | null;
-  } | null,
+  } | null
 ) {
   if (dateResponse === null) {
     return null;

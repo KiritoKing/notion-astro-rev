@@ -28,7 +28,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
     image &&
       (link ? (
         <a class="group relative block" href={link ?? 'javascript:void(0)'}>
-          <div class="relative h-0 overflow-hidden rounded bg-gray-400 pb-[56.25%] shadow-lg dark:bg-slate-700 md:h-72 md:pb-[75%] lg:pb-[56.25%]">
+          <div class="relative h-0 overflow-hidden rounded bg-gray-400 pb-[56.25%] shadow-lg md:h-72 md:pb-[75%] lg:pb-[56.25%] dark:bg-slate-700">
             {image && (
               <Image
                 src={image}
@@ -45,7 +45,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
           </div>
         </a>
       ) : (
-        <div class="relative h-0 overflow-hidden rounded bg-gray-400 pb-[56.25%] shadow-lg dark:bg-slate-700 md:h-72 md:pb-[75%] lg:pb-[56.25%]">
+        <div class="relative h-0 overflow-hidden rounded bg-gray-400 pb-[56.25%] shadow-lg md:h-72 md:pb-[75%] lg:pb-[56.25%] dark:bg-slate-700">
           {image && (
             <Image
               src={image}
@@ -90,11 +90,11 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
           }
         </span>
       </div>
-      <h2 class="mb-2 font-heading text-xl font-bold leading-tight dark:text-slate-300 sm:text-2xl">
+      <h2 class="font-heading mb-2 text-xl font-bold leading-tight sm:text-2xl dark:text-slate-300">
         {
           link ? (
             <a
-              class="inline-block transition duration-200 ease-in hover:text-primary dark:hover:text-blue-700"
+              class="hover:text-primary inline-block transition duration-200 ease-in dark:hover:text-blue-700"
               href={link}
             >
               {post.title}
@@ -106,7 +106,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
       </h2>
     </header>
 
-    {post.excerpt && <p class="flex-grow text-lg text-muted dark:text-slate-400">{post.excerpt}</p>}
+    {post.excerpt && <p class="text-muted flex-grow text-lg dark:text-slate-400">{post.excerpt}</p>}
     {
       post.tags && Array.isArray(post.tags) ? (
         <footer class="mt-5">

@@ -6,11 +6,7 @@
   "engines": {
     "node": "^18.17.1 || ^20.3.0 || >= 21.0.0"
   },
-  "scripts": {
-    "dev": "pnpm --filter your-astro-app dev",
-    "build": "pnpm --filter your-astro-app build",
-    "preview": "pnpm --filter your-astro-app preview"
-  },
+  "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
