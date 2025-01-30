@@ -26,12 +26,16 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "^5.7.3"
+    "typescript": "5.7.3"
   },
   "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321",
   "pnpm": {
     "patchedDependencies": {
       "astro@5.0.3": "patches/astro@5.0.3.patch"
+    },
+    "overrides": {
+      "typescript": "5.7.3",
+      "astro": "5.0.3"
     }
   }
 }

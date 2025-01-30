@@ -2,7 +2,7 @@
   "extends": "astro/tsconfigs/strictest",
   "compilerOptions": {
     "composite": true,
-    "types": ["astro/client", "vite/client"],
+    "types": ["astro/client"],
     "exactOptionalPropertyTypes": false,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
