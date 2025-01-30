@@ -18,16 +18,16 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
 ---
 
 <article
-  class="intersect-once intersect-quarter mb-6 transition motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade"
+  class="intersect-once intersect-quarter motion-safe:md:intersect:animate-fade mb-6 transition motion-safe:md:opacity-0"
 >
-  <div class="relative mb-6 rounded bg-gray-400 shadow-lg dark:bg-slate-700 md:h-64">
+  <div class="relative mb-6 rounded bg-gray-400 shadow-lg md:h-64 dark:bg-slate-700">
     {
       image &&
         (link ? (
           <a href={link}>
             <Image
               src={image}
-              class="w-full rounded bg-gray-400 shadow-lg dark:bg-slate-700 md:h-full"
+              class="w-full rounded bg-gray-400 shadow-lg md:h-full dark:bg-slate-700"
               widths={[400, 900]}
               width={400}
               sizes="(max-width: 900px) 400px, 900px"
@@ -41,7 +41,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
         ) : (
           <Image
             src={image}
-            class="w-full rounded bg-gray-400 shadow-lg dark:bg-slate-700 md:h-full"
+            class="w-full rounded bg-gray-400 shadow-lg md:h-full dark:bg-slate-700"
             widths={[400, 900]}
             width={400}
             sizes="(max-width: 900px) 400px, 900px"
@@ -55,10 +55,10 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
     }
   </div>
 
-  <h3 class="mb-2 font-heading text-xl font-bold leading-tight dark:text-slate-300 sm:text-2xl">
+  <h3 class="font-heading mb-2 text-xl font-bold leading-tight sm:text-2xl dark:text-slate-300">
     {
       link ? (
-        <a class="inline-block transition duration-200 ease-in hover:text-primary dark:hover:text-blue-700" href={link}>
+        <a class="hover:text-primary inline-block transition duration-200 ease-in dark:hover:text-blue-700" href={link}>
           {post.title}
         </a>
       ) : (
@@ -67,5 +67,5 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
     }
   </h3>
 
-  <p class="text-lg text-muted dark:text-slate-400">{post.excerpt}</p>
+  <p class="text-muted text-lg dark:text-slate-400">{post.excerpt}</p>
 </article>

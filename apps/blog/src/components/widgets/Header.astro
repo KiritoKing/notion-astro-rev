@@ -61,7 +61,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
   <div class="absolute inset-0"></div>
   <div
     class:list={[
-      'relative mx-auto w-full px-3 py-3 text-default md:px-6',
+      'text-default relative mx-auto w-full px-3 py-3 md:px-6',
       {
         'md:flex md:justify-between': position !== 'center',
       },
@@ -82,7 +82,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
       </div>
     </div>
     <nav
-      class="hidden w-full items-center overflow-y-auto overflow-x-hidden text-default md:mx-5 md:flex md:w-auto md:justify-self-center md:overflow-x-auto md:overflow-y-visible"
+      class="text-default hidden w-full items-center overflow-y-auto overflow-x-hidden md:mx-5 md:flex md:w-auto md:justify-self-center md:overflow-x-auto md:overflow-y-visible"
       aria-label="Main navigation"
     >
       <ul
@@ -105,7 +105,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
                       <li>
                         <a
                           class:list={[
-                            'hover:text-link whitespace-no-wrap block px-5 py-2 first:rounded-t last:rounded-b dark:hover:bg-gray-700 dark:hover:text-white md:hover:bg-gray-100',
+                            'hover:text-link whitespace-no-wrap block px-5 py-2 first:rounded-t last:rounded-b md:hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white',
                             { 'aw-link-active': href2 === currentPath },
                           ]}
                           href={href2}
@@ -144,7 +144,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
           {
             showRssFeed && (
               <a
-                class="inline-flex items-center rounded-lg p-2.5 text-sm text-muted hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                class="text-muted inline-flex items-center rounded-lg p-2.5 text-sm hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                 aria-label="RSS Feed"
                 href={getAsset('/rss.xml')}
               >

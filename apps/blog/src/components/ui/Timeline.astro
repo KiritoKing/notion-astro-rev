@@ -26,7 +26,7 @@ const {
       {items.map(({ title, description, icon, classes: itemClasses = {} }, index = 0) => (
         <div
           class={twMerge(
-            'intersect-once intersect-quarter flex motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade',
+            'intersect-once intersect-quarter motion-safe:md:intersect:animate-fade flex motion-safe:md:opacity-0',
             panelClass,
             itemClasses?.panel
           )}
@@ -48,7 +48,7 @@ const {
             {title && <p class={twMerge('text-xl font-bold', titleClass, itemClasses?.title)} set:html={title} />}
             {description && (
               <p
-                class={twMerge('mt-2 text-muted', descriptionClass, itemClasses?.description)}
+                class={twMerge('text-muted mt-2', descriptionClass, itemClasses?.description)}
                 set:html={description}
               />
             )}

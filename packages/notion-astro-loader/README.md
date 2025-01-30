@@ -16,7 +16,7 @@ This package requires that you enable the experimental content layer in Astro. Y
 
 ```js
 // astro.config.js
-import { defineConfig } from "astro";
+import { defineConfig } from 'astro';
 
 export default defineConfig({
   experimental: {
@@ -31,8 +31,8 @@ You can then use the loader loader in your content collection configuration:
 
 ```ts
 // src/content/config.ts
-import { defineCollection } from "astro:content";
-import { notionLoader } from "notion-astro-loader";
+import { defineCollection } from 'astro:content';
+import { notionLoader } from 'notion-astro-loader';
 
 const database = defineCollection({
   loader: notionLoader({
@@ -40,7 +40,7 @@ const database = defineCollection({
     database_id: import.meta.env.NOTION_DATABASE_ID,
     // Use Notion sorting and filtering
     filter: {
-      property: "Hidden",
+      property: 'Hidden',
       checkbox: { equals: false },
     },
   }),
@@ -57,14 +57,14 @@ Notion stores images in remote AWS buckets, and this loader will automatically t
 
 ```js
 // astro.config.js
-import { defineConfig } from "astro/config";
+import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   image: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "**.amazonaws.com",
+        protocol: 'https',
+        hostname: '**.amazonaws.com',
       },
     ],
   },
@@ -80,14 +80,10 @@ This can be used instead of the automatic inference.
 
 ```ts
 // src/content/config.ts
-import { z } from "astro/zod";
-import { defineCollection } from "astro:content";
-import { notionLoader } from "notion-astro-loader";
-import {
-  notionPageSchema,
-  propertySchema,
-  transformedPropertySchema,
-} from "notion-astro-loader/schemas";
+import { z } from 'astro/zod';
+import { defineCollection } from 'astro:content';
+import { notionLoader } from 'notion-astro-loader';
+import { notionPageSchema, propertySchema, transformedPropertySchema } from 'notion-astro-loader/schemas';
 
 const database = defineCollection({
   loader: notionLoader({
