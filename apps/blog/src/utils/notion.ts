@@ -1,11 +1,9 @@
 import type { ImageMetadata } from 'astro';
 import { render, type CollectionEntry } from 'astro:content';
-import { dateToDateObjects, fileToImageAsset } from 'node_modules/notion-astro-loader/dist/format';
-import { richTextToPlainText } from 'notion-astro-loader';
+import { richTextToPlainText, dateToDateObjects, fileToImageAsset } from '@kiritoking/notion-astro-loader';
 import type { Post, Taxonomy } from '~/types';
 import { generatePermalink } from './blog';
 import { cleanSlug } from './permalinks';
-import { getImage } from 'astro:assets';
 
 export type NotionItem = CollectionEntry<'notion'>;
 
@@ -16,8 +14,6 @@ const getCoverImage = async (
     return undefined;
   }
   const imageAsset = await fileToImageAsset(notionFile);
-
-  console.log(imageAsset);
 
   return {
     ...imageAsset.options,
