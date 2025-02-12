@@ -14,6 +14,16 @@ export interface NotionLoaderOptions
    * You can import and apply the plugin function (recommended), or pass the plugin name as a string.
    */
   rehypePlugins?: RehypePlugins;
+  /**
+   * The path to save the images.
+   * Defaults to 'public'.
+   */
+  publicPath?: string;
+  /**
+   * The path to save the images relative to `publicPath`.
+   * Defaults to 'post_images'.
+   */
+  imageSavePath?: string;
 }
 
 /**
@@ -45,6 +55,8 @@ export function notionLoader({
   sorts,
   filter,
   archived,
+  publicPath = 'public',
+  imageSavePath = 'post_images',
   rehypePlugins = [],
   ...clientOptions
 }: NotionLoaderOptions): Loader {
@@ -97,7 +109,15 @@ export function notionLoader({
 
         // If the page has been updated, re-render it
         if (existingPage?.digest !== page.last_edited_time) {
-          const renderer = new NotionPageRenderer(notionClient, page, logger);
+          const renderer = new NotionPageRenderer(
+            notionClient,
+            page,
+            {
+              publicPath,
+              imageSavePath,
+            },
+            logger
+          );
 
           const data = await parseData(await renderer.getPageData());
           const renderPromise = renderer.render(processor).then((rendered) => {
