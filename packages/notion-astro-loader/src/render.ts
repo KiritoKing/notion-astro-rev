@@ -6,7 +6,7 @@ import type { ParseDataOptions } from 'astro/loaders';
 
 import type { FileObject, NotionPageData, PageObjectResponse } from './types.js';
 import * as transformedPropertySchema from './schemas/transformed-properties.js';
-import { fileToImageAsset, fileToUrl } from './format.js';
+import { fileToUrl } from './format.js';
 import { type VFile } from 'vfile';
 
 // #region Processor
@@ -15,6 +15,9 @@ import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import { unified, type Plugin } from 'unified';
+import { saveImageFromAWS } from './image.js';
+import * as path from 'node:path';
+import { ensureDirSync } from 'fs-extra';
 
 const baseProcessor = unified()
   .use(notionRehype, {}) // Parse Notion blocks to rehype AST
@@ -84,6 +87,8 @@ async function* listBlocks(client: Client, blockId: string, fetchImage: (file: F
       // Fetch remote image and store it locally
       const url = await fetchImage(block.image);
 
+      console.log(url);
+
       // notion-rehype-k incorrectly expects "file" to be a string instead of an object
       yield {
         ...block,
@@ -146,6 +151,10 @@ export class NotionPageRenderer {
   constructor(
     private readonly client: Client,
     private readonly page: PageObjectResponse,
+    public readonly imagePath: {
+      publicPath: string;
+      imageSavePath: string;
+    },
     parentLogger: AstroIntegrationLogger
   ) {
     // Create a sub-logger labelled with the page name
@@ -207,12 +216,28 @@ export class NotionPageRenderer {
    * @param imageFileObject Notion file object representing an image.
    * @returns Local path to the image, or undefined if the image could not be fetched.
    */
-  #fetchImage = async (imageFileObject: FileObject) => {
+  #fetchImage: (imageFileObject: FileObject) => Promise<string> = async (imageFileObject) => {
     try {
-      const fetchedImageData = await fileToImageAsset(imageFileObject);
-      this.#imagePaths.push(fetchedImageData.src);
-      return fetchedImageData.src;
+      let imageUrl: string;
+      if (imageFileObject.type === 'external') {
+        imageUrl = imageFileObject.external.url;
+      } else {
+        const { publicPath, imageSavePath } = this.imagePath;
+        const imageAbsDir = path.resolve(process.cwd(), publicPath, imageSavePath);
+        ensureDirSync(imageAbsDir);
+
+        // 文件需要下载到本地的指定目录中
+        const { filename } = await saveImageFromAWS(imageFileObject.file.url, imageAbsDir, {
+          log: (message: string) => {
+            this.#logger.debug(message);
+          },
+        });
+        imageUrl = `/${imageSavePath}/${filename}`;
+      }
+      this.#imagePaths.push(imageUrl);
+      return imageUrl;
     } catch (error) {
+      console.error(error);
       this.#logger.error(
         `Failed to fetch image when rendering page.
 Have you added \`image: { remotePatterns: [{ protocol: "https", hostname: "*.amazonaws.com" }] }\` to your Astro config file?\n
