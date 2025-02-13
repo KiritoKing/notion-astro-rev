@@ -16,7 +16,8 @@
     "check:prettier": "prettier --check .",
     "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "eslint --fix .",
-    "fix:prettier": "prettier -w ."
+    "fix:prettier": "prettier -w .",
+    "sync": "astro sync"
   },
   "dependencies": {
     "@astrojs/react": "4.1.5",
