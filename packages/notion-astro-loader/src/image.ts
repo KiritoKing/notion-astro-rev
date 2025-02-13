@@ -28,14 +28,14 @@ export async function saveImageFromAWS(url: string, dir: string, options: SaveOp
     const response = await fetch(url);
 
     const buffer = await response.arrayBuffer();
-    await fse.writeFile(path, Buffer.from(buffer));
+    fse.writeFile(path, new Uint8Array(buffer));
     log?.(`Saved image ${name} to ${path}`);
   } else {
     log?.(`Skip saving image ${name}, since it is cached.`);
   }
 
   return {
-    path,
+    absPath: path,
     filename: name,
   };
 }

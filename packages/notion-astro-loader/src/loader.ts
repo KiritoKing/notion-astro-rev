@@ -86,7 +86,8 @@ export function notionLoader({
       notionPageSchema({
         properties: await propertiesSchemaForDatabase(notionClient, database_id),
       }),
-    async load({ store, logger, parseData }) {
+    async load(ctx) {
+      const { store, logger, parseData } = ctx;
       logger.info('Loading notion pages');
 
       const existingPageIds = new Set<string>(store.keys());
@@ -116,7 +117,7 @@ export function notionLoader({
               publicPath,
               imageSavePath,
             },
-            logger
+            ctx
           );
 
           const data = await parseData(await renderer.getPageData());
@@ -126,6 +127,7 @@ export function notionLoader({
               digest: page.last_edited_time,
               data,
               rendered,
+              assetImports: rendered?.metadata.imagePaths,
             });
           });
 

@@ -2,7 +2,7 @@ import type { HtmlElementNode, ListNode, TextNode } from '@jsdevtools/rehype-toc
 import { toc as rehypeToc } from '@jsdevtools/rehype-toc';
 import { type Client, iteratePaginatedAPI, isFullBlock } from '@notionhq/client';
 import type { AstroIntegrationLogger, MarkdownHeading } from 'astro';
-import type { ParseDataOptions } from 'astro/loaders';
+import type { LoaderContext, ParseDataOptions } from 'astro/loaders';
 
 import type { FileObject, NotionPageData, PageObjectResponse } from './types.js';
 import * as transformedPropertySchema from './schemas/transformed-properties.js';
@@ -17,7 +17,8 @@ import rehypeStringify from 'rehype-stringify';
 import { unified, type Plugin } from 'unified';
 import { saveImageFromAWS } from './image.js';
 import * as path from 'node:path';
-import { ensureDirSync } from 'fs-extra';
+import * as fse from 'fs-extra';
+import { fileURLToPath } from 'node:url';
 
 const baseProcessor = unified()
   .use(notionRehype, {}) // Parse Notion blocks to rehype AST
@@ -142,6 +143,7 @@ export interface RenderedNotionEntry {
 export class NotionPageRenderer {
   #imagePaths: string[] = [];
   #logger: AstroIntegrationLogger;
+  #ctx: LoaderContext;
 
   /**
    * @param client Notion API client.
@@ -155,14 +157,17 @@ export class NotionPageRenderer {
       publicPath: string;
       imageSavePath: string;
     },
-    parentLogger: AstroIntegrationLogger
+    loaderContext: LoaderContext
   ) {
     // Create a sub-logger labelled with the page name
     const pageTitle = transformedPropertySchema.title.safeParse(page.properties.Name);
-    this.#logger = parentLogger.fork(`page ${page.id} (Name ${pageTitle.success ? pageTitle.data : 'unknown'})`);
+    this.#logger = loaderContext.logger.fork(
+      `page ${page.id} (Name ${pageTitle.success ? pageTitle.data : 'unknown'})`
+    );
     if (!pageTitle.success) {
       this.#logger.warn(`Failed to parse property Name as title: ${pageTitle.error.toString()}`);
     }
+    this.#ctx = loaderContext;
   }
 
   /**
@@ -218,31 +223,26 @@ export class NotionPageRenderer {
    */
   #fetchImage: (imageFileObject: FileObject) => Promise<string> = async (imageFileObject) => {
     try {
-      let imageUrl: string;
+      // only file type will be processed
       if (imageFileObject.type === 'external') {
-        imageUrl = imageFileObject.external.url;
-      } else {
-        const { publicPath, imageSavePath } = this.imagePath;
-        const imageAbsDir = path.resolve(process.cwd(), publicPath, imageSavePath);
-        ensureDirSync(imageAbsDir);
-
-        // 文件需要下载到本地的指定目录中
-        const { filename } = await saveImageFromAWS(imageFileObject.file.url, imageAbsDir, {
-          log: (message: string) => {
-            this.#logger.debug(message);
-          },
-        });
-        imageUrl = `/${imageSavePath}/${filename}`;
+        return imageFileObject.external.url;
       }
+
+      // get cache dir from config
+      const cacheDirUrl = this.#ctx.config.cacheDir;
+      const cachePath = path.resolve(fileURLToPath(cacheDirUrl), 'notion_images');
+      fse.ensureDirSync(cachePath);
+
+      // 文件需要下载到本地的指定目录中
+      const { absPath: imageUrl } = await saveImageFromAWS(imageFileObject.file.url, cachePath, {
+        log: (message: string) => {
+          this.#logger.debug(message);
+        },
+      });
       this.#imagePaths.push(imageUrl);
       return imageUrl;
     } catch (error) {
-      console.error(error);
-      this.#logger.error(
-        `Failed to fetch image when rendering page.
-Have you added \`image: { remotePatterns: [{ protocol: "https", hostname: "*.amazonaws.com" }] }\` to your Astro config file?\n
-Error: ${getErrorMessage(error)}`
-      );
+      this.#logger.error(`Failed to fetch image: ${getErrorMessage(error)}`);
       // Fall back to using the remote URL directly.
       return fileToUrl(imageFileObject);
     }
