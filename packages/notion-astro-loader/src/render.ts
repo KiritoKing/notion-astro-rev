@@ -2,7 +2,7 @@ import type { HtmlElementNode, ListNode, TextNode } from '@jsdevtools/rehype-toc
 import { toc as rehypeToc } from '@jsdevtools/rehype-toc';
 import { type Client, iteratePaginatedAPI, isFullBlock } from '@notionhq/client';
 import type { AstroIntegrationLogger, MarkdownHeading } from 'astro';
-import type { LoaderContext, ParseDataOptions } from 'astro/loaders';
+import type { ParseDataOptions } from 'astro/loaders';
 
 import type { FileObject, NotionPageData, PageObjectResponse } from './types.js';
 import * as transformedPropertySchema from './schemas/transformed-properties.js';
@@ -16,9 +16,8 @@ import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import { unified, type Plugin } from 'unified';
 import { saveImageFromAWS } from './image.js';
-import * as path from 'node:path';
 import * as fse from 'fs-extra';
-import { fileURLToPath } from 'node:url';
+import { rehypeImages } from './rehype/rehype-images.js';
 
 const baseProcessor = unified()
   .use(notionRehype, {}) // Parse Notion blocks to rehype AST
@@ -48,8 +47,8 @@ export function buildProcessor(rehypePlugins: Promise<ReadonlyArray<readonly [Re
     return processor;
   });
 
-  return async function process(blocks: unknown[]) {
-    const processor = await processorPromise;
+  return async function process(blocks: unknown[], imagePaths: string[]) {
+    const processor = await processorPromise.then((p) => p().use(rehypeImages(), { imagePaths }));
     const vFile = (await processor.process({ data: blocks } as Record<string, unknown>)) as VFile;
     return { vFile, headings };
   };
@@ -87,9 +86,6 @@ async function* listBlocks(client: Client, blockId: string, fetchImage: (file: F
     if (block.type === 'image') {
       // Fetch remote image and store it locally
       const url = await fetchImage(block.image);
-
-      console.log(url);
-
       // notion-rehype-k incorrectly expects "file" to be a string instead of an object
       yield {
         ...block,
@@ -142,8 +138,11 @@ export interface RenderedNotionEntry {
 
 export class NotionPageRenderer {
   #imagePaths: string[] = [];
+  #imageAnalytics: Record<'download' | 'cached', number> = {
+    download: 0,
+    cached: 0,
+  };
   #logger: AstroIntegrationLogger;
-  #ctx: LoaderContext;
 
   /**
    * @param client Notion API client.
@@ -153,21 +152,15 @@ export class NotionPageRenderer {
   constructor(
     private readonly client: Client,
     private readonly page: PageObjectResponse,
-    public readonly imagePath: {
-      publicPath: string;
-      imageSavePath: string;
-    },
-    loaderContext: LoaderContext
+    public readonly imageSavePath: string,
+    logger: AstroIntegrationLogger
   ) {
     // Create a sub-logger labelled with the page name
     const pageTitle = transformedPropertySchema.title.safeParse(page.properties.Name);
-    this.#logger = loaderContext.logger.fork(
-      `page ${page.id} (Name ${pageTitle.success ? pageTitle.data : 'unknown'})`
-    );
+    this.#logger = logger.fork(`page ${page.id} (Name ${pageTitle.success ? pageTitle.data : 'unknown'})`);
     if (!pageTitle.success) {
       this.#logger.warn(`Failed to parse property Name as title: ${pageTitle.error.toString()}`);
     }
-    this.#ctx = loaderContext;
   }
 
   /**
@@ -199,7 +192,13 @@ export class NotionPageRenderer {
     try {
       const blocks = await awaitAll(listBlocks(this.client, this.page.id, this.#fetchImage));
 
-      const { vFile, headings } = await process(blocks);
+      if (this.#imageAnalytics.download > 0 || this.#imageAnalytics.cached > 0) {
+        this.#logger.info(
+          `🌟 Astro Notion Loader found ${this.#imageAnalytics.download} images need to download, ${this.#imageAnalytics.cached} images need to use cached`
+        );
+      }
+
+      const { vFile, headings } = await process(blocks, this.#imagePaths);
 
       this.#logger.debug('Rendered');
       return {
@@ -228,15 +227,15 @@ export class NotionPageRenderer {
         return imageFileObject.external.url;
       }
 
-      // get cache dir from config
-      const cacheDirUrl = this.#ctx.config.cacheDir;
-      const cachePath = path.resolve(fileURLToPath(cacheDirUrl), 'notion_images');
-      fse.ensureDirSync(cachePath);
+      fse.ensureDirSync(this.imageSavePath);
 
       // 文件需要下载到本地的指定目录中
-      const { absPath: imageUrl } = await saveImageFromAWS(imageFileObject.file.url, cachePath, {
-        log: (message: string) => {
+      const imageUrl = await saveImageFromAWS(imageFileObject.file.url, this.imageSavePath, {
+        log: (message) => {
           this.#logger.debug(message);
+        },
+        tag: (type) => {
+          this.#imageAnalytics[type]++;
         },
       });
       this.#imagePaths.push(imageUrl);
