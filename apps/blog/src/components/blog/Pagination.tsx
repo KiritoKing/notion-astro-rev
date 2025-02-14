@@ -23,7 +23,7 @@ const BOUNDARY_COUNT = 1;
 const Pagination: React.FC<Props> = ({ prevUrl, nextUrl, currentPage = 1, totalPages = 1, baseUrl = '' }) => {
   const getPageUrl = (page: number): string => {
     if (page === 1) return baseUrl;
-    return `${baseUrl}${page}`;
+    return `${baseUrl}/${page}`;
   };
 
   const range = (start: number, end: number): number[] => {

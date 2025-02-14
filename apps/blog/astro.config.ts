@@ -89,7 +89,9 @@ export default defineConfig({
     domains: ['amazonaws.com'],
     service: {
       entrypoint: 'astro/assets/services/sharp',
-      config: {},
+      config: {
+        limitInputPixels: false, // 禁用输入大小限制
+      },
     },
   },
 
