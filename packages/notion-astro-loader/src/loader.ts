@@ -5,6 +5,7 @@ import { propertiesSchemaForDatabase } from './database-properties.js';
 import { buildProcessor, NotionPageRenderer, type RehypePlugin } from './render.js';
 import { notionPageSchema } from './schemas/page.js';
 import type { ClientOptions, QueryDatabaseParameters } from './types.js';
+import * as path from 'node:path';
 
 export interface NotionLoaderOptions
   extends Pick<ClientOptions, 'auth' | 'timeoutMs' | 'baseUrl' | 'notionVersion' | 'fetch' | 'agent'>,
@@ -20,11 +21,14 @@ export interface NotionLoaderOptions
    */
   publicPath?: string;
   /**
-   * The path to save the images relative to `publicPath`.
-   * Defaults to 'post_images'.
+   * MUST STORED IN `src` TO BE PROCESSED PROPERLY
+   * The path to save the images relative to `src`.
+   * Defaults to 'assets/images/notion'.
    */
   imageSavePath?: string;
 }
+
+const DEFAULT_IMAGE_SAVE_PATH = 'assets/images/notion';
 
 /**
  * Notion loader for the Astro Content Layer API.
@@ -55,8 +59,7 @@ export function notionLoader({
   sorts,
   filter,
   archived,
-  publicPath = 'public',
-  imageSavePath = 'post_images',
+  imageSavePath = DEFAULT_IMAGE_SAVE_PATH,
   rehypePlugins = [],
   ...clientOptions
 }: NotionLoaderOptions): Loader {
@@ -110,23 +113,19 @@ export function notionLoader({
 
         // If the page has been updated, re-render it
         if (existingPage?.digest !== page.last_edited_time) {
-          const renderer = new NotionPageRenderer(
-            notionClient,
-            page,
-            {
-              publicPath,
-              imageSavePath,
-            },
-            ctx
-          );
+          const realSavePath = path.resolve(process.cwd(), 'src', imageSavePath);
+
+          const renderer = new NotionPageRenderer(notionClient, page, realSavePath, logger);
 
           const data = await parseData(await renderer.getPageData());
+
           const renderPromise = renderer.render(processor).then((rendered) => {
             store.set({
               id: page.id,
               digest: page.last_edited_time,
               data,
               rendered,
+              filePath: `src/content/notion/${page.id}.md`, // 不重要，有就行
               assetImports: rendered?.metadata.imagePaths,
             });
           });

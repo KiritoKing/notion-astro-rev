@@ -43,9 +43,11 @@
     "unified": "^11.0.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
     "@types/slug": "^5.0.9",
     "astro": "5.0.3",
     "crossrm": "^1.0.0",
+    "fs-extra": "^11.3.0",
     "typescript": "^5.5.4",
     "vfile": "^6.0.3",
     "vitest": "^2.0.5"
