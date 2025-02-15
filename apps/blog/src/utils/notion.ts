@@ -1,25 +1,56 @@
-import type { ImageMetadata } from 'astro';
+import type { GetImageResult } from 'astro';
 import { render, type CollectionEntry } from 'astro:content';
-import { richTextToPlainText, dateToDateObjects, fileToImageAsset } from '@chlorinec-pkgs/notion-astro-loader';
+import {
+  richTextToPlainText,
+  dateToDateObjects,
+  fileToImageAsset,
+  fileToUrl,
+} from '@chlorinec-pkgs/notion-astro-loader';
 import type { Post, Taxonomy } from '~/types';
 import { generatePermalink } from './blog';
 import { cleanSlug } from './permalinks';
+import { getImage } from 'astro:assets';
 
 export type NotionItem = CollectionEntry<'notion'>;
 
-const getCoverImage = async (
-  notionFile: Parameters<typeof fileToImageAsset>[0] | null
-): Promise<ImageMetadata | undefined> => {
-  if (!notionFile) {
-    return undefined;
+export type GetNotionImageResult = {
+  result: GetImageResult;
+  src: string;
+  /** 原始URL，用于直接传给<Image>组件 */
+  raw: string;
+};
+
+/**
+ * @deprecated 请在本地缓存notion图片，不要依赖astro缓存
+ */
+export const getNotionImage = async (
+  notionFile: Parameters<typeof fileToImageAsset>[0] | string | null
+): Promise<GetNotionImageResult | null> => {
+  if (typeof notionFile === 'string') {
+    try {
+      const url = new URL(notionFile);
+      // 不处理非notion文件的url
+      if (!url.host.includes('amazonaws.com')) return null;
+    } catch {
+      // invalid url
+      return null;
+    }
+  } else if (!notionFile || notionFile.type !== 'file') {
+    // 不处理notion external image
+    return null;
   }
-  const imageAsset = await fileToImageAsset(notionFile);
+
+  const rawImageUrl = typeof notionFile === 'string' ? notionFile : fileToUrl(notionFile);
+  const imageAsset = await getImage({
+    src: rawImageUrl,
+    inferSize: true,
+  });
 
   return {
-    ...imageAsset.options,
-    src: typeof imageAsset.options.src === 'string' ? imageAsset.options.src : imageAsset.src,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } as any;
+    result: imageAsset,
+    src: imageAsset.src,
+    raw: rawImageUrl,
+  };
 };
 
 const getTaxonomy = (raw: string | null | undefined): Taxonomy | undefined => {
@@ -32,7 +63,6 @@ const getTaxonomy = (raw: string | null | undefined): Taxonomy | undefined => {
 
 export const notionToPost = async (notionItem: NotionItem): Promise<Post> => {
   const props = notionItem.data.properties;
-  const coverImg = await getCoverImage(notionItem.data.cover);
   const slug = richTextToPlainText(props.slug.rich_text);
   const date = dateToDateObjects(props.date?.date)?.start ?? new Date();
 
@@ -46,7 +76,7 @@ export const notionToPost = async (notionItem: NotionItem): Promise<Post> => {
     excerpt: richTextToPlainText(props.summary.rich_text),
     category: getTaxonomy(props.category.select?.name),
     tags: props.tags.multi_select.map((tag) => getTaxonomy(tag.name)).filter((item): item is Taxonomy => !!item),
-    image: coverImg,
+    image: notionItem.data.cover ? await fileToUrl(notionItem.data.cover) : undefined,
     publishDate: date,
     updateDate: new Date(props.updateAt.last_edited_time),
     Content: renderedContent,

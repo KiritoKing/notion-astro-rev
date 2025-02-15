@@ -21,10 +21,10 @@ export const fetchLocalImages = async () => {
   return _images;
 };
 
-/** */
-export const findImage = async (
-  imagePath?: string | ImageMetadata | null
-): Promise<string | ImageMetadata | undefined | null> => {
+/**
+ * 处理本地图像资源，转为dynamic import
+ */
+export const findImage = async (imagePath?: string | ImageMetadata): Promise<string | ImageMetadata | undefined> => {
   // Not string
   if (typeof imagePath !== 'string') {
     return imagePath;
@@ -36,16 +36,19 @@ export const findImage = async (
   }
 
   // Relative paths or not "~/assets/"
-  if (!imagePath.startsWith('~/assets/images')) {
+  if (!imagePath.startsWith('~/assets/images') && !imagePath.startsWith('src/')) {
     return imagePath;
   }
 
   const images = await fetchLocalImages();
-  const key = imagePath.replace('~/', '/src/');
+  let key = imagePath.replace('~/', '/src/');
+  if (!key.startsWith('/')) {
+    key = '/' + key;
+  }
 
   return images && typeof images[key] === 'function'
     ? ((await images[key]()) as { default: ImageMetadata })['default']
-    : null;
+    : undefined;
 };
 
 /** */
