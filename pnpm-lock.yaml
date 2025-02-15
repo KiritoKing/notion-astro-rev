@@ -156,9 +156,6 @@ importers:
       '@iconify-json/tabler':
         specifier: ^1.2.10
         version: 1.2.15
-      '@tailwindcss/line-clamp':
-        specifier: ^0.4.4
-        version: 0.4.4(tailwindcss@3.4.17)
       '@types/eslint__js':
         specifier: ^8.42.3
         version: 8.42.3
@@ -278,7 +275,7 @@ packages:
   '@astro-community/astro-embed-bluesky@0.1.3':
     resolution: {integrity: sha512-qOuIK2CYQfAjFePaxtko7yyS0rb94I3MgZ94kK02xqeonCzHNP95Q+jUCD/uelcvZK4u+VEh5zNkQ4BfjFm63w==}
     peerDependencies:
-      astro: 5.0.3
+      astro: ^4.0.0 || ^5.0.0-beta.0
 
   '@astro-community/astro-embed-integration@0.8.0':
     resolution: {integrity: sha512-WnBBikazuFDSslsYjJ5xGeQexMWYdGqpxpiHl0IiBJ9A51MYwDlBoHAtnXU8a5jkidneN8+BD/vLW5uFWf157A==}
@@ -1428,11 +1425,6 @@ packages:
 
   '@shikijs/vscode-textmate@10.0.1':
     resolution: {integrity: sha512-fTIQwLF+Qhuws31iw7Ncl1R3HUDtGwIipiJ9iU+UsDUwMhegFcQKQHd51nZjb7CArq0MvON8rbgCGQYWHUKAdg==}
-
-  '@tailwindcss/line-clamp@0.4.4':
-    resolution: {integrity: sha512-5U6SY5z8N42VtrCrKlsTAA35gy2VSyYtHWCsg1H87NU1SXnEfekTVlrga9fzUDrrHcGi2Lb5KenUWb4lRQT5/g==}
-    peerDependencies:
-      tailwindcss: '>=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1'
 
   '@tailwindcss/typography@0.5.16':
     resolution: {integrity: sha512-0wDLwCVF5V3x3b1SGXPCDcdsbDHMBe+lkFzBRaHeLvNi+nrrnZ1lA18u+OTWO8iSWU2GxUOCvlXtDuqftc1oiA==}
@@ -5785,10 +5777,6 @@ snapshots:
       '@types/hast': 3.0.4
 
   '@shikijs/vscode-textmate@10.0.1': {}
-
-  '@tailwindcss/line-clamp@0.4.4(tailwindcss@3.4.17)':
-    dependencies:
-      tailwindcss: 3.4.17
 
   '@tailwindcss/typography@0.5.16(tailwindcss@3.4.17)':
     dependencies:
