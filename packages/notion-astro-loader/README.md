@@ -1,4 +1,4 @@
-# @kiritoking/notion-astro-loader
+# @chlorinec-pkgs/notion-astro-loader
 
 > **Notice**
 >
@@ -16,13 +16,13 @@ If you want to know more about new content layer API, you can read [Astro's blog
 
 ```sh
 # npm
-npm install @kiritoking/notion-astro-loader --save-dev
+npm install @chlorinec-pkgs/notion-astro-loader --save-dev
 # pnpm
-pnpm add @kiritoking/notion-astro-loader -D
+pnpm add @chlorinec-pkgs/notion-astro-loader -D
 # yarn
-yarn add @kiritoking/notion-astro-loader -D
+yarn add @chlorinec-pkgs/notion-astro-loader -D
 # bun
-bun add @kiritoking/notion-astro-loader -D
+bun add @chlorinec-pkgs/notion-astro-loader -D
 ```
 
 ## Usage
@@ -75,7 +75,7 @@ Then, you can use the loader loader in your content collection configuration:
 
 ```ts
 import { defineCollection } from 'astro:content';
-import { notionLoader } from '@kiritoking/notion-astro-loader';
+import { notionLoader } from '@chlorinec-pkgs/notion-astro-loader';
 
 const database = defineCollection({
   loader: notionLoader({
@@ -103,7 +103,7 @@ Notion loader will automatically fetch pages from Notion database, render them i
 
 You can then use this collection like any other content collection in Astro, with integrated and type-safe DX.
 
-If you are looking for an example, you can check out [my blog repository](https://github.com/KiritoKing/notion-astro-rev/tree/main/apps/blog), which is also a blog template based on AstroWind and this loader, **allowing you to use any Notion database as your CMS rather than force you to create from an existing template**.
+If you are looking for an example, you can check out [my blog repository](https://github.com/chlorinec-pkgs/notion-astro-rev/tree/main/apps/blog), which is also a blog template based on AstroWind and this loader, **allowing you to use any Notion database as your CMS rather than force you to create from an existing template**.
 
 ## Options
 
