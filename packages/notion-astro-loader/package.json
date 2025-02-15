@@ -7,12 +7,12 @@
     "astro",
     "notion"
   ],
-  "homepage": "https://github.com/chlorinec-pkgs/notion-astro-rev/tree/main/packages/notion-astro-loader",
+  "homepage": "https://github.com/Kiritoking/notion-astro-rev/tree/main/packages/notion-astro-loader",
   "bugs": {
-    "url": "https://github.com/chlorinec-pkgs/notion-astro-rev/issues",
+    "url": "https://github.com/Kiritoking/notion-astro-rev/issues",
     "email": "kiritoclzh@gmail.com"
   },
-  "repository": "github:chlorinec-pkgs/notion-astro-rev",
+  "repository": "github:Kiritoking/notion-astro-rev",
   "license": "MIT",
   "type": "module",
   "exports": {
