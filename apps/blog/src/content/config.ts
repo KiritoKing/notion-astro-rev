@@ -1,5 +1,5 @@
 import { defineCollection } from 'astro:content';
-import { notionLoader } from '@kiritoking/notion-astro-loader';
+import { notionLoader } from '@chlorinec-pkgs/notion-astro-loader';
 import rehypePrism from 'rehype-prism';
 
 const database = defineCollection({

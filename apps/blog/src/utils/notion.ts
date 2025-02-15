@@ -1,6 +1,6 @@
 import type { ImageMetadata } from 'astro';
 import { render, type CollectionEntry } from 'astro:content';
-import { richTextToPlainText, dateToDateObjects, fileToImageAsset } from '@kiritoking/notion-astro-loader';
+import { richTextToPlainText, dateToDateObjects, fileToImageAsset } from '@chlorinec-pkgs/notion-astro-loader';
 import type { Post, Taxonomy } from '~/types';
 import { generatePermalink } from './blog';
 import { cleanSlug } from './permalinks';
