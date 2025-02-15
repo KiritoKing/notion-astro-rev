@@ -26,6 +26,10 @@ const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroInteg
 export default defineConfig({
   output: 'static',
 
+  redirects: {
+    '/': '/blog', // TODO: 主页还没完工
+  },
+
   integrations: [
     tailwind({
       applyBaseStyles: false,

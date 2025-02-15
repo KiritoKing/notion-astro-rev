@@ -148,7 +148,6 @@ export default {
       addVariant('intersect', '&:not([no-intersect])');
     }),
     require('tailwindcss-animate'),
-    require('@tailwindcss/line-clamp'),
   ],
   darkMode: 'class',
 };
