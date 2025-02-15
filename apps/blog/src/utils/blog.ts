@@ -134,9 +134,7 @@ export const getStaticPathsBlogPost = async () => {
 
   const migratedPostLinks = Object.keys(urlMap)
     .map((key) => {
-      const post = posts.find((post) => {
-        return post.params.blog === key;
-      });
+      const post = posts.find((post) => post.params.blog === key.split('/').at(-1));
       if (!post) return null;
       const aliases = urlMap[key].map((url: string) => url) as string[];
       return aliases.map((alias) => ({
