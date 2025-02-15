@@ -24,7 +24,9 @@ export const fetchLocalImages = async () => {
 /**
  * 处理本地图像资源，转为dynamic import
  */
-export const findImage = async (imagePath?: string | ImageMetadata): Promise<string | ImageMetadata | undefined> => {
+export const findImage = async (
+  imagePath?: string | ImageMetadata | null
+): Promise<string | ImageMetadata | undefined | null> => {
   // Not string
   if (typeof imagePath !== 'string') {
     return imagePath;

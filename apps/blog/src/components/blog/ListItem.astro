@@ -9,14 +9,13 @@ import type { Post } from '~/types';
 import { getPermalink } from '~/utils/permalinks';
 import { findImage } from '~/utils/images';
 import { getFormattedDate } from '~/utils/utils';
-import type { ImageMetadata } from 'astro';
 
 export interface Props {
   post: Post;
 }
 
 const { post } = Astro.props;
-const image: string | ImageMetadata | undefined = await findImage(post.image);
+const image = await findImage(post.image);
 
 const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : '';
 ---
