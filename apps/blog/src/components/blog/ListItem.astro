@@ -24,26 +24,8 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
   class={`max-w-md mx-auto md:max-w-none grid gap-6 md:gap-8 intersect-once intersect-quarter motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade ${image ? 'md:grid-cols-2' : ''}`}
 >
   {
-    image &&
-      (link ? (
-        <a class="group relative block" href={link ?? 'javascript:void(0)'}>
-          <div class="relative h-0 overflow-hidden rounded bg-gray-400 pb-[56.25%] shadow-lg md:h-72 md:pb-[75%] lg:pb-[56.25%] dark:bg-slate-700">
-            {image && (
-              <Image
-                src={image}
-                class="absolute inset-0 mb-6 h-full w-full rounded bg-gray-400 object-cover shadow-lg dark:bg-slate-700"
-                widths={[400, 900]}
-                width={900}
-                sizes="(max-width: 900px) 400px, 900px"
-                alt={post.title}
-                aspectRatio="16:9"
-                loading="lazy"
-                decoding="async"
-              />
-            )}
-          </div>
-        </a>
-      ) : (
+    image && (
+      <a class="group relative block" href={link ?? 'javascript:void(0)'}>
         <div class="relative h-0 overflow-hidden rounded bg-gray-400 pb-[56.25%] shadow-lg md:h-72 md:pb-[75%] lg:pb-[56.25%] dark:bg-slate-700">
           {image && (
             <Image
@@ -59,7 +41,8 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
             />
           )}
         </div>
-      ))
+      </a>
+    )
   }
   <div class="mt-2">
     <header>
