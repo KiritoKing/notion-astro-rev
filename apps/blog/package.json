@@ -26,8 +26,8 @@
     "@astrojs/sitemap": "3.2.1",
     "@astrolib/analytics": "^0.6.1",
     "@astrolib/seo": "^1.0.0-beta.8",
-    "@fontsource-variable/inter": "^5.1.0",
     "@chlorinec-pkgs/notion-astro-loader": "workspace:*",
+    "@fontsource-variable/inter": "^5.1.0",
     "@radix-ui/react-slot": "^1.1.1",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
@@ -58,6 +58,7 @@
     "@eslint/js": "^9.16.0",
     "@iconify-json/flat-color-icons": "^1.2.0",
     "@iconify-json/tabler": "^1.2.10",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@types/eslint__js": "^8.42.3",
     "@types/js-yaml": "^4.0.9",
     "@types/lodash.merge": "^4.6.9",
@@ -69,8 +70,8 @@
     "mdast-util-to-string": "^4.0.0",
     "reading-time": "^1.5.0",
     "sharp": "0.33.5",
+    "tailwind-merge": "^2.6.0",
     "typescript-eslint": "^8.17.0",
-    "unist-util-visit": "^5.0.0",
     "wrangler": "*"
   },
   "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
