@@ -15,7 +15,7 @@ import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import { unified, type Plugin } from 'unified';
-import { saveImageFromAWS } from './image.js';
+import { saveImageFromAWS, transformImagePathForCover } from './image.js';
 import * as fse from 'fs-extra';
 import { rehypeImages } from './rehype/rehype-images.js';
 
@@ -166,13 +166,25 @@ export class NotionPageRenderer {
   /**
    * Return page properties for Astro to use.
    */
-  getPageData(): ParseDataOptions<NotionPageData> {
+  async getPageData(transformCoverImage = false, rootAlias = 'src'): Promise<ParseDataOptions<NotionPageData>> {
     const { page } = this;
+    let cover = page.cover;
+    // transform cover image file
+    if (cover && transformCoverImage && cover.type === 'file') {
+      const transformedUrl = `${rootAlias}/${transformImagePathForCover(await this.#fetchImage(cover))}`;
+      cover = {
+        ...cover,
+        file: {
+          ...cover.file,
+          url: transformedUrl,
+        },
+      };
+    }
     return {
       id: page.id,
       data: {
         icon: page.icon,
-        cover: page.cover,
+        cover,
         archived: page.archived,
         in_trash: page.in_trash,
         url: page.url,
@@ -194,7 +206,11 @@ export class NotionPageRenderer {
 
       if (this.#imageAnalytics.download > 0 || this.#imageAnalytics.cached > 0) {
         this.#logger.info(
-          `🌟 Astro Notion Loader found ${this.#imageAnalytics.download} images need to download, ${this.#imageAnalytics.cached} images need to use cached`
+          [
+            `Astro Notion Loader found `,
+            ` ${this.#imageAnalytics.download} images need to download `,
+            this.#imageAnalytics.cached > 0 ? `and ${this.#imageAnalytics.cached} images need to use cached ` : ``,
+          ].join(' ')
         );
       }
 

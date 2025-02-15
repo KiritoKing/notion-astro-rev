@@ -4,8 +4,8 @@ import type { Post, Taxonomy } from '~/types';
 import { APP_BLOG } from 'astrowind:config';
 import { trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
 import { notionToPost } from './notion';
-import { findImage } from './images';
 import urlMap from 'migration/url-map.json' with { type: 'json' };
+import { findImage } from './images';
 
 export const generatePermalink = async ({
   id,
@@ -239,8 +239,8 @@ export async function getRelatedPosts(originalPost: Post, maxResults: number = 4
   return selectedPosts;
 }
 
-export interface PostWithCover extends Post {
-  cover: ImageMetadata;
+export interface PostWithCover extends Omit<Post, 'image'> {
+  image: ImageMetadata | string;
 }
 
 export async function getRecommendPosts(maxResults = 3): Promise<PostWithCover[]> {
@@ -248,10 +248,13 @@ export async function getRecommendPosts(maxResults = 3): Promise<PostWithCover[]
 
   const processedPosts = posts.map(async (post) => {
     if (!post.image) return null;
-    const image = (await findImage(post.image)) as ImageMetadata | undefined;
-    if (!image) return null;
+    let src = post.image;
+    if (typeof src === 'string') {
+      src = await findImage(src);
+    }
+    if (!src) return null;
 
-    return { ...post, image };
+    return { ...post, image: src };
   });
 
   return (await Promise.all(processedPosts)).filter((post) => !!post).slice(0, maxResults) as PostWithCover[];

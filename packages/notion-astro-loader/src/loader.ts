@@ -6,6 +6,7 @@ import { buildProcessor, NotionPageRenderer, type RehypePlugin } from './render.
 import { notionPageSchema } from './schemas/page.js';
 import type { ClientOptions, QueryDatabaseParameters } from './types.js';
 import * as path from 'node:path';
+import { VIRTUAL_CONTENT_ROOT } from './image.js';
 
 export interface NotionLoaderOptions
   extends Pick<ClientOptions, 'auth' | 'timeoutMs' | 'baseUrl' | 'notionVersion' | 'fetch' | 'agent'>,
@@ -26,6 +27,16 @@ export interface NotionLoaderOptions
    * Defaults to 'assets/images/notion'.
    */
   imageSavePath?: string;
+  /**
+   * Whether to cache images in the data.
+   * Defaults to `false`.
+   */
+  experimentalCacheImageInData?: boolean;
+  /**
+   * The root alias for the images.
+   * Defaults to `src`.
+   */
+  experimentalRootSourceAlias?: string;
 }
 
 const DEFAULT_IMAGE_SAVE_PATH = 'assets/images/notion';
@@ -61,6 +72,8 @@ export function notionLoader({
   archived,
   imageSavePath = DEFAULT_IMAGE_SAVE_PATH,
   rehypePlugins = [],
+  experimentalCacheImageInData = false,
+  experimentalRootSourceAlias = 'src',
   ...clientOptions
 }: NotionLoaderOptions): Loader {
   const notionClient = new Client(clientOptions);
@@ -117,7 +130,9 @@ export function notionLoader({
 
           const renderer = new NotionPageRenderer(notionClient, page, realSavePath, logger);
 
-          const data = await parseData(await renderer.getPageData());
+          const data = await parseData(
+            await renderer.getPageData(experimentalCacheImageInData, experimentalRootSourceAlias)
+          );
 
           const renderPromise = renderer.render(processor).then((rendered) => {
             store.set({
@@ -125,7 +140,7 @@ export function notionLoader({
               digest: page.last_edited_time,
               data,
               rendered,
-              filePath: `src/content/notion/${page.id}.md`, // 不重要，有就行
+              filePath: `${VIRTUAL_CONTENT_ROOT}/${page.id}.md`, // 不重要，有就行
               assetImports: rendered?.metadata.imagePaths,
             });
           });

@@ -15,6 +15,8 @@ const database = defineCollection({
     },
     sorts: [{ property: 'date', direction: 'descending' }],
     rehypePlugins: [rehypePrism],
+    experimentalCacheImageInData: true,
+    experimentalRootSourceAlias: '~',
   }),
 });
 
