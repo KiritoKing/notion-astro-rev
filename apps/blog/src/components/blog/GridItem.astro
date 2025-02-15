@@ -20,11 +20,11 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
 <article
   class="intersect-once intersect-quarter motion-safe:md:intersect:animate-fade mb-6 transition motion-safe:md:opacity-0"
 >
-  <div class="relative mb-6 rounded bg-gray-400 shadow-lg md:h-64 dark:bg-slate-700">
-    {
-      image &&
-        (link ? (
-          <a href={link}>
+  {
+    link ? (
+      <a href={link}>
+        <div class="relative mb-6 rounded bg-gray-400 shadow-lg md:h-64 dark:bg-slate-700">
+          {image && (
             <Image
               src={image}
               class="w-full rounded bg-gray-400 shadow-lg md:h-full dark:bg-slate-700"
@@ -37,8 +37,12 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
               loading="lazy"
               decoding="async"
             />
-          </a>
-        ) : (
+          )}
+        </div>
+      </a>
+    ) : (
+      <div class="relative mb-6 rounded bg-gray-400 shadow-lg md:h-64 dark:bg-slate-700">
+        {image && (
           <Image
             src={image}
             class="w-full rounded bg-gray-400 shadow-lg md:h-full dark:bg-slate-700"
@@ -51,11 +55,12 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
             loading="lazy"
             decoding="async"
           />
-        ))
-    }
-  </div>
+        )}
+      </div>
+    )
+  }
 
-  <h3 class="font-heading mb-2 text-xl font-bold leading-tight sm:text-2xl dark:text-slate-300">
+  <h3 class="font-heading mb-2 line-clamp-2 text-xl font-bold leading-tight sm:text-2xl dark:text-slate-300">
     {
       link ? (
         <a class="hover:text-primary inline-block transition duration-200 ease-in dark:hover:text-blue-700" href={link}>
@@ -67,5 +72,5 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
     }
   </h3>
 
-  <p class="text-muted text-lg dark:text-slate-400">{post.excerpt}</p>
+  <p class="text-muted line-clamp-4 text-lg dark:text-slate-400" title={post.excerpt}>{post.excerpt}</p>
 </article>

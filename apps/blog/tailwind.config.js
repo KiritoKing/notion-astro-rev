@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import defaultTheme from 'tailwindcss/defaultTheme';
 import plugin from 'tailwindcss/plugin';
 import typographyPlugin from '@tailwindcss/typography';
@@ -146,8 +147,8 @@ export default {
     plugin(({ addVariant }) => {
       addVariant('intersect', '&:not([no-intersect])');
     }),
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     require('tailwindcss-animate'),
+    require('@tailwindcss/line-clamp'),
   ],
   darkMode: 'class',
 };
