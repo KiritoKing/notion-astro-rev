@@ -30,6 +30,8 @@ export default defineConfig({
     '/': '/blog', // TODO: 主页还没完工
   },
 
+  prefetch: true,
+
   integrations: [
     tailwind({
       applyBaseStyles: false,

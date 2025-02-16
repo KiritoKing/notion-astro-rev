@@ -17,7 +17,9 @@ const title = `Error 404`;
         <p class="text-muted mb-8 mt-4 text-lg dark:text-slate-400">
           But dont worry, you can find plenty of other things on our homepage.
         </p>
-        <a rel="noopener noreferrer" href={getHomePermalink()} class="btn ml-4">Back to homepage</a>
+        <a rel="noopener noreferrer" href={getHomePermalink()} class="btn ml-4" data-astro-prefetch="load"
+          >Back to homepage</a
+        >
       </div>
     </div>
   </section>
