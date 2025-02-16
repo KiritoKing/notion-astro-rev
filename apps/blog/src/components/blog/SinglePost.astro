@@ -37,10 +37,14 @@ const { post, url } = Astro.props;
             height={506}
             loading="eager"
             decoding="async"
+            transition:name={`post-cover-${post.id}`}
           />
         )
       }
-      <h1 class="leading-tighter font-heading mx-auto px-2 text-4xl font-bold tracking-tighter">
+      <h1
+        class="leading-tighter font-heading mx-auto px-2 text-4xl font-bold tracking-tighter"
+        transition:name={`post-title-${post.id}`}
+      >
         {post.title}
       </h1>
       <div class="mx-auto my-2 flex flex-wrap items-center gap-4 px-2">
@@ -65,7 +69,10 @@ const { post, url } = Astro.props;
       </div>
       {post.tags && post.tags.length > 0 && <PostTags tags={post.tags} class="mt-4 px-2 text-sm" />}
 
-      <p class="text-muted mx-auto mb-8 mt-4 px-2 text-justify dark:text-slate-400">
+      <p
+        class="text-muted mx-auto mb-8 mt-4 px-2 text-justify dark:text-slate-400"
+        transition:name={`post-excerpt-${post.id}`}
+      >
         {post.excerpt}
       </p>
       <div class="mx-auto px-2">

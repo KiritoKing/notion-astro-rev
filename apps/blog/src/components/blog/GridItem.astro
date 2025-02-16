@@ -36,6 +36,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
               layout="cover"
               loading="lazy"
               decoding="async"
+              transition:name={`post-cover-${post.id}`}
             />
           )}
         </div>
@@ -54,16 +55,24 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
             layout="cover"
             loading="lazy"
             decoding="async"
+            transition:name={`post-image-${post.id}`}
           />
         )}
       </div>
     )
   }
 
-  <h3 class="font-heading mb-2 line-clamp-2 text-xl font-bold leading-tight sm:text-2xl dark:text-slate-300">
+  <h3
+    class="font-heading mb-2 line-clamp-2 text-xl font-bold leading-tight sm:text-2xl dark:text-slate-300"
+    transition:name={`post-title-${post.id}`}
+  >
     {
       link ? (
-        <a class="hover:text-primary inline-block transition duration-200 ease-in dark:hover:text-blue-700" href={link}>
+        <a
+          class="hover:text-primary inline-block transition duration-200 ease-in dark:hover:text-blue-700"
+          href={link}
+          data-astro-prefetch
+        >
           {post.title}
         </a>
       ) : (
@@ -72,5 +81,11 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
     }
   </h3>
 
-  <p class="text-muted line-clamp-4 text-lg dark:text-slate-400" title={post.excerpt}>{post.excerpt}</p>
+  <p
+    class="text-muted line-clamp-4 text-lg dark:text-slate-400"
+    title={post.excerpt}
+    transition:name={`post-excerpt-${post.id}`}
+  >
+    {post.excerpt}
+  </p>
 </article>
