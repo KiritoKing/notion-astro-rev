@@ -22,7 +22,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
 >
   {
     link ? (
-      <a href={link}>
+      <a href={link} data-astro-prefetch>
         <div class="relative mb-6 rounded bg-gray-400 shadow-lg md:h-64 dark:bg-slate-700">
           {image && (
             <Image

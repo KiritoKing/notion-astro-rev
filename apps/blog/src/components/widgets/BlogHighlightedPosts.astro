@@ -46,6 +46,7 @@ const posts = APP_BLOG.isEnabled ? await findPostsByIds(postIds) : [];
               <a
                 class="text-muted hover:text-primary mb-6 block transition duration-200 ease-in lg:mb-0 dark:text-slate-400"
                 href={linkUrl}
+                data-astro-prefetch
               >
                 {linkText} »
               </a>

@@ -52,7 +52,11 @@ const { post, url } = Astro.props;
           post.category && (
             <div>
               <Icon name="tabler:archive" class="-mt-0.5 inline-block h-4 w-4 dark:text-gray-400" />
-              <a class="inline-block hover:underline" href={getPermalink(post.category.slug, 'category')}>
+              <a
+                class="inline-block hover:underline"
+                href={getPermalink(post.category.slug, 'category')}
+                data-astro-prefetch
+              >
                 {post.category.title}
               </a>
             </div>
