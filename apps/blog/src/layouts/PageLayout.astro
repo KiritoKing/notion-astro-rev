@@ -3,8 +3,6 @@ import Layout from '~/layouts/Layout.astro';
 import Header, { type Props as HeaderProps } from '~/components/widgets/Header.astro';
 import Footer from '~/components/widgets/Footer.astro';
 
-import { headerData, socialLinks } from '~/navigation';
-
 import type { MetaData } from '~/types';
 
 export interface Props {
@@ -18,12 +16,12 @@ const { metadata, headerProps = {} } = Astro.props;
 <Layout metadata={metadata}>
   <slot name="announcement" />
   <slot name="header">
-    <Header {...headerData} isSticky showRssFeed showToggleTheme {...headerProps} />
+    <Header />
   </slot>
   <main class="min-h-screen">
     <slot />
   </main>
   <slot name="footer">
-    <Footer socialLinks={socialLinks} />
+    <!-- <Footer socialLinks={socialLinks} /> -->
   </slot>
 </Layout>

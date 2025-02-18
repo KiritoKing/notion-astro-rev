@@ -1,55 +1,38 @@
 ---
-import { Icon } from 'astro-icon/components';
 import Logo from '~/components/Logo.astro';
-import ToggleTheme from '~/components/common/ToggleTheme.astro';
 import ToggleMenu from '~/components/common/ToggleMenu.astro';
-import Button from '~/components/ui/Button.astro';
 
 import { getHomePermalink } from '~/utils/permalinks';
-import { trimSlash, getAsset } from '~/utils/permalinks';
-import type { CallToAction } from '~/types';
+import { trimSlash } from '~/utils/permalinks';
 
-interface Link {
-  text?: string;
-  href?: string;
-  ariaLabel?: string;
-  icon?: string;
-}
-
-interface MenuLink extends Link {
-  links?: Array<MenuLink>;
-}
+import { HeaderDock } from './HeaderDock';
+import { socialLinks } from '~/constants/social';
+import { routes } from '~/constants/navigation';
 
 export interface Props {
   class?: string;
-  id?: string;
-  links?: Array<MenuLink>;
-  actions?: Array<CallToAction>;
-  isSticky?: boolean;
-  isDark?: boolean;
-  isFullWidth?: boolean;
-  showToggleTheme?: boolean;
-  showRssFeed?: boolean;
-  position?: string;
 }
 
-const {
-  class: className,
-  id = 'header',
-  links = [],
-  actions = [],
-  isSticky = false,
-  isDark = false,
-  isFullWidth = false,
-  showToggleTheme = false,
-  showRssFeed = false,
-  position = 'center',
-} = Astro.props;
+const { class: className } = Astro.props;
 
 const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
 ---
 
-<header
+<header id="page-header" class:list={['mx-auto w-full flex-none', className]}>
+  <div class="text-default mx-auto w-full max-w-7xl px-3 py-3 md:grid md:grid-cols-3 md:items-center md:px-6">
+    <div class="flex justify-between">
+      <a class="flex items-center" href={getHomePermalink()}>
+        <Logo />
+      </a>
+      <div class="flex items-center md:hidden">
+        <ToggleMenu />
+      </div>
+    </div>
+    <div class="flex justify-between">
+      <HeaderDock client:load groups={[routes, socialLinks]} />
+    </div>
+  </div>
+  <!-- <header
   class:list={[
     { sticky: isSticky, relative: !isSticky, dark: isDark },
     'top-0 z-40 mx-auto w-full flex-none border-b border-gray-50/0 transition-[opacity] ease-in-out',
@@ -167,4 +150,5 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
       </div>
     </div>
   </div>
+</header> -->
 </header>
