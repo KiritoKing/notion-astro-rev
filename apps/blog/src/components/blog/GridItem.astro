@@ -6,6 +6,8 @@ import Image from '~/components/common/OptImage.astro';
 
 import { findImage } from '~/utils/images';
 import { getPermalink } from '~/utils/permalinks';
+import { Icon } from 'astro-icon/components';
+import { getFormattedDate } from '~/utils/utils';
 
 export interface Props {
   post: Post;
@@ -20,30 +22,10 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
 <article
   class="intersect-once intersect-quarter motion-safe:md:intersect:animate-fade mb-6 transition motion-safe:md:opacity-0"
 >
-  {
-    link ? (
-      <a href={link} data-astro-prefetch>
-        <div class="relative mb-6 rounded bg-gray-400 shadow-lg md:h-64 dark:bg-slate-700">
-          {image && (
-            <Image
-              src={image}
-              class="w-full rounded bg-gray-400 shadow-lg md:h-full dark:bg-slate-700"
-              widths={[400, 900]}
-              width={400}
-              sizes="(max-width: 900px) 400px, 900px"
-              alt={post.title}
-              aspectRatio="16:9"
-              layout="cover"
-              loading="lazy"
-              decoding="async"
-              transition:name={`post-cover-${post.id}`}
-            />
-          )}
-        </div>
-      </a>
-    ) : (
-      <div class="relative mb-6 rounded bg-gray-400 shadow-lg md:h-64 dark:bg-slate-700">
-        {image && (
+  <a href={link ?? 'javascript:void(0)'} data-astro-prefetch>
+    <div class="relative mb-6 rounded bg-gray-400 shadow-lg md:h-64 dark:bg-slate-700">
+      {
+        image && (
           <Image
             src={image}
             class="w-full rounded bg-gray-400 shadow-lg md:h-full dark:bg-slate-700"
@@ -55,12 +37,12 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
             layout="cover"
             loading="lazy"
             decoding="async"
-            transition:name={`post-image-${post.id}`}
+            transition:name={`post-cover-${post.id}`}
           />
-        )}
-      </div>
-    )
-  }
+        )
+      }
+    </div>
+  </a>
 
   <h3
     class="font-heading mb-2 line-clamp-2 text-xl font-bold leading-tight sm:text-2xl dark:text-slate-300"
@@ -80,6 +62,11 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
       )
     }
   </h3>
+
+  <div class="my-2">
+    <Icon name="tabler:clock" class="-mt-0.5 inline-block h-4 w-4 dark:text-gray-400" />
+    <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
+  </div>
 
   <p
     class="text-muted line-clamp-4 text-lg dark:text-slate-400"

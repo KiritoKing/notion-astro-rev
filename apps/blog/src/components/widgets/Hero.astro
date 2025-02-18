@@ -1,0 +1,87 @@
+---
+
+---
+
+<section class="relative mx-auto h-screen w-full">
+  <div class="absolute inset-0 top-[120px] mx-auto flex max-w-7xl flex-row items-start gap-5 px-6 sm:px-16">
+    <div class="mt-5 flex flex-col items-center justify-center">
+      <div class="h-5 w-5 rounded-full bg-[#915EFF]"></div>
+      <div class="violet-gradient h-40 w-1 sm:h-80"></div>
+    </div>
+
+    <div>
+      <h1
+        class="xs:text-[50px] mt-2 text-[40px] font-black text-black sm:text-[60px] lg:text-[80px] lg:leading-[98px] dark:text-white"
+      >
+        Hi, I'm <span class="text-[#915EFF]">Your Name</span>
+      </h1>
+      <p
+        class="xs:text-[20px] mt-2 text-[16px] font-medium text-gray-600 sm:text-[26px] lg:text-[30px] lg:leading-[40px] dark:text-[#dfd9ff]"
+      >
+        I develop web applications, user <br class="hidden sm:block" />
+        interfaces and digital experiences
+      </p>
+
+      <div class="mt-10 flex flex-wrap gap-5">
+        <a
+          href="#contact"
+          class="shadow-primary w-fit rounded-xl bg-[#915EFF] px-8 py-3 text-base font-bold text-white shadow-md outline-none transition-all hover:bg-[#804dee]"
+        >
+          Contact Me
+        </a>
+        <a
+          href="#projects"
+          class="shadow-primary w-fit rounded-xl border-2 border-[#915EFF] px-8 py-3 text-base font-bold text-[#915EFF] shadow-md outline-none transition-all hover:bg-[#915EFF] hover:text-white"
+        >
+          View Projects
+        </a>
+      </div>
+
+      <div class="mt-16 flex gap-10">
+        <div>
+          <h2 class="text-5xl font-extrabold text-black dark:text-white">3+</h2>
+          <p class="mt-2 text-gray-600 dark:text-[#dfd9ff]">Years of Experience</p>
+        </div>
+        <div>
+          <h2 class="text-5xl font-extrabold text-black dark:text-white">20+</h2>
+          <p class="mt-2 text-gray-600 dark:text-[#dfd9ff]">Projects Completed</p>
+        </div>
+        <div>
+          <h2 class="text-5xl font-extrabold text-black dark:text-white">10+</h2>
+          <p class="mt-2 text-gray-600 dark:text-[#dfd9ff]">Happy Clients</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="xs:bottom-10 absolute bottom-32 flex w-full items-center justify-center">
+    <a href="#about">
+      <div
+        class="dark:border-secondary-dark flex h-[64px] w-[35px] items-start justify-center rounded-3xl border-4 border-gray-400 p-2"
+      >
+        <div class="dark:bg-secondary-dark mb-1 h-3 w-3 animate-bounce rounded-full bg-gray-400"></div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<style>
+  .violet-gradient {
+    background: #804dee;
+    background: linear-gradient(-90deg, #804dee 0%, rgba(60, 51, 80, 0) 100%);
+  }
+
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(10px);
+    }
+  }
+
+  .animate-bounce {
+    animation: bounce 2s infinite;
+  }
+</style>
