@@ -1,0 +1,20 @@
+---
+import BlogLatestPosts from '~/components/blog/BlogLatestPosts.astro';
+import About from '~/components/widgets/About.astro';
+import Contact from '~/components/widgets/Contact.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Projects from '~/components/widgets/Projects.astro';
+import Layout from '~/layouts/PageLayout.astro';
+const metadata = {
+  title: 'Personal Homepage Demo',
+};
+---
+
+<Layout metadata={metadata}>
+  <Fragment slot="announcement"></Fragment>
+  <Hero />
+  <About />
+  <BlogLatestPosts title="最新博客" linkText="查看更多" />
+  <Projects />
+  <Contact />
+</Layout>

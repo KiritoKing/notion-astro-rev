@@ -1,0 +1,82 @@
+---
+const projects = [
+  {
+    name: 'Project One',
+    description: 'A web application that helps users manage their daily tasks and increase productivity.',
+    tags: [
+      {
+        name: 'react',
+        color: 'blue-text-gradient',
+      },
+      {
+        name: 'mongodb',
+        color: 'green-text-gradient',
+      },
+      {
+        name: 'tailwind',
+        color: 'pink-text-gradient',
+      },
+    ],
+    image: 'https://random.imagecdn.app/500/300',
+    source_code_link: 'https://github.com',
+  },
+  // Add more projects as needed
+];
+---
+
+<section class="relative z-0 mx-auto max-w-7xl px-6 py-10 sm:px-16 sm:py-16">
+  <div>
+    <h2 class="xs:text-[40px] text-[30px] font-black text-black sm:text-[50px] md:text-[60px] dark:text-white">
+      Projects
+    </h2>
+    <p class="dark:text-secondary-dark mt-4 max-w-3xl text-[17px] leading-[30px] text-gray-600">
+      The following projects showcase my skills and experience through real-world examples of my work.
+    </p>
+  </div>
+
+  <div class="mt-20 flex flex-wrap gap-7">
+    {
+      projects.map((project) => (
+        <div class="bg-tertiary-light dark:bg-tertiary-dark w-full rounded-2xl p-5 sm:w-[360px]">
+          <div class="relative h-[230px] w-full">
+            <img src={project.image} alt={project.name} class="h-full w-full rounded-2xl object-cover" />
+          </div>
+
+          <div class="mt-5">
+            <h3 class="text-[24px] font-bold text-black dark:text-white">{project.name}</h3>
+            <p class="dark:text-secondary-dark mt-2 text-[14px] text-gray-600">{project.description}</p>
+          </div>
+
+          <div class="mt-4 flex flex-wrap gap-2">
+            {project.tags.map((tag) => (
+              <p class={`text-[14px] ${tag.color}`}>#{tag.name}</p>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .blue-text-gradient {
+    background: #00c6ff;
+    background: linear-gradient(to right, #00c6ff, #0072ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .green-text-gradient {
+    background: #11998e;
+    background: linear-gradient(to right, #11998e, #38ef7d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .pink-text-gradient {
+    background: #ec008c;
+    background: linear-gradient(to right, #ec008c, #fc6767);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+</style>

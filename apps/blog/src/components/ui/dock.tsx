@@ -1,8 +1,8 @@
 'use client';
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import { motion, MotionProps, MotionValue, useMotionValue, useSpring, useTransform } from 'motion/react';
-import React, { PropsWithChildren, useRef } from 'react';
+import { motion, type MotionProps, MotionValue, useMotionValue, useSpring, useTransform } from 'motion/react';
+import React, { type PropsWithChildren, useRef } from 'react';
 
 import { cn } from '~/lib/utils';
 
@@ -42,6 +42,7 @@ const Dock = React.forwardRef<HTMLDivElement, DockProps>(
       return React.Children.map(children, (child) => {
         if (React.isValidElement(child) && child.type === DockIcon) {
           return React.cloneElement(child, {
+            //@ts-expect-error magic-ui下载的代码
             ...child.props,
             mouseX: mouseX,
             size: iconSize,
