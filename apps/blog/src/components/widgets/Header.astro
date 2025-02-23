@@ -5,9 +5,12 @@ import ToggleMenu from '~/components/common/ToggleMenu.astro';
 import { getHomePermalink } from '~/utils/permalinks';
 import { trimSlash } from '~/utils/permalinks';
 
-import { HeaderDock } from './HeaderDock';
 import { socialLinks } from '~/constants/social';
 import { routes } from '~/constants/navigation';
+
+import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
+import { Icon } from 'astro-icon/components';
+import Button from '../ui/Button.astro';
 
 export interface Props {
   class?: string;
@@ -18,8 +21,33 @@ const { class: className } = Astro.props;
 const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
 ---
 
-<header id="page-header" class:list={['mx-auto w-full flex-none', className]}>
-  <div class="text-default mx-auto w-full max-w-7xl px-3 py-3 md:grid md:grid-cols-3 md:items-center md:px-6">
+<header
+  id="header"
+  class:list={[
+    'pointer-events-none relative z-50 mx-auto max-w-7xl px-0 transition-all duration-700 md:px-4',
+    className,
+  ]}
+>
+  <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all">
+    <WidgetWrapper as="nav" containerClass="z-50">
+      <a class="btn btn-ghost flex size-fit items-center border-none" href={getHomePermalink()}>
+        <Icon class="size-6" name="material-symbols:home-outline-rounded" />
+        <Logo class="m-0 text-lg" />
+      </a>
+
+      <!-- <section class="hidden md:flex">
+        {
+          routes.map((route) => (
+            <a class="btn btn-ghost flex size-fit items-center border-none" href={route.url}>
+              {route.label}
+            </a>
+          ))
+        }
+      </section> -->
+    </WidgetWrapper>
+  </div>
+
+  <!-- <div class="text-default mx-auto w-full max-w-7xl px-3 py-3 md:grid md:grid-cols-3 md:items-center md:px-6">
     <div class="flex justify-between">
       <a class="flex items-center" href={getHomePermalink()}>
         <Logo />
@@ -31,7 +59,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
     <div class="flex justify-between">
       <HeaderDock client:load groups={[routes, socialLinks]} />
     </div>
-  </div>
+  </div> -->
   <!-- <header
   class:list={[
     { sticky: isSticky, relative: !isSticky, dark: isDark },

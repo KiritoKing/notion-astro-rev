@@ -1,22 +1,20 @@
+import compress from 'astro-compress';
+import icon from 'astro-icon';
+import { defineConfig } from 'astro/config';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { defineConfig } from 'astro/config';
-
-import sitemap from '@astrojs/sitemap';
-import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 import partytown from '@astrojs/partytown';
-import icon from 'astro-icon';
-import compress from 'astro-compress';
-import type { AstroIntegration } from 'astro';
+import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
+import tailwind from '@astrojs/tailwind';
+import swup from '@swup/astro';
 
+import { lazyImagesRehypePlugin, readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/utils/frontmatter';
 import astrowind from './vendor/integration';
 
-import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin, lazyImagesRehypePlugin } from './src/utils/frontmatter';
-
-import react from '@astrojs/react';
-
+import type { AstroIntegration } from 'astro';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const hasExternalScripts = false;
@@ -48,6 +46,7 @@ export default defineConfig({
           'business-contact',
           'database',
         ],
+        'material-symbols': ['home-outline-rounded'],
       },
     }),
     ...whenExternalScripts(() =>
@@ -71,6 +70,20 @@ export default defineConfig({
       config: './src/config.yaml',
     }),
     react(),
+    swup({
+      theme: false,
+      animationClass: 'transition-swup-', // see https://swup.js.org/options/#animationselector
+      // the default value `transition-` cause transition delay
+      // when the Tailwind class `transition-all` is used
+      containers: ['main', '#toc'],
+      smoothScrolling: true,
+      cache: true,
+      preload: true,
+      accessibility: true,
+      updateHead: true,
+      updateBodyClass: false,
+      globalInstance: true,
+    }),
   ],
 
   image: {
