@@ -3,9 +3,7 @@ site:
   site: 'https://chlorinec.top'
   base: '/'
   trailingSlash: false
-  owner: 'ChlorineC'
-
-  googleSiteVerificationId: orcPxI47GSa-cRvY11tUe6iGg2IO_RPvnA1q95iEM3M
+  googleSiteVerificationId: w7ls0tNoCdOIrPVBpNiJequQRSTVoLgY6JFVfiTSXPQ
 
 # Default SEO metadata
 metadata:
@@ -67,7 +65,7 @@ apps:
 analytics:
   vendors:
     googleAnalytics:
-      id: null # or "G-XXXXXXXXXX"
+      id: G-VKMW6WV2NC # or "G-XXXXXXXXXX"
 
 ui:
   theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
