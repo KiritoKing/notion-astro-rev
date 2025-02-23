@@ -1,3 +1,11 @@
+/* Page transition animations with Swup */
+html.is-changing .transition-swup-fade {
+  @apply transition-all duration-200;
+}
+html.is-animating .transition-swup-fade {
+  @apply translate-y-4 opacity-0;
+}
+
 /** Animated Theme Toggle */
 ::view-transition-old(root),
 ::view-transition-new(root) {
