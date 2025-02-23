@@ -1,25 +1,25 @@
-import type { IconLinkItem } from './types';
+import type { LinkType } from './types';
 
-export const socialLinks: IconLinkItem[] = [
+export const socialLinks: LinkType[] = [
   {
-    text: 'Github',
-    href: 'https://github.com/KiritoKing',
+    label: 'Github',
+    url: 'https://github.com/KiritoKing',
     icon: 'tabler:brand-github',
     props: {
       target: '_blank',
     },
   },
   {
-    text: 'Email',
-    href: 'mailto:kiritoclzh@gmail.com',
+    label: 'Email',
+    url: 'mailto:kiritoclzh@gmail.com',
     icon: 'tabler:mail',
     props: {
       target: '_blank',
     },
   },
   {
-    text: 'RSS',
-    href: '/rss.xml',
+    label: 'RSS',
+    url: '/rss.xml',
     icon: 'tabler:rss',
     props: {
       target: '_blank',

@@ -1,6 +1,5 @@
 ---
 import dayjs from 'dayjs';
-import { cn } from '~/lib/utils';
 
 // LicenseCard.astro
 interface Props {
@@ -18,7 +17,7 @@ const createDateStr = dayjs(publishDate).format('YYYY-MM-DD HH:mm:ss');
 const updateDateStr = updateDate ? dayjs(updateDate).format('YYYY-MM-DD HH:mm:ss') : null;
 ---
 
-<div class={cn('rounded-lg bg-gray-50 p-6 shadow-sm dark:bg-gray-800', className)}>
+<div class:list={['rounded-lg bg-gray-50 p-6 shadow-sm dark:bg-gray-800', className]}>
   <div class="space-y-2">
     <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
       标题: {title}

@@ -1,15 +1,15 @@
 import { getPermalink, getBlogPermalink } from '~/utils/permalinks';
-import type { IconLinkItem } from './types';
+import type { LinkType } from './types';
 
-export const routes: IconLinkItem[] = [
+export const routes: LinkType[] = [
   {
-    text: 'Home',
-    href: getPermalink('/'),
+    label: 'Home',
+    url: getPermalink('/'),
     icon: 'tabler:home',
   },
   {
-    text: 'Blog',
-    href: getBlogPermalink(),
+    label: 'Blog',
+    url: getBlogPermalink(),
     icon: 'tabler:book',
   },
 ];

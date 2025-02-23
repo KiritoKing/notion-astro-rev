@@ -4,7 +4,7 @@ import type { Post, Taxonomy } from '~/types';
 import { APP_BLOG } from 'astrowind:config';
 import { trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
 import { notionToPost } from './notion';
-import urlMap from 'migration/url-map.json' with { type: 'json' };
+import urlMap from '~/assets/migration.json' with { type: 'json' };
 import { findImage } from './images';
 
 export const generatePermalink = async ({

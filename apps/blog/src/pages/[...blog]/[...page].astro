@@ -7,7 +7,7 @@ import Pagination from '~/components/blog/Pagination';
 import PostTags from '~/components/blog/Tags.astro';
 
 import { blogListRobots, getRecommendPosts, getStaticPathsBlogList, getCategoryMap, getTagMap } from '~/utils/blog';
-import RecommendBlogPosts from '~/components/blog/RecommendBlogPosts';
+// import RecommendBlogPosts from '~/components/blog/RecommendBlogPosts';
 import { getBlogPermalink } from '~/utils/permalinks';
 
 export const prerender = true;
@@ -40,7 +40,7 @@ const metadata = {
 
 <Layout metadata={metadata}>
   <section class="mx-auto max-w-7xl px-6 py-12 sm:py-16 lg:py-20">
-    <RecommendBlogPosts client:idle posts={carouselData} className="mb-20" />
+    <!-- <RecommendBlogPosts client:idle posts={carouselData} className="mb-20" /> -->
     <div class="flex flex-col gap-10 lg:flex-row">
       <div class="flex-1">
         <PostTags tags={allCategories} class="mb-8" title="所有分类" isCategory />

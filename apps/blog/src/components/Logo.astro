@@ -1,9 +1,21 @@
 ---
 import { SITE } from 'astrowind:config';
+import { cn } from '~/utils/cn';
+
+export interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
 ---
 
 <span
-  class="ml-2 self-center whitespace-nowrap text-2xl font-bold text-gray-900 md:text-xl rtl:ml-0 rtl:mr-2 dark:text-white"
+  class:list={[
+    cn(
+      'ml-2 self-center whitespace-nowrap text-2xl font-bold text-gray-900 md:text-xl rtl:ml-0 rtl:mr-2 dark:text-white',
+      className
+    ),
+  ]}
 >
   {SITE?.name}
 </span>
