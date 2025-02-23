@@ -2,27 +2,21 @@
 import { Icon } from 'astro-icon/components';
 
 import { UI } from 'astrowind:config';
+import { cn } from '~/utils/cn';
 
 export interface Props {
-  label?: string;
   class?: string;
-  iconClass?: string;
-  iconName?: string;
 }
 
-const {
-  label = 'Toggle between Dark and Light mode',
-  class:
-    className = 'text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center',
-  iconClass = 'w-6 h-6',
-  iconName = 'tabler:sun',
-} = Astro.props;
+const { class: className } = Astro.props;
 ---
 
 {
   !(UI.theme && UI.theme.endsWith(':only')) && (
-    <button type="button" class={className} aria-label={label} data-aw-toggle-color-scheme>
-      <Icon name={iconName} class={iconClass} />
-    </button>
+    <label class="swap swap-rotate" aria-label={'Toggle between Dark and Light mode'} data-aw-toggle-color-scheme>
+      <input type="checkbox" />
+      <Icon name="tabler:moon" class:list={cn('swap-on size-5 fill-current', className)} />
+      <Icon name="tabler:sun" class:list={cn('swap-off size-5 fill-current', className)} />
+    </label>
   )
 }

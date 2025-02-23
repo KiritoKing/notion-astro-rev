@@ -8,10 +8,12 @@ import { UI } from 'astrowind:config';
   function applyTheme(theme) {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'night');
     } else {
       document.documentElement.classList.remove('dark');
+      document.documentElement.setAttribute('data-theme', 'light');
     }
-    const matches = document.querySelectorAll('[data-aw-toggle-color-scheme] > input');
+    const matches = document.querySelectorAll('[data-aw-toggle-color-scheme] input');
 
     if (matches && matches.length) {
       matches.forEach((elem) => {

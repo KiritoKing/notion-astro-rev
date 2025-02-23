@@ -64,12 +64,67 @@ import { UI } from 'astrowind:config';
       document.querySelector('#header > div > div:last-child')?.classList.toggle('hidden');
     });
 
-    attachEvent('[data-aw-toggle-color-scheme]', 'click', function () {
+    attachEvent('[data-aw-toggle-color-scheme] > input', 'click', async function (e) {
       if (defaultTheme.endsWith(':only')) {
         return;
       }
-      document.documentElement.classList.toggle('dark');
-      localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      const isDark = document.documentElement.classList.contains('dark');
+      const isReducedMotion = window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
+
+      const animation = new Promise((resolve) => {
+        const el = e.target.parentElement;
+        if (!el) {
+          resolve();
+          return;
+        }
+        const handler = () => {
+          console.log(111);
+          resolve();
+          el.removeEventListener('transitionend', handler);
+        };
+        el.addEventListener('transitionend', handler);
+      });
+
+      const toggleDark = () => {
+        document.documentElement.classList.toggle('dark');
+        document.documentElement.setAttribute(
+          'data-theme',
+          document.documentElement.classList.contains('dark') ? 'night' : 'light'
+        );
+        localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+
+        return;
+      };
+
+      await animation;
+
+      if (!document.startViewTransition || isReducedMotion) {
+        toggleDark();
+        return;
+      }
+
+      // 开始加载 ViewTransition 扩散动画
+      const transition = document.startViewTransition(() => {
+        toggleDark();
+      });
+
+      // 传入点击事件，从点击处开始扩散。否则，从右上角开始扩散
+      const x = e?.clientX ?? window.innerWidth;
+      const y = e?.clientY ?? 0;
+
+      const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      await transition.ready;
+      const clipPath = [`circle(20px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`];
+      document.documentElement.animate(
+        {
+          clipPath: !isDark ? clipPath : [...clipPath].reverse(),
+        },
+        {
+          duration: 500,
+          easing: 'ease-in',
+          pseudoElement: !isDark ? '::view-transition-new(root)' : '::view-transition-old(root)',
+        }
+      );
     });
 
     attachEvent('[data-aw-social-share]', 'click', function (_, elem) {
