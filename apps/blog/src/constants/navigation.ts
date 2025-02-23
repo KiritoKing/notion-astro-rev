@@ -5,10 +5,9 @@ export const routes: LinkType[] = [
   {
     label: 'Home',
     url: getPermalink('/'),
-    icon: 'tabler:home',
   },
   {
-    label: 'Blog',
+    label: 'Archive',
     url: getBlogPermalink(),
     icon: 'tabler:book',
   },

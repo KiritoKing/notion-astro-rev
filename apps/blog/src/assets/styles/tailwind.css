@@ -13,7 +13,7 @@
     background-color: var(--aw-color-bg-page);
   }
   .text-page {
-    color: var(--aw-color-text-page);
+    color: var(--aw-color-text-default);
   }
   .text-muted {
     color: var(--aw-color-text-muted);

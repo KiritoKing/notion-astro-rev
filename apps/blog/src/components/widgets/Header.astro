@@ -11,6 +11,7 @@ import { routes } from '~/constants/navigation';
 import WidgetWrapper from '~/components/ui/WidgetWrapper.astro';
 import { Icon } from 'astro-icon/components';
 import Button from '../ui/Button.astro';
+import ToggleTheme from '../common/ToggleTheme.astro';
 
 export interface Props {
   class?: string;
@@ -24,26 +25,28 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
 <header
   id="header"
   class:list={[
-    'pointer-events-none relative z-50 mx-auto max-w-7xl px-0 transition-all duration-700 md:px-4',
+    'pointer-events-none sticky top-0 z-50 mx-auto max-w-7xl px-0 transition-all duration-700 md:px-4',
     className,
   ]}
 >
-  <div id="navbar-wrapper" class="pointer-events-auto sticky top-0 transition-all">
-    <WidgetWrapper as="nav" containerClass="z-50">
+  <div id="navbar-wrapper" class="pointer-events-auto relative top-0 transition-all">
+    <WidgetWrapper as="div" containerClass="z-50 flex items-center justify-between !py-4">
       <a class="btn btn-ghost flex size-fit items-center border-none" href={getHomePermalink()}>
         <Icon class="size-6" name="material-symbols:home-outline-rounded" />
         <Logo class="m-0 text-lg" />
       </a>
-
-      <!-- <section class="hidden md:flex">
+      <section class="hidden gap-2 md:flex">
         {
-          routes.map((route) => (
-            <a class="btn btn-ghost flex size-fit items-center border-none" href={route.url}>
-              {route.label}
+          routes.map((item) => (
+            <a class="btn btn-sm btn-ghost hover:text-primary flex size-fit items-center border-none" href={item.url}>
+              {item.label}
             </a>
           ))
         }
-      </section> -->
+      </section>
+      <section class="flex">
+        <ToggleTheme />
+      </section>
     </WidgetWrapper>
   </div>
 
