@@ -33,12 +33,15 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
     <WidgetWrapper as="div" containerClass="z-50 flex items-center justify-between !py-4">
       <a class="btn btn-ghost flex size-fit items-center border-none" href={getHomePermalink()}>
         <Icon class="size-6" name="material-symbols:home-outline-rounded" />
-        <Logo class="m-0 text-lg" />
+        <Logo class="m-0 font-bold" />
       </a>
       <section class="hidden gap-2 md:flex">
         {
           routes.map((item) => (
-            <a class="btn btn-sm btn-ghost hover:text-primary flex size-fit items-center border-none" href={item.url}>
+            <a
+              class="btn btn-ghost hover:text-primary flex size-fit items-center border-none text-base font-bold"
+              href={item.url}
+            >
               {item.label}
             </a>
           ))

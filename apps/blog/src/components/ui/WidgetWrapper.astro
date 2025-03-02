@@ -17,13 +17,13 @@ const WrapperTag = as;
 <WrapperTag class="not-prose relative scroll-mt-[72px]" {...id ? { id } : {}}>
   <div class="pointer-events-none absolute inset-0 -z-[1]" aria-hidden="true">
     <slot name="bg">
-      {bg ? <Fragment set:html={bg} /> : <Background isDark={isDark} />}
+      {bg ? <Fragment set:html={bg} /> : <Background isDark={isDark} class="rounded-b-xl shadow" />}
     </slot>
   </div>
   <div
     class:list={[
       twMerge(
-        'intersect-once intersect-quarter intercept-no-queue text-default motion-safe:md:intersect:animate-in motion-safe:md:intersect:fade-in relative mx-auto max-w-7xl px-8 py-4 duration-75',
+        'intersect-once intersect-quarter intercept-no-queue text-default motion-safe:md:intersect:animate-fade relative mx-auto max-w-7xl px-8 py-4 duration-75',
         containerClass
       ),
       { dark: isDark },
