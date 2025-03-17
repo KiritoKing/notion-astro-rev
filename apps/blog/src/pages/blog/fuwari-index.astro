@@ -3,37 +3,51 @@ import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 import FuwariLayout from '~/layouts/FuwariLayout.astro';
 import BlogGrid from '~/components/fuwari/BlogGrid.astro';
+import type { NotionCollection, NotionItem } from '../../types/notion';
 import { SITE, BLOG } from 'astrowind:config';
 
-// Get all blog posts
-const posts = await getCollection('blog');
+// Get all blog posts from notion collection
+const notionPosts = await getCollection('notion') as unknown as NotionCollection;
 
 // Sort posts by date
-const sortedPosts = posts
-  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+const sortedPosts = notionPosts
+  .sort((a: NotionItem, b: NotionItem) => {
+    const dateA = a.data.properties?.date?.date?.start ? new Date(a.data.properties.date.date.start) : new Date();
+    const dateB = b.data.properties?.date?.date?.start ? new Date(b.data.properties.date.date.start) : new Date();
+    return dateB.valueOf() - dateA.valueOf();
+  });
 
 // Format posts for display
-const formattedPosts = sortedPosts.map(post => ({
-  id: post.id,
-  slug: post.slug,
-  title: post.data.title,
-  description: post.data.description,
-  image: post.data.image,
-  publishDate: post.data.publishDate,
-  excerpt: post.data.excerpt,
-  tags: post.data.tags,
-  readingTime: post.data.readingTime
-}));
+const formattedPosts = sortedPosts.map((post: NotionItem) => {
+  const title = post.data.properties?.Name?.title?.[0]?.plain_text || 'Untitled';
+  const excerpt = post.data.properties?.summary?.rich_text?.[0]?.plain_text || '';
+  const date = post.data.properties?.date?.date?.start ? new Date(post.data.properties.date.date.start) : new Date();
+  const slug = post.data.properties?.slug?.rich_text?.[0]?.plain_text || post.id;
+  const tags = post.data.properties?.tags?.multi_select?.map(tag => tag.name) || [];
+  
+  return {
+    id: post.id,
+    slug,
+    title,
+    description: excerpt,
+    image: post.data.cover ? post.data.cover.external?.url || post.data.cover.file?.url : undefined,
+    publishDate: date,
+    excerpt,
+    tags,
+    readingTime: Math.ceil(excerpt.length / 200) // Rough estimate
+  };
+});
 
 // Extract all tags from posts and count occurrences
-const tagCounts = sortedPosts.reduce((acc, post) => {
-  if (post.data.tags) {
-    post.data.tags.forEach(tag => {
-      acc[tag] = (acc[tag] || 0) + 1;
-    });
-  }
+const tagCounts = sortedPosts.reduce((acc, post: NotionItem) => {
+  const tags = post.data.properties?.tags?.multi_select || [];
+  tags.forEach(tag => {
+    if (tag.name) {
+      acc[tag.name] = (acc[tag.name] || 0) + 1;
+    }
+  });
   return acc;
-}, {});
+}, {} as Record<string, number>);
 
 // Convert to array and sort by count
 const tags = Object.entries(tagCounts)
