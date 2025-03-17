@@ -1,0 +1,75 @@
+---
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  categories: Array<{
+    name: string;
+    count: number;
+    icon?: string;
+    color?: string;
+  }>;
+}
+
+const {
+  title = 'Categories',
+  subtitle = 'Browse posts by category',
+  categories = []
+} = Astro.props;
+
+// Generate a pastel color based on the category name if no color is provided
+function generatePastelColor(name: string): string {
+  if (!name) return 'hsl(var(--primary))';
+  
+  // Simple hash function to generate a number from a string
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  
+  // Convert to a hue value (0-360)
+  const hue = hash % 360;
+  
+  // Return a pastel color using HSL
+  return `hsl(${hue}, 70%, 80%)`;
+}
+---
+
+<section class="py-12 onload-animation">
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-bold">{title}</h2>
+    {subtitle && <p class="mt-2 text-xl text-muted-foreground">{subtitle}</p>}
+    <div class="mt-4 mx-auto h-1 w-20 bg-primary rounded"></div>
+  </div>
+  
+  {categories.length > 0 && (
+    <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      {categories.map((category) => {
+        const bgColor = category.color || generatePastelColor(category.name);
+        return (
+          <a 
+            href={`/category/${category.name.toLowerCase()}`}
+            class="card-base flex items-center p-4 transition-transform hover:scale-105"
+            style={`--category-color: ${bgColor};`}
+          >
+            <div 
+              class="flex h-12 w-12 items-center justify-center rounded-full mr-4"
+              style={`background-color: var(--category-color);`}
+            >
+              {category.icon ? (
+                <Icon name={category.icon} class="h-6 w-6 text-white" />
+              ) : (
+                <span class="text-xl font-bold text-white">{category.name.charAt(0).toUpperCase()}</span>
+              )}
+            </div>
+            <div>
+              <h3 class="font-medium">{category.name}</h3>
+              <p class="text-sm text-muted-foreground">{category.count} posts</p>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  )}
+</section>

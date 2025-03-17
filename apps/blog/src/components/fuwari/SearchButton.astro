@@ -1,0 +1,220 @@
+---
+import FuwariIcon from './FuwariIcon.astro';
+---
+
+<button
+  id="search-button"
+  class="btn-plain rounded-full p-2 text-foreground hover:bg-accent hover:text-accent-foreground"
+  aria-label="Search"
+>
+  <FuwariIcon name="tabler:search" class="w-5 h-5" />
+</button>
+
+<div id="search-panel" class="float-panel float-panel-closed top-20 left-1/2 -translate-x-1/2 w-full max-w-xl p-4">
+  <div class="flex flex-col">
+    <div class="flex items-center mb-4">
+      <FuwariIcon name="tabler:search" class="w-5 h-5 mr-2" />
+      <input 
+        type="text" 
+        id="search-input" 
+        class="flex-1 bg-background border border-input rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary" 
+        placeholder="Search posts..."
+      />
+      <button 
+        id="close-search" 
+        class="ml-2 btn-plain rounded-full p-2 text-foreground hover:bg-accent hover:text-accent-foreground"
+      >
+        <FuwariIcon name="tabler:x" class="w-5 h-5" />
+      </button>
+    </div>
+    <div id="search-results" class="max-h-96 overflow-y-auto">
+      <!-- Search results will be populated here -->
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupSearch() {
+    const searchButton = document.getElementById('search-button');
+    const searchPanel = document.getElementById('search-panel');
+    const closeSearch = document.getElementById('close-search');
+    const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
+    
+    if (searchButton && searchPanel && closeSearch && searchInput) {
+      // Open search panel
+      searchButton.addEventListener('click', () => {
+        searchPanel.classList.remove('float-panel-closed');
+        setTimeout(() => {
+          searchInput.focus();
+        }, 100);
+      });
+      
+      // Close search panel
+      closeSearch.addEventListener('click', () => {
+        searchPanel.classList.add('float-panel-closed');
+      });
+      
+      // Close search panel when clicking outside
+      document.addEventListener('click', (event: MouseEvent) => {
+        const target = event.target as Node;
+        if (!searchPanel.contains(target) && target !== searchButton) {
+          searchPanel.classList.add('float-panel-closed');
+        }
+      });
+      
+      // Prevent clicks inside search panel from closing it
+      searchPanel.addEventListener('click', (event: Event) => {
+        event.stopPropagation();
+      });
+      
+      // Handle search input
+      searchInput.addEventListener('input', debounce(() => {
+        const query = searchInput.value.trim();
+        if (query.length >= 2) {
+          performSearch(query);
+        } else {
+          clearSearchResults();
+        }
+      }, 300));
+    }
+  }
+  
+  function debounce<T extends (...args: unknown[]) => void>(func: T, wait: number) {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    return function executedFunction(...args: Parameters<T>) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+  
+  interface PagefindWindow extends Window {
+    pagefind?: {
+      search: (query: string) => Promise<PagefindResults>;
+    };
+  }
+
+  interface PagefindResults {
+    results?: PagefindResult[];
+  }
+
+  interface PagefindResult {
+    url: string;
+    title: string;
+    excerpt: string;
+    data: () => Promise<{
+      url: string;
+      meta: {
+        title: string;
+      };
+      excerpt: string;
+    }>;
+  }
+
+  interface SearchIndexItem {
+    title: string;
+    url: string;
+    content?: string;
+    excerpt?: string;
+    description?: string;
+    tags?: string[];
+  }
+
+  async function performSearch(query: string) {
+    const searchResults = document.getElementById('search-results');
+    if (!searchResults) return;
+    
+    searchResults.innerHTML = `<div class="p-4 text-center">Searching for "${query}"...</div>`;
+    
+    try {
+      // First try to use pagefind if available
+      if (typeof window !== 'undefined' && 'pagefind' in window) {
+        const pagefindWindow = window as PagefindWindow;
+        if (pagefindWindow.pagefind) {
+          const results = await pagefindWindow.pagefind.search(query);
+          displayPagefindResults(results, query, searchResults);
+        }
+      } 
+      // Fallback to fetch API to search from a JSON index
+      else {
+        // Try to fetch from a local search index
+        const response = await fetch('/search-index.json');
+        if (response.ok) {
+          const searchIndex = await response.json() as SearchIndexItem[];
+          displayLocalResults(searchIndex, query, searchResults);
+        } else {
+          // If no search index is available, show a message
+          searchResults.innerHTML = `<div class="p-4 text-center">Search index not available</div>`;
+        }
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+      searchResults.innerHTML = `<div class="p-4 text-center">An error occurred while searching</div>`;
+    }
+  }
+  
+  function displayPagefindResults(results: PagefindResults, query: string, searchResults: HTMLElement) {
+    if (results.results?.length === 0) {
+      searchResults.innerHTML = `<div class="p-4 text-center">No results found for "${query}"</div>`;
+      return;
+    }
+    
+    let html = '';
+    results.results?.forEach((result) => {
+      html += `
+        <a href="${result.url}" class="block p-3 hover:bg-accent rounded-md transition-colors">
+          <h3 class="font-medium">${result.title}</h3>
+          <p class="text-sm text-muted-foreground">${result.excerpt}</p>
+        </a>
+      `;
+    });
+    
+    searchResults.innerHTML = html;
+  }
+  
+  function displayLocalResults(searchIndex: SearchIndexItem[], query: string, searchResults: HTMLElement) {
+    // Simple search implementation that checks if the query is in the title or content
+    const results = searchIndex.filter(item => {
+      const titleMatch = item.title?.toLowerCase().includes(query.toLowerCase());
+      const contentMatch = item.content?.toLowerCase().includes(query.toLowerCase());
+      const tagsMatch = item.tags?.some((tag) => tag.toLowerCase().includes(query.toLowerCase()));
+      return titleMatch || contentMatch || tagsMatch;
+    });
+    
+    if (results.length === 0) {
+      searchResults.innerHTML = `<div class="p-4 text-center">No results found for "${query}"</div>`;
+      return;
+    }
+    
+    let html = '';
+    results.forEach(result => {
+      html += `
+        <a href="${result.url}" class="block p-3 hover:bg-accent rounded-md transition-colors">
+          <h3 class="font-medium">${result.title}</h3>
+          <p class="text-sm text-muted-foreground">${result.excerpt || result.description || 'No description available'}</p>
+          ${result.tags?.length ? `<div class="mt-1 flex flex-wrap gap-1">
+            ${result.tags.map((tag) => `<span class="text-xs px-1.5 py-0.5 bg-muted rounded-full">${tag}</span>`).join('')}
+          </div>` : ''}
+        </a>
+      `;
+    });
+    
+    searchResults.innerHTML = html;
+  }
+  
+  function clearSearchResults() {
+    const searchResults = document.getElementById('search-results');
+    if (searchResults) {
+      searchResults.innerHTML = '';
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', setupSearch);
+  
+  // Handle page transitions
+  document.addEventListener('astro:page-load', setupSearch);
+</script>

@@ -1,0 +1,122 @@
+---
+---
+
+<script>
+  // Page transition animation using View Transitions API
+  document.addEventListener('astro:page-load', () => {
+    // Add animation classes to elements with onload-animation class
+    const animatedElements = document.querySelectorAll('.onload-animation');
+    animatedElements.forEach((element, index) => {
+      // Get any existing delay from inline style
+      const htmlElement = element as HTMLElement;
+      const existingDelay = htmlElement.style.animationDelay;
+      const delay = existingDelay || `${index * 0.05}s`;
+      
+      // Apply animation with delay
+      htmlElement.style.animationDelay = delay;
+      element.classList.add('animate-in');
+      
+      // Remove animation class after animation completes
+      const animationDuration = 500; // Default animation duration in ms
+      const delayMs = parseFloat(delay) * 1000 || 0;
+      
+      setTimeout(() => {
+        element.classList.remove('animate-in');
+      }, animationDuration + delayMs);
+    });
+  });
+
+  // Handle navigation start
+  document.addEventListener('astro:before-preparation', () => {
+    // Add exit animation if not using View Transitions API
+    if (!document.startViewTransition) {
+      const animatedElements = document.querySelectorAll('.onload-animation');
+      animatedElements.forEach((element) => {
+        element.classList.add('animate-out');
+      });
+    }
+  });
+
+  // Enhance navbar with scroll behavior
+  function setupNavbarScroll() {
+    const navbar = document.getElementById('navbar');
+    if (!navbar) return;
+
+    let lastScrollY = window.scrollY;
+    
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Add shadow when scrolled
+      if (currentScrollY > 10) {
+        navbar.classList.add('navbar-shadow');
+      } else {
+        navbar.classList.remove('navbar-shadow');
+      }
+      
+      // Hide navbar when scrolling down, show when scrolling up
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        navbar.classList.add('navbar-hidden');
+      } else {
+        navbar.classList.remove('navbar-hidden');
+      }
+      
+      lastScrollY = currentScrollY;
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', setupNavbarScroll);
+  
+  // Handle page transitions
+  document.addEventListener('astro:page-load', setupNavbarScroll);
+</script>
+
+<style is:global>
+  /* Base animation classes */
+  .animate-in {
+    animation: fadeIn 0.5s ease forwards;
+  }
+  
+  .animate-out {
+    animation: fadeOut 0.3s ease forwards;
+  }
+  
+  /* Navbar animations */
+  .navbar-shadow {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-hidden {
+    transform: translateY(-100%);
+  }
+  
+  #navbar {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Animation keyframes */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+</style>

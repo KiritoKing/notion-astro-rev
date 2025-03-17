@@ -1,0 +1,180 @@
+/* Fuwari UI styling for notion-astro-rev */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --hue: 240;
+    
+    /* Light mode variables */
+    --primary: 65% 0.2 var(--hue);
+    --primary-foreground: 98% 0.005 var(--hue);
+    --secondary: 95% 0.03 var(--hue);
+    --secondary-foreground: 25% 0.05 var(--hue);
+    --background: 98% 0.005 var(--hue);
+    --foreground: 25% 0.05 var(--hue);
+    --card: 99% 0.01 var(--hue);
+    --card-foreground: 25% 0.05 var(--hue);
+    --popover: 99% 0.01 var(--hue);
+    --popover-foreground: 25% 0.05 var(--hue);
+    --muted: 95% 0.01 var(--hue);
+    --muted-foreground: 65% 0.05 var(--hue);
+    --accent: 95% 0.03 var(--hue);
+    --accent-foreground: 25% 0.05 var(--hue);
+    --destructive: 60% 0.5 0;
+    --destructive-foreground: 98% 0.005 var(--hue);
+    --border: 90% 0.01 var(--hue);
+    --input: 90% 0.01 var(--hue);
+    --ring: 65% 0.2 var(--hue);
+
+    /* Fuwari specific variables */
+    --page-width: 65rem;
+    --card-radius: 1rem;
+    --banner-height: 20rem;
+    --banner-height-home: 30rem;
+    --banner-height-extend: 35rem;
+    
+    /* Animation durations */
+    --animation-duration: 0.3s;
+    --transition-duration: 0.2s;
+  }
+
+  .dark {
+    /* Dark mode variables */
+    --primary: 65% 0.2 var(--hue);
+    --primary-foreground: 98% 0.005 var(--hue);
+    --secondary: 25% 0.05 var(--hue);
+    --secondary-foreground: 95% 0.03 var(--hue);
+    --background: 15% 0.01 var(--hue);
+    --foreground: 95% 0.03 var(--hue);
+    --card: 20% 0.02 var(--hue);
+    --card-foreground: 95% 0.03 var(--hue);
+    --popover: 20% 0.02 var(--hue);
+    --popover-foreground: 95% 0.03 var(--hue);
+    --muted: 25% 0.02 var(--hue);
+    --muted-foreground: 65% 0.05 var(--hue);
+    --accent: 25% 0.05 var(--hue);
+    --accent-foreground: 95% 0.03 var(--hue);
+    --destructive: 60% 0.5 0;
+    --destructive-foreground: 98% 0.005 var(--hue);
+    --border: 30% 0.02 var(--hue);
+    --input: 30% 0.02 var(--hue);
+    --ring: 65% 0.2 var(--hue);
+  }
+}
+
+@layer components {
+  /* Card base styles */
+  .card-base {
+    @apply transition bg-card text-card-foreground rounded-[var(--card-radius)] shadow-sm overflow-hidden;
+  }
+
+  /* Button styles */
+  .btn-plain {
+    @apply transition flex items-center justify-center;
+  }
+
+  .btn-primary {
+    @apply transition bg-primary text-primary-foreground hover:opacity-90 rounded-md px-4 py-2;
+  }
+
+  .btn-secondary {
+    @apply transition bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-md px-4 py-2;
+  }
+
+  .btn-outline {
+    @apply transition border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-md px-4 py-2;
+  }
+
+  /* Link styles */
+  .link {
+    @apply transition hover:underline;
+  }
+
+  /* Animation classes */
+  .scale-animation {
+    @apply transition-transform duration-200 hover:scale-105;
+  }
+
+  .fade-animation {
+    @apply transition-opacity duration-200;
+  }
+
+  /* Page transition animations */
+  .onload-animation {
+    animation: slide-up 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  /* Banner styles */
+  .banner {
+    @apply relative w-full overflow-hidden;
+    height: var(--banner-height);
+    background-position: center;
+    background-size: cover;
+  }
+
+  .banner-home {
+    height: var(--banner-height-home);
+  }
+
+  .banner-extend {
+    height: var(--banner-height-extend);
+  }
+
+  .banner-overlay {
+    @apply absolute inset-0 bg-black/30;
+  }
+
+  /* Float panel styles */
+  .float-panel {
+    @apply card-base fixed z-50 transition-all duration-300 ease-in-out;
+  }
+
+  .float-panel-closed {
+    @apply opacity-0 pointer-events-none;
+  }
+}
+
+@layer utilities {
+  /* Animations */
+  @keyframes slide-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-down {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* Container styles */
+  .container-fuwari {
+    @apply mx-auto px-4;
+    max-width: var(--page-width);
+  }
+}

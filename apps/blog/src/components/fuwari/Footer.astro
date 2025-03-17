@@ -1,0 +1,37 @@
+---
+import { Icon } from 'astro-icon/components';
+import { SITE } from 'astrowind:config';
+import { socialLinks } from '~/constants/social';
+
+const currentYear = new Date().getFullYear();
+---
+
+<div class="transition border-t border-black/10 dark:border-white/15 my-10 border-dashed mx-8 md:mx-32"></div>
+
+<div class="transition border-dashed border-[oklch(85%_0.01_var(--hue))] dark:border-white/15 rounded-2xl mb-12 flex flex-col items-center justify-center px-6">
+  <div class="transition text-foreground text-sm text-center py-6">
+    &copy; <span id="copyright-year">{currentYear}</span> {SITE?.name || 'Notion Astro Blog'}. All Rights Reserved. /
+    <a class="transition link text-primary font-medium" target="_blank" href="/rss.xml">RSS</a> /
+    <a class="transition link text-primary font-medium" target="_blank" href="/sitemap-index.xml">Sitemap</a><br>
+    
+    <div class="flex justify-center mt-4 space-x-3">
+      {socialLinks.map((item) => (
+        <a 
+          href={item.href} 
+          class="btn-plain rounded-full p-2 text-foreground hover:bg-accent hover:text-accent-foreground"
+          aria-label={item.text}
+          target={item.props?.target}
+          rel={item.props?.rel}
+        >
+          {item.icon && <Icon name={item.icon} class="w-5 h-5" />}
+        </a>
+      ))}
+    </div>
+    
+    <div class="mt-4">
+      Powered by
+      <a class="transition link text-primary font-medium" target="_blank" href="https://astro.build">Astro</a> &
+      <a class="transition link text-primary font-medium" target="_blank" href="https://github.com/saicaca/fuwari">Fuwari</a>
+    </div>
+  </div>
+</div>

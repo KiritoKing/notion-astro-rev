@@ -1,0 +1,74 @@
+---
+import { getCollection } from 'astro:content';
+import FuwariLayout from '~/layouts/FuwariLayout.astro';
+import BlogGrid from '~/components/fuwari/BlogGrid.astro';
+import { Icon } from 'astro-icon/components';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  
+  // Get all unique tags
+  const tags = [...new Set(posts.flatMap(post => post.data.tags || []))];
+  
+  // Create a path for each tag
+  return tags.map(tag => ({
+    params: { tag },
+    props: { tag }
+  }));
+}
+
+const { tag } = Astro.props;
+
+// Get all posts with this tag
+const posts = await getCollection('blog');
+const filteredPosts = posts
+  .filter(post => post.data.tags && post.data.tags.includes(tag))
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+// Format posts for display
+const formattedPosts = filteredPosts.map(post => ({
+  id: post.id,
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description,
+  image: post.data.image,
+  publishDate: post.data.publishDate,
+  excerpt: post.data.excerpt,
+  tags: post.data.tags,
+  readingTime: post.data.readingTime
+}));
+
+const title = `Posts tagged with #${tag}`;
+const description = `Browse all posts tagged with #${tag}`;
+---
+
+<FuwariLayout
+  title={title}
+  description={description}
+>
+  <div class="mb-8">
+    <div class="flex items-center gap-2 mb-4">
+      <a href="/blog" class="text-primary hover:underline flex items-center">
+        <Icon name="tabler:arrow-left" class="w-5 h-5 mr-1" />
+        Back to Blog
+      </a>
+    </div>
+    
+    <h1 class="text-3xl font-bold mb-2">#{tag}</h1>
+    <p class="text-muted-foreground">
+      {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'} tagged with #{tag}
+    </p>
+  </div>
+  
+  {formattedPosts.length > 0 ? (
+    <BlogGrid posts={formattedPosts} columns={2} />
+  ) : (
+    <div class="card-base p-8 text-center">
+      <h2 class="text-xl font-bold mb-2">No posts found</h2>
+      <p class="text-muted-foreground mb-4">There are no posts with this tag yet.</p>
+      <a href="/blog" class="btn-primary">
+        Browse All Posts
+      </a>
+    </div>
+  )}
+</FuwariLayout>
