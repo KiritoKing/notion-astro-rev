@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import FuwariLayout from '~/layouts/FuwariLayout.astro';
+import Hero from '~/components/fuwari/Hero.astro';
+import FeaturedPosts from '~/components/fuwari/FeaturedPosts.astro';
+import Categories from '~/components/fuwari/Categories.astro';
+import Newsletter from '~/components/fuwari/Newsletter.astro';
+import { SITE } from 'astrowind:config';
+
+// Get all blog posts
+const posts = await getCollection('blog');
+
+// Sort posts by date
+const sortedPosts = posts
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+// Get featured posts (most recent 6)
+const featuredPosts = sortedPosts.slice(0, 6).map(post => ({
+  id: post.id,
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description,
+  image: post.data.image,
+  publishDate: post.data.publishDate,
+  excerpt: post.data.excerpt,
+  tags: post.data.tags,
+  readingTime: post.data.readingTime
+}));
+
+// Extract all tags from posts and count occurrences
+const tagCounts = sortedPosts.reduce((acc, post) => {
+  if (post.data.tags) {
+    post.data.tags.forEach(tag => {
+      acc[tag] = (acc[tag] || 0) + 1;
+    });
+  }
+  return acc;
+}, {});
+
+// Convert to array and sort by count
+const categories = Object.entries(tagCounts)
+  .map(([name, count]) => ({ 
+    name, 
+    count: count as number,
+    // Map some common categories to icons
+    icon: {
+      'technology': 'tabler:device-laptop',
+      'design': 'tabler:palette',
+      'programming': 'tabler:code',
+      'tutorial': 'tabler:book',
+      'news': 'tabler:news',
+      'personal': 'tabler:user',
+    }[name.toLowerCase()] || undefined
+  }))
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 8); // Take top 8 categories
+---
+
+<FuwariLayout>
+  <Hero 
+    title={SITE?.name || "Notion Astro Blog"}
+    subtitle="A beautiful blog powered by Notion and Astro"
+    tagline="Share your thoughts with the world"
+  />
+  
+  <div class="container-fuwari">
+    <FeaturedPosts 
+      title="Latest Articles"
+      subtitle="Check out our most recent blog posts"
+      posts={featuredPosts}
+      moreUrl="/blog"
+    />
+    
+    {categories.length > 0 && (
+      <Categories
+        title="Browse by Category"
+        subtitle="Find posts on topics that interest you"
+        categories={categories}
+      />
+    )}
+    
+    <Newsletter />
+  </div>
+</FuwariLayout>

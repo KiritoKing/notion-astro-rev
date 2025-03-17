@@ -1,0 +1,47 @@
+---
+import BlogCard from './BlogCard.astro';
+import type { BlogPost } from '~/types';
+
+export interface Props {
+  posts: Array<BlogPost>;
+  title?: string;
+  columns?: number;
+  featured?: boolean;
+}
+
+const { 
+  posts = [], 
+  title, 
+  columns = 3,
+  featured = false
+} = Astro.props;
+
+// Determine grid columns based on the columns prop
+const gridClass = {
+  1: 'grid-cols-1',
+  2: 'grid-cols-1 md:grid-cols-2',
+  3: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+  4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+}[columns] || 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+---
+
+<section class="onload-animation">
+  {title && (
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold">{title}</h2>
+      <div class="mt-2 h-1 w-20 bg-primary rounded"></div>
+    </div>
+  )}
+  
+  {featured && posts.length > 0 && (
+    <div class="mb-8">
+      <BlogCard post={posts[0]} featured={true} />
+    </div>
+  )}
+  
+  <div class={`grid ${gridClass} gap-6`}>
+    {posts.slice(featured ? 1 : 0).map(post => (
+      <BlogCard post={post} />
+    ))}
+  </div>
+</section>

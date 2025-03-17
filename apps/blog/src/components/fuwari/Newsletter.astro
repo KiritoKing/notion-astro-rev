@@ -1,0 +1,83 @@
+---
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  title = 'Subscribe to our newsletter',
+  subtitle = 'Get the latest posts delivered right to your inbox'
+} = Astro.props;
+---
+
+<section class="py-12 onload-animation">
+  <div class="card-base mx-auto max-w-3xl overflow-hidden">
+    <div class="bg-gradient-to-r from-primary/20 to-primary/5 p-8 md:p-12">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-bold md:text-3xl">{title}</h2>
+        {subtitle && <p class="mt-2 text-muted-foreground">{subtitle}</p>}
+      </div>
+      
+      <form id="newsletter-form" class="mx-auto max-w-md">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="flex-1">
+            <input 
+              type="email" 
+              id="email-input" 
+              placeholder="Enter your email" 
+              required
+              class="w-full rounded-md border border-input bg-background px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+          <button 
+            type="submit" 
+            class="btn-primary flex items-center justify-center whitespace-nowrap"
+          >
+            <Icon name="tabler:send" class="mr-2 h-5 w-5" />
+            Subscribe
+          </button>
+        </div>
+        <p class="mt-3 text-xs text-muted-foreground text-center">
+          We respect your privacy. Unsubscribe at any time.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  function setupNewsletterForm() {
+    const form = document.getElementById('newsletter-form');
+    const emailInput = document.getElementById('email-input');
+    
+    if (form && emailInput) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const email = (emailInput as HTMLInputElement).value;
+        if (!email || !email.includes('@')) {
+          alert('Please enter a valid email address');
+          return;
+        }
+        
+        // Here you would typically send the email to your newsletter service
+        // For now, we'll just show a success message
+        form.innerHTML = `
+          <div class="text-center py-4">
+            <Icon name="tabler:check-circle" class="mx-auto h-12 w-12 text-primary mb-4" />
+            <h3 class="text-xl font-medium mb-2">Thank you for subscribing!</h3>
+            <p class="text-muted-foreground">You'll receive our next newsletter in your inbox.</p>
+          </div>
+        `;
+      });
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', setupNewsletterForm);
+  
+  // Handle page transitions
+  document.addEventListener('astro:page-load', setupNewsletterForm);
+</script>

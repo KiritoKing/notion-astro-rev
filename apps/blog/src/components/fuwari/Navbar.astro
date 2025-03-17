@@ -1,0 +1,110 @@
+---
+import { Icon } from 'astro-icon/components';
+import { routes } from '~/constants/navigation';
+import { socialLinks } from '~/constants/social';
+import ThemeToggle from './ThemeToggle.astro';
+import SearchButton from './SearchButton.astro';
+import { SITE } from 'astrowind:config';
+
+const className = Astro.props.class;
+---
+
+<div id="navbar" class="z-50 onload-animation sticky top-0">
+  <div class="absolute h-8 left-0 right-0 -top-8 bg-card transition"></div> <!-- used for onload animation -->
+  <div class:list={[
+    className,
+    "card-base !overflow-visible max-w-[var(--page-width)] h-[4.5rem] !rounded-t-none mx-auto flex items-center justify-between px-4"
+  ]}>
+    <a href="/" class="btn-plain scale-animation rounded-lg h-[3.25rem] px-5 font-bold active:scale-95">
+      <div class="flex flex-row text-primary items-center text-md">
+        <Icon name="tabler:home" class="text-[1.75rem] mb-1 mr-2" />
+        {SITE?.name || 'Notion Astro Blog'}
+      </div>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <div class="hidden md:flex items-center space-x-1">
+      {routes.map((item) => (
+        <a 
+          href={item.href} 
+          class="btn-plain scale-animation rounded-lg px-3 py-2 text-foreground hover:bg-accent hover:text-accent-foreground"
+          {...item.props}
+        >
+          {item.icon && <Icon name={item.icon} class="inline-block mr-1 w-5 h-5" />}
+          <span>{item.text}</span>
+        </a>
+      ))}
+    </div>
+
+    <!-- Right side buttons -->
+    <div class="flex items-center space-x-2">
+      <SearchButton />
+      <ThemeToggle />
+      
+      <!-- Mobile menu button -->
+      <button 
+        id="mobile-menu-button" 
+        class="md:hidden btn-plain rounded-full p-2 text-foreground hover:bg-accent"
+        aria-label="Menu"
+      >
+        <Icon name="tabler:menu-2" class="w-6 h-6" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation Menu -->
+  <div id="mobile-menu" class="md:hidden card-base fixed inset-x-0 top-[4.5rem] z-50 p-4 mx-4 hidden">
+    <div class="flex flex-col space-y-2">
+      {routes.map((item) => (
+        <a 
+          href={item.href} 
+          class="btn-plain rounded-lg px-3 py-2 text-foreground hover:bg-accent hover:text-accent-foreground"
+          {...item.props}
+        >
+          {item.icon && <Icon name={item.icon} class="inline-block mr-2 w-5 h-5" />}
+          <span>{item.text}</span>
+        </a>
+      ))}
+      
+      <div class="border-t border-border my-2"></div>
+      
+      <div class="flex flex-wrap gap-2">
+        {socialLinks.map((item) => (
+          <a 
+            href={item.href} 
+            class="btn-plain rounded-full p-2 text-foreground hover:bg-accent hover:text-accent-foreground"
+            aria-label={item.text}
+            {...item.props}
+          >
+            {item.icon && <Icon name={item.icon} class="w-5 h-5" />}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupMobileMenu() {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+          mobileMenu.classList.add('onload-animation');
+        } else {
+          mobileMenu.classList.add('hidden');
+        }
+      });
+    }
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', setupMobileMenu);
+  
+  // Handle page transitions
+  document.addEventListener('astro:page-load', setupMobileMenu);
+</script>

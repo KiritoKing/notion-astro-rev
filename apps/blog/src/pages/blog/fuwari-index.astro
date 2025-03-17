@@ -1,0 +1,109 @@
+---
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import FuwariLayout from '~/layouts/FuwariLayout.astro';
+import BlogGrid from '~/components/fuwari/BlogGrid.astro';
+import { SITE, BLOG } from 'astrowind:config';
+
+// Get all blog posts
+const posts = await getCollection('blog');
+
+// Sort posts by date
+const sortedPosts = posts
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+// Format posts for display
+const formattedPosts = sortedPosts.map(post => ({
+  id: post.id,
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description,
+  image: post.data.image,
+  publishDate: post.data.publishDate,
+  excerpt: post.data.excerpt,
+  tags: post.data.tags,
+  readingTime: post.data.readingTime
+}));
+
+// Extract all tags from posts and count occurrences
+const tagCounts = sortedPosts.reduce((acc, post) => {
+  if (post.data.tags) {
+    post.data.tags.forEach(tag => {
+      acc[tag] = (acc[tag] || 0) + 1;
+    });
+  }
+  return acc;
+}, {});
+
+// Convert to array and sort by count
+const tags = Object.entries(tagCounts)
+  .map(([name, count]) => ({ name, count: count as number }))
+  .sort((a, b) => b.count - a.count);
+
+const title = 'Blog';
+const description = BLOG?.description || 'All the latest articles and posts';
+---
+
+<FuwariLayout
+  title={title}
+  description={description}
+>
+  <div class="flex flex-col md:flex-row gap-8">
+    <!-- Main content -->
+    <div class="flex-1">
+      <BlogGrid 
+        posts={formattedPosts} 
+        columns={2}
+        featured={true}
+      />
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="w-full md:w-72 space-y-8">
+      <!-- About -->
+      <div class="card-base p-6">
+        <h2 class="text-xl font-bold mb-4">About</h2>
+        <p class="text-muted-foreground mb-4">
+          {SITE?.description || 'A beautiful blog powered by Notion and Astro'}
+        </p>
+        <div class="flex gap-2">
+          <a href="/about" class="btn-outline text-sm">
+            Learn More
+          </a>
+        </div>
+      </div>
+      
+      <!-- Tags -->
+      <div class="card-base p-6">
+        <h2 class="text-xl font-bold mb-4">Tags</h2>
+        <div class="flex flex-wrap gap-2">
+          {tags.map(tag => (
+            <a 
+              href={`/tag/${tag.name}`} 
+              class="inline-flex items-center rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground hover:bg-secondary/80"
+            >
+              #{tag.name}
+              <span class="ml-1 text-muted-foreground">({tag.count})</span>
+            </a>
+          ))}
+        </div>
+      </div>
+      
+      <!-- Social Links -->
+      <div class="card-base p-6">
+        <h2 class="text-xl font-bold mb-4">Follow Us</h2>
+        <div class="flex gap-2">
+          <a href="https://twitter.com" class="btn-plain rounded-full p-2 bg-secondary hover:bg-secondary/80" aria-label="Twitter">
+            <Icon name="tabler:brand-twitter" class="h-5 w-5" />
+          </a>
+          <a href="https://github.com" class="btn-plain rounded-full p-2 bg-secondary hover:bg-secondary/80" aria-label="GitHub">
+            <Icon name="tabler:brand-github" class="h-5 w-5" />
+          </a>
+          <a href="/rss.xml" class="btn-plain rounded-full p-2 bg-secondary hover:bg-secondary/80" aria-label="RSS">
+            <Icon name="tabler:rss" class="h-5 w-5" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</FuwariLayout>

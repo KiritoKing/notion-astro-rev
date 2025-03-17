@@ -1,0 +1,46 @@
+---
+import { Icon } from 'astro-icon/components';
+import BlogCard from './BlogCard.astro';
+import type { BlogPost } from '~/types';
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  posts: Array<BlogPost>;
+  moreUrl?: string;
+}
+
+const {
+  title = 'Featured Posts',
+  subtitle = 'Check out some of our best articles',
+  posts = [],
+  moreUrl = '/blog'
+} = Astro.props;
+---
+
+<section class="py-12 onload-animation">
+  <div class="text-center mb-8">
+    <h2 class="text-3xl font-bold">{title}</h2>
+    {subtitle && <p class="mt-2 text-xl text-muted-foreground">{subtitle}</p>}
+    <div class="mt-4 mx-auto h-1 w-20 bg-primary rounded"></div>
+  </div>
+  
+  {posts.length > 0 && (
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {posts.map((post, index) => (
+        <div class="onload-animation" style={`animation-delay: ${index * 0.1}s`}>
+          <BlogCard post={post} />
+        </div>
+      ))}
+    </div>
+  )}
+  
+  {moreUrl && (
+    <div class="mt-12 text-center">
+      <a href={moreUrl} class="btn-primary inline-flex items-center">
+        View All Posts
+        <Icon name="tabler:arrow-right" class="ml-2 h-5 w-5" />
+      </a>
+    </div>
+  )}
+</section>

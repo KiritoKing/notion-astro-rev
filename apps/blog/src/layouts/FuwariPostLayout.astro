@@ -1,0 +1,278 @@
+---
+import FuwariIcon from '~/components/fuwari/FuwariIcon.astro';
+import FuwariLayout from './FuwariLayout.astro';
+import { formatDate } from '~/utils/utils';
+import type { MetaData } from '~/types';
+
+export interface Props {
+  frontmatter: {
+    title: string;
+    description?: string;
+    image?: string;
+    publishDate: Date;
+    tags?: Array<string>;
+    readingTime?: number;
+    author?: string;
+  };
+  metadata?: MetaData;
+}
+
+const { frontmatter, metadata } = Astro.props;
+
+const {
+  title,
+  description,
+  image,
+  publishDate,
+  tags,
+  readingTime,
+  author
+} = frontmatter;
+
+// Format date using the utility function
+const formattedDate = formatDate(publishDate);
+
+// Calculate reading time in minutes
+const readingTimeText = readingTime 
+  ? `${Math.ceil(readingTime)} min read` 
+  : '3 min read';
+---
+
+<FuwariLayout
+  title={title}
+  description={description}
+  banner={image}
+  metadata={metadata}
+  setOGTypeArticle={true}
+>
+  <!-- Reading progress bar at the top of the page -->
+  <div id="reading-progress-container" class="fixed top-0 left-0 z-50 w-full h-1 bg-transparent">
+    <div id="reading-progress" class="h-full bg-primary" style="width: 0%"></div>
+  </div>
+  
+  <div class="container-fuwari py-8">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-4">
+      <!-- Table of Contents (desktop) -->
+      <aside class="hidden lg:block sticky top-24 self-start overflow-auto max-h-[calc(100vh-8rem)]">
+        <div class="card-base p-4">
+          <h2 class="text-lg font-semibold mb-4">Table of Contents</h2>
+          <div id="toc" class="text-sm space-y-2"></div>
+        </div>
+      </aside>
+      
+      <!-- Main content -->
+      <article class="card-base p-8 lg:col-span-3">
+    <header class="mb-8">
+      <h1 class="mb-4 text-3xl font-bold md:text-4xl">{title}</h1>
+      
+      {description && (
+        <p class="mb-6 text-xl text-muted-foreground">{description}</p>
+      )}
+      
+      <div class="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+        {author && (
+          <div class="flex items-center">
+            <FuwariIcon name="tabler:user" class="mr-1 h-4 w-4" />
+            <span>{author}</span>
+          </div>
+        )}
+        
+        <div class="flex items-center">
+          <FuwariIcon name="tabler:calendar" class="mr-1 h-4 w-4" />
+          <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+        </div>
+        
+        <div class="flex items-center">
+          <FuwariIcon name="tabler:clock" class="mr-1 h-4 w-4" />
+          <span>{readingTimeText}</span>
+        </div>
+      </div>
+      
+      {tags && tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <a 
+              href={`/tag/${tag}`} 
+              class="inline-flex items-center rounded-full bg-secondary px-2.5 py-1 text-sm font-medium text-secondary-foreground hover:bg-secondary/80"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+    
+    <div class="prose prose-lg dark:prose-invert max-w-none">
+      <slot />
+    </div>
+    
+    <!-- Post Navigation -->
+    <div class="mt-12 border-t border-border pt-6">
+      <div class="flex flex-col sm:flex-row sm:justify-between gap-4">
+        <a href="/blog" class="btn-outline flex items-center">
+          <FuwariIcon name="tabler:arrow-left" class="mr-2 h-4 w-4" />
+          Back to Blog
+        </a>
+        
+        <div class="flex gap-2">
+          <button class="btn-outline flex items-center" aria-label="Share">
+            <FuwariIcon name="tabler:share" class="mr-2 h-4 w-4" />
+            Share
+          </button>
+          
+          <button id="scroll-to-top" class="btn-outline flex items-center" aria-label="Scroll to top">
+            <FuwariIcon name="tabler:arrow-up" class="mr-2 h-4 w-4" />
+            Top
+          </button>
+        </div>
+      </div>
+    </div>
+  </article>
+    </div>
+  </div>
+</FuwariLayout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', setupPostPage);
+  document.addEventListener('astro:page-load', setupPostPage);
+  
+  function setupPostPage() {
+    setupScrollToTop();
+    setupTableOfContents();
+    setupReadingProgress();
+    setupSocialSharing();
+  }
+  
+  function setupScrollToTop() {
+    const scrollToTopButton = document.getElementById('scroll-to-top');
+    if (scrollToTopButton) {
+      scrollToTopButton.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    }
+  }
+  
+  function setupTableOfContents() {
+    const tocContainer = document.getElementById('toc');
+    const article = document.querySelector('article .prose');
+    
+    if (!tocContainer || !article) return;
+    
+    // Find all headings in the article
+    const headings = article.querySelectorAll('h2, h3, h4');
+    
+    if (headings.length === 0) {
+      tocContainer.innerHTML = '<p class="text-muted-foreground">No table of contents available</p>';
+      return;
+    }
+    
+    // Generate TOC HTML
+    let tocHtml = '';
+    
+    headings.forEach((heading) => {
+      // Add ID to heading if it doesn't have one
+      if (!heading.id) {
+        const headingText = heading.textContent || '';
+        heading.id = headingText.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+      }
+      
+      const level = parseInt(heading.tagName.substring(1)) - 2; // h2 = 0, h3 = 1, h4 = 2
+      const indentClass = level > 0 ? `ml-${level * 3}` : '';
+      
+      tocHtml += `
+        <a href="#${heading.id}" class="block py-1 hover:text-primary ${indentClass}">
+          ${heading.textContent || ''}
+        </a>
+      `;
+    });
+    
+    tocContainer.innerHTML = tocHtml;
+    
+    // Make TOC links smooth scroll
+    const tocLinks = tocContainer.querySelectorAll('a');
+    tocLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href') || '';
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+          
+          // Update URL hash without jumping
+          history.pushState(null, '', targetId);
+        }
+      });
+    });
+  }
+  
+  function setupReadingProgress() {
+    const progressBar = document.getElementById('reading-progress');
+    const article = document.querySelector('article');
+    
+    if (!progressBar || !article) return;
+    
+    const updateProgress = () => {
+      const rect = article.getBoundingClientRect();
+      const articleTop = rect.top;
+      const articleHeight = rect.height;
+      const windowHeight = window.innerHeight;
+      
+      // Calculate how much of the article has been scrolled through
+      let progress = 0;
+      
+      if (articleTop <= 0) {
+        // Article has started to scroll off the top
+        const scrolled = Math.abs(articleTop);
+        const total = articleHeight - windowHeight;
+        progress = Math.min(scrolled / total * 100, 100);
+      }
+      
+      // Update progress bar width
+      progressBar.style.width = `${progress}%`;
+    };
+    
+    // Update on scroll
+    window.addEventListener('scroll', updateProgress);
+    
+    // Initial update
+    updateProgress();
+  }
+  
+  function setupSocialSharing() {
+    const shareButton = document.querySelector('button[aria-label="Share"]');
+    
+    if (!shareButton) return;
+    
+    shareButton.addEventListener('click', () => {
+      if (navigator.share) {
+        // Use Web Share API if available
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        })
+        .catch(error => console.warn('Error sharing:', error));
+      } else {
+        // Fallback: copy URL to clipboard
+        const url = window.location.href;
+        navigator.clipboard.writeText(url)
+          .then(() => {
+            // Show a temporary tooltip
+            const tooltip = document.createElement('div');
+            tooltip.textContent = 'URL copied to clipboard!';
+            tooltip.className = 'fixed bottom-4 right-4 bg-primary text-primary-foreground px-4 py-2 rounded-md shadow-md z-50';
+            document.body.appendChild(tooltip);
+            
+            // Remove tooltip after 2 seconds
+            setTimeout(() => {
+              tooltip.remove();
+            }, 2000);
+          })
+          .catch(error => console.warn('Error copying URL:', error));
+      }
+    });
+  }
+</script>

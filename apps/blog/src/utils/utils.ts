@@ -1,6 +1,13 @@
 import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+
+// Initialize dayjs plugins
+dayjs.extend(localizedFormat);
 
 export const getFormattedDate = (date: Date, format = 'YYYY-MM-DD'): string => dayjs(date).format(format);
+
+// Format date in a more readable format (e.g., March 17, 2025)
+export const formatDate = (date: Date): string => dayjs(date).format('LL');
 
 export const trim = (str = '', ch?: string) => {
   let start = 0,

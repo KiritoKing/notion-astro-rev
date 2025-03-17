@@ -1,0 +1,75 @@
+---
+import { Icon } from 'astro-icon/components';
+import { SITE } from 'astrowind:config';
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  tagline?: string;
+  actions?: Array<{
+    text: string;
+    href: string;
+    icon?: string;
+    variant?: 'primary' | 'secondary' | 'outline';
+  }>;
+}
+
+const {
+  title = SITE?.name || 'Notion Astro Blog',
+  subtitle = 'A beautiful blog powered by Notion and Astro',
+  tagline = 'Share your thoughts with the world',
+  actions = [
+    {
+      text: 'Explore Blog',
+      href: '/blog',
+      icon: 'tabler:article',
+      variant: 'primary'
+    },
+    {
+      text: 'GitHub',
+      href: 'https://github.com/KiritoKing/notion-astro-rev',
+      icon: 'tabler:brand-github',
+      variant: 'outline'
+    }
+  ]
+} = Astro.props;
+
+// Button variants
+const buttonVariants = {
+  primary: 'btn-primary',
+  secondary: 'btn-secondary',
+  outline: 'btn-outline'
+};
+---
+
+<section class="py-12 md:py-20">
+  <div class="mx-auto max-w-4xl text-center">
+    <h1 class="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+      {title}
+    </h1>
+    
+    <p class="mt-4 text-xl text-muted-foreground md:text-2xl">
+      {subtitle}
+    </p>
+    
+    {tagline && (
+      <p class="mt-2 text-lg text-muted-foreground">
+        {tagline}
+      </p>
+    )}
+    
+    {actions && actions.length > 0 && (
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        {actions.map(({ text, href, icon, variant = 'primary' }) => (
+          <a 
+            href={href} 
+            class={`${buttonVariants[variant]} flex items-center gap-2`}
+          >
+            {icon && <Icon name={icon} class="h-5 w-5" />}
+            {text}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</section>

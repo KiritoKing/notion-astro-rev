@@ -1,0 +1,184 @@
+---
+import '~/assets/styles/tailwind.css';
+import '~/assets/styles/notion.css';
+import '~/assets/styles/fuwari.css';
+
+import { I18N } from 'astrowind:config';
+import { themeConfig } from '~/config/theme';
+
+import CommonMeta from '~/components/common/CommonMeta.astro';
+import Favicons from '~/components/Favicons.astro';
+import CustomStyles from '~/components/CustomStyles.astro';
+import ApplyColorMode from '~/components/common/ApplyColorMode.astro';
+import Metadata from '~/components/common/Metadata.astro';
+import SiteVerification from '~/components/common/SiteVerification.astro';
+import Analytics from '~/components/common/Analytics.astro';
+import BasicScripts from '~/components/common/BasicScripts.astro';
+import FuwariNavbar from '~/components/fuwari/Navbar.astro';
+import FuwariFooter from '~/components/fuwari/Footer.astro';
+import PageTransition from '~/components/fuwari/PageTransition.astro';
+
+// Comment the line below to disable View Transitions
+import { ViewTransitions } from 'astro:transitions';
+
+import type { MetaData as MetaDataType } from '~/types';
+
+export interface Props {
+  metadata?: MetaDataType;
+  banner?: string;
+  title?: string;
+  description?: string;
+  lang?: string;
+  setOGTypeArticle?: boolean;
+}
+
+const { 
+  metadata = {}, 
+  banner = themeConfig.banner.default,
+  title,
+  description,
+  lang,
+  setOGTypeArticle = false
+} = Astro.props;
+
+// Use setOGTypeArticle to override OpenGraph type if needed
+const meta = {
+  ...metadata,
+  openGraph: {
+    ...metadata.openGraph,
+    type: setOGTypeArticle ? 'article' : (metadata.openGraph?.type || 'website')
+  }
+};
+
+const { language, textDirection } = I18N;
+
+// Check if this is the home page to apply special banner styling
+const isHomePage = Astro.url.pathname === '/' || Astro.url.pathname === '';
+const bannerClass = isHomePage 
+  ? themeConfig.banner.extend 
+    ? 'banner banner-home banner-extend onload-animation' 
+    : 'banner banner-home onload-animation'
+  : 'banner onload-animation';
+---
+
+<!doctype html>
+<html lang={lang || language} dir={textDirection} class="scroll-smooth">
+  <head>
+    <CommonMeta />
+    <Favicons />
+    <CustomStyles />
+    <ApplyColorMode />
+    <Metadata {...meta} />
+    <SiteVerification />
+    <Analytics />
+
+    <!-- Enable View Transitions for smooth page transitions -->
+    <ViewTransitions fallback="swap" />
+    
+    <!-- Fuwari specific styles -->
+    <style is:global define:vars={{ hue: themeConfig.themeColor.hue }}>
+      :root {
+        --hue: var(--hue);
+      }
+    </style>
+  </head>
+
+  <body class="bg-background text-foreground antialiased">
+    <div id="app" class="flex min-h-screen flex-col">
+      <FuwariNavbar />
+      
+      {banner && (
+        <div 
+          class={bannerClass} 
+          style={`background-image: url(${banner})`}
+          transition:animate="fade"
+        >
+          <div class="banner-overlay"></div>
+          <div class="container-fuwari relative z-10 flex h-full flex-col items-center justify-center text-white">
+            {title && <h1 class="text-4xl font-bold mb-4 text-center onload-animation" style="animation-delay: 0.1s;">{title}</h1>}
+            {description && <p class="text-xl text-center max-w-2xl onload-animation" style="animation-delay: 0.2s;">{description}</p>}
+          </div>
+        </div>
+      )}
+      
+      <main class="flex-grow">
+        <div class="container-fuwari py-8">
+          <slot />
+        </div>
+      </main>
+      
+      <FuwariFooter />
+      
+      <!-- Back to top button -->
+      <button 
+        id="back-to-top" 
+        class="fixed bottom-8 right-8 z-50 rounded-full bg-primary p-3 text-primary-foreground shadow-lg transition-opacity opacity-0 invisible"
+        aria-label="Back to top"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
+    </div>
+
+    <BasicScripts />
+    <PageTransition />
+    
+    <!-- Fuwari specific scripts -->
+    <script>
+      // Theme toggle functionality
+      function setupThemeToggle() {
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+          themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            if (isDark) {
+              document.documentElement.classList.remove('dark');
+              localStorage.setItem('theme', 'light');
+            } else {
+              document.documentElement.classList.add('dark');
+              localStorage.setItem('theme', 'dark');
+            }
+          });
+        }
+      }
+      
+      // Back to top button functionality
+      function setupBackToTop() {
+        const backToTopButton = document.getElementById('back-to-top');
+        if (backToTopButton) {
+          // Show/hide button based on scroll position
+          window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+              backToTopButton.classList.remove('opacity-0', 'invisible');
+              backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+              backToTopButton.classList.remove('opacity-100', 'visible');
+              backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+          });
+          
+          // Scroll to top when clicked
+          backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth'
+            });
+          });
+        }
+      }
+
+      // Initialize on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        setupThemeToggle();
+        setupBackToTop();
+      });
+
+      // Handle page transitions
+      document.addEventListener('astro:page-load', () => {
+        setupThemeToggle();
+        setupBackToTop();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,4 @@
+1. 本应用为monorepo，使用pnpm workspace管理，你需要使用pnpm来执行所有命令，如运行开发服务器、管理依赖等，注意区分依赖安装的正确位置，应该安装在根目录还是子应用中
+2. 主应用为`apps/blog`，该应用为一个基于AstroWind脚手架的静态博客项目，其依赖为`packages/notion-astro-loader`，负责从Notion数据库加载数据并渲染页面
+3. 尽量尊重框架原有的能力，参考README： https://github.com/onwidget/astrowind
+4. 你应该尽可能地调用MCP工具自主完成任务，减少外部介入的次数，如你可以自己运行开发指令、使用puppeteer进行UI调试、使用console-ninja读取浏览器日志、使用github读取外部仓库信息进行参考、调用web工具查找最新资料等
