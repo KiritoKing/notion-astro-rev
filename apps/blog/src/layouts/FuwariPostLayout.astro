@@ -79,7 +79,7 @@ const readingTimeText = readingTime
         
         <div class="flex items-center">
           <FuwariIcon name="tabler:calendar" class="mr-1 h-4 w-4" />
-          <time datetime={publishDate.toISOString()}>{formattedDate}</time>
+          <time datetime={typeof publishDate === 'object' && publishDate instanceof Date ? publishDate.toISOString() : new Date(publishDate).toISOString()}>{formattedDate}</time>
         </div>
         
         <div class="flex items-center">

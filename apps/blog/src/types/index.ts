@@ -1,4 +1,5 @@
 export * from './blog';
+export * from './notion';
 
 export interface MetaData {
   title?: string;

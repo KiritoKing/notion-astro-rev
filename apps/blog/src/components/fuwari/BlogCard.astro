@@ -19,72 +19,69 @@ export interface Props {
 
 const { post, featured = false } = Astro.props;
 const image = post.image || '/images/placeholder.jpg';
-const linkUrl = `/blog/${post.slug}`;
+// 根据路由系统，文章链接应该是 /blog/permalink
+const linkUrl = `/blog/${post.permalink}`;
 
 // Format date using the utility function
 const formattedDate = formatDate(post.publishDate);
 
 // Calculate reading time in minutes
-const readingTime = post.readingTime 
-  ? `${Math.ceil(post.readingTime)} min read` 
-  : '3 min read';
+const readingTime = post.readingTime ? `${Math.ceil(post.readingTime)} min read` : '3 min read';
 ---
 
-<article class:list={[
-  "card-base overflow-hidden transition-all duration-300 hover:shadow-md",
-  featured ? "md:flex md:h-64" : "h-full"
-]}>
-  <a href={linkUrl} class:list={[
-    "block overflow-hidden",
-    featured ? "md:w-1/2" : "aspect-video"
-  ]}>
-    <img 
-      src={image} 
-      alt={post.title} 
+<article
+  class:list={[
+    'card-base overflow-hidden transition-all duration-300 hover:shadow-md',
+    featured ? 'md:flex md:h-64' : 'h-full',
+  ]}
+>
+  <a href={linkUrl} class:list={['block overflow-hidden', featured ? 'md:w-1/2' : 'aspect-video']}>
+    <img
+      src={image}
+      alt={post.title}
       class="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
     />
   </a>
-  
-  <div class:list={[
-    "flex flex-col p-6",
-    featured ? "md:w-1/2" : ""
-  ]}>
-    <div class="mb-2 flex items-center text-sm text-muted-foreground">
+
+  <div class:list={['flex flex-col p-6', featured ? 'md:w-1/2' : '']}>
+    <div class="text-muted-foreground mb-2 flex items-center text-sm">
       <Icon name="tabler:calendar" class="mr-1 h-4 w-4" />
-      <time datetime={post.publishDate.toISOString()}>{formattedDate}</time>
+      <time
+        datetime={typeof post.publishDate === 'object' && post.publishDate instanceof Date
+          ? post.publishDate.toISOString()
+          : new Date(post.publishDate).toISOString()}>{formattedDate}</time
+      >
       <span class="mx-2">•</span>
       <Icon name="tabler:clock" class="mr-1 h-4 w-4" />
       <span>{readingTime}</span>
     </div>
-    
+
     <h3 class="mb-2 text-xl font-bold leading-tight">
       <a href={linkUrl} class="hover:text-primary">
         {post.title}
       </a>
     </h3>
-    
-    {post.excerpt && (
-      <p class="flex-grow text-muted-foreground line-clamp-3">
-        {post.excerpt}
-      </p>
-    )}
-    
-    {post.tags && post.tags.length > 0 && (
-      <div class="mt-4 flex flex-wrap gap-2">
-        {post.tags.slice(0, 3).map((tag) => (
-          <a 
-            href={`/tag/${tag}`} 
-            class="inline-flex items-center rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground hover:bg-secondary/80"
-          >
-            #{tag}
-          </a>
-        ))}
-        {post.tags.length > 3 && (
-          <span class="inline-flex items-center rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
-            +{post.tags.length - 3}
-          </span>
-        )}
-      </div>
-    )}
+
+    {post.excerpt && <p class="text-muted-foreground line-clamp-3 flex-grow">{post.excerpt}</p>}
+
+    {
+      post.tags && post.tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+          {post.tags.slice(0, 3).map((tag) => (
+            <a
+              href={`/tag/${tag}`}
+              class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
+            >
+              #{tag}
+            </a>
+          ))}
+          {post.tags.length > 3 && (
+            <span class="bg-secondary text-secondary-foreground inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium">
+              +{post.tags.length - 3}
+            </span>
+          )}
+        </div>
+      )
+    }
   </div>
 </article>
