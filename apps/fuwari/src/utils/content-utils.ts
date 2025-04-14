@@ -3,12 +3,15 @@ import type { BlogPostData } from '@/types/config'
 import I18nKey from '@i18n/i18nKey'
 import { i18n } from '@i18n/translation'
 
-export async function getSortedPosts(): Promise<
-  { body: string, data: BlogPostData; slug: string }[]
-> {
-  const allBlogPosts = (await getCollection('posts', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true
-  })) as unknown as { body: string, data: BlogPostData; slug: string }[]
+export type PostType = {
+  body: string
+  data: BlogPostData
+  slug: string
+}
+
+export async function getSortedPosts(): Promise<PostType[]> {
+  const allNotionPosts = await getCollection('notion')
+  const allBlogPosts = 
 
   const sorted = allBlogPosts.sort(
     (a: { data: BlogPostData }, b: { data: BlogPostData }) => {
