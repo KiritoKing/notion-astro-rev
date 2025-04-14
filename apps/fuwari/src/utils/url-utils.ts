@@ -31,7 +31,7 @@ export function getDir(path: string): string {
 }
 
 export function url(path: string) {
-  if (path === '/about') {
+  if (path.startsWith('/about')) {
     return 'https://chlorinec.notion.site/ChlorineC-15fbdeba885680e3b3bdcb8553a4b478?pvs=4'
   }
   return joinUrl('', import.meta.env.BASE_URL, path)
