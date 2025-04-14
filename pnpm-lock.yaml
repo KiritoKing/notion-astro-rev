@@ -240,6 +240,9 @@ importers:
       '@astrojs/tailwind':
         specifier: ^5.1.4
         version: 5.1.5(astro@5.1.6(@types/node@22.13.4)(jiti@1.21.7)(lightningcss@1.27.0)(rollup@2.79.2)(stylus@0.63.0)(terser@5.36.0)(typescript@5.7.3)(yaml@2.7.0))(tailwindcss@3.4.17)
+      '@chlorinec-pkgs/notion-astro-loader':
+        specifier: workspace:*
+        version: link:../../packages/notion-astro-loader
       '@fontsource-variable/jetbrains-mono':
         specifier: ^5.1.1
         version: 5.2.5
@@ -309,6 +312,9 @@ importers:
       rehype-katex:
         specifier: ^7.0.1
         version: 7.0.1
+      rehype-prism:
+        specifier: ^2.3.3
+        version: 2.3.3(unified@11.0.5)
       rehype-slug:
         specifier: ^6.0.0
         version: 6.0.0
