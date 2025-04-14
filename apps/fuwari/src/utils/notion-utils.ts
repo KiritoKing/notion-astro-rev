@@ -4,22 +4,57 @@ import {
   richTextToPlainText,
   fileToUrl,
 } from '@chlorinec-pkgs/notion-astro-loader'
+import type { PostType } from './content-utils'
+import { getCollection, render } from 'astro:content'
 
-export async function notionPropertiesToBlogData(
-  notionItem: any,
-): Promise<BlogPostData> {
-  const props = notionItem.data.properties
-  const date = dateToDateObjects(props.date?.date)?.start ?? new Date()
+let _posts: PostType[] | null = null
 
+export type NotionPostItem = Awaited<
+  ReturnType<typeof getCollection<'notion'>>
+>[number]
+
+export function getNotionPostData(post: NotionPostItem): BlogPostData {
+  const { properties, cover } = post.data
   return {
-    body: notionItem.body,
-    title: richTextToPlainText(props.Name.title),
-    published: date,
-    description: richTextToPlainText(props.summary.rich_text),
-    category: props.category.select?.name,
-    tags: props.tags.multi_select.map((tag: any) => tag.name),
-    image: notionItem.data.cover
-      ? await fileToUrl(notionItem.data.cover)
+    body: post.body || '',
+    title: richTextToPlainText(properties.Name.title),
+    published: dateToDateObjects(properties.date?.date)?.start ?? new Date(),
+    updated: properties.updateAt?.last_edited_time
+      ? new Date(properties.updateAt?.last_edited_time)
       : undefined,
+    description: richTextToPlainText(properties.summary.rich_text),
+    tags: properties.tags.multi_select.map(tag => tag.name),
+    image: cover ? fileToUrl(cover) : undefined,
+    category: properties.category.select?.name,
   }
+}
+
+export async function getNotionPosts(): Promise<PostType[]> {
+  if (!_posts) {
+    const rawPosts = await getCollection('notion')
+
+    const processedPosts = await Promise.all(
+      rawPosts.map(async p => {
+        const { properties } = p.data
+        return {
+          body: p.body || '',
+          data: getNotionPostData(p),
+          slug: richTextToPlainText(properties.slug.rich_text),
+          rendered: await render(p),
+        }
+      }),
+    )
+
+    _posts = processedPosts.map((p, i) => ({
+      ...p,
+      data: {
+        ...p.data,
+        prevTitle: processedPosts[i - 1]?.data.title,
+        prevSlug: processedPosts[i - 1]?.slug,
+        nextTitle: processedPosts[i + 1]?.data.title,
+        nextSlug: processedPosts[i + 1]?.slug,
+      },
+    }))
+  }
+  return _posts
 }
