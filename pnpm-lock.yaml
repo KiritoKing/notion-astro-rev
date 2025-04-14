@@ -354,6 +354,9 @@ importers:
       unist-util-visit:
         specifier: ^5.0.0
         version: 5.0.0
+      unpic:
+        specifier: ^3.22.0
+        version: 3.22.0
     devDependencies:
       '@astrojs/ts-plugin':
         specifier: ^1.10.4

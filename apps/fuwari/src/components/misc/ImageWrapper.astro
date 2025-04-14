@@ -1,50 +1,80 @@
 ---
-import path from 'path'
-interface Props {
-  id?: string
+import type { HTMLAttributes } from 'astro/types'
+import { findImage } from '@/utils/image-utils'
+import {
+  getImagesOptimized,
+  astroAsseetsOptimizer,
+  unpicOptimizer,
+  isUnpicCompatible,
+  type ImageProps,
+} from '@/utils/image-optimization'
+
+type Props = ImageProps & { id?: string; position?: string; className?: string }
+type ImageType = {
   src: string
-  class?: string
-  alt?: string
-  position?: string
-  basePath?: string
+  attributes: HTMLAttributes<'img'>
 }
-import { Image } from 'astro:assets'
-import { url } from '../../utils/url-utils'
 
-const { id, src, alt, position = 'center', basePath = '/' } = Astro.props
-const className = Astro.props.class
+const props = Astro.props
 
-const isLocal = !(
-  src.startsWith('/') ||
-  src.startsWith('http') ||
-  src.startsWith('https') ||
-  src.startsWith('data:')
-)
-const isPublic = src.startsWith('/')
+if (props.alt === undefined || props.alt === null) {
+  throw new Error()
+}
 
-// TODO temporary workaround for images dynamic import
-// https://github.com/withastro/astro/issues/3373
-let img
-if (isLocal) {
-  const files = import.meta.glob<ImageMetadata>('../../**', {
-    import: 'default',
-  })
-  let normalizedPath = path
-    .normalize(path.join('../../', basePath, src))
-    .replace(/\\/g, '/')
-  const file = files[normalizedPath]
-  if (!file) {
-    console.error(`\n[ERROR] Image file not found: ${normalizedPath.replace('../../', 'src/')}`)
-  }
-  img = await file()
+if (typeof props.width === 'string') {
+  props.width = parseInt(props.width)
+}
+
+if (typeof props.height === 'string') {
+  props.height = parseInt(props.height)
+}
+
+if (!props.loading) {
+  props.loading = 'lazy'
+}
+
+if (!props.decoding) {
+  props.decoding = 'async'
+}
+
+const _image = await findImage(props.src)
+
+let image: ImageType | undefined = undefined
+
+if (
+  typeof _image === 'string' &&
+  (_image.startsWith('http://') || _image.startsWith('https://')) &&
+  isUnpicCompatible(_image)
+) {
+  image = await getImagesOptimized(_image, props, unpicOptimizer)
+} else if (_image) {
+  image = await getImagesOptimized(_image, props, astroAsseetsOptimizer)
 }
 
 const imageClass = 'w-full h-full object-cover'
-const imageStyle = `object-position: ${position}`
+const imageStyle = `object-position: ${props.position}`
 ---
-<div id={id} class:list={[className, 'overflow-hidden relative']}>
-    <div class="transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none"></div>
-    {isLocal && img && <Image src={img} alt={alt || ""} class={imageClass} style={imageStyle}/>}
-    {!isLocal && <img src={isPublic ? url(src) : src} alt={alt || ""} class={imageClass} style={imageStyle}/>}
+
+<div id={props.id} class:list={[props.className, 'overflow-hidden relative']}>
+  <div
+    class='transition absolute inset-0 dark:bg-black/10 bg-opacity-50 pointer-events-none'
+  >
+  </div>
+  {
+    !image ? (
+      <Fragment />
+    ) : (
+      <img
+        id={props.id}
+        src={image.src}
+        crossorigin='anonymous'
+        referrerpolicy='no-referrer'
+        class={imageClass}
+        style={imageStyle}
+        {...image.attributes}
+      />
+    )
+  }
 </div>
 
+{}

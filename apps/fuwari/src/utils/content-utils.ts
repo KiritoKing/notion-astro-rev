@@ -1,17 +1,18 @@
-import { getCollection } from 'astro:content'
 import type { BlogPostData } from '@/types/config'
 import I18nKey from '@i18n/i18nKey'
 import { i18n } from '@i18n/translation'
+import { getNotionPosts } from './notion-utils'
+import type { RenderResult } from 'astro:content'
 
 export type PostType = {
   body: string
   data: BlogPostData
   slug: string
+  rendered: RenderResult
 }
 
 export async function getSortedPosts(): Promise<PostType[]> {
-  const allNotionPosts = await getCollection('notion')
-  const allBlogPosts = 
+  const allBlogPosts: PostType[] = await getNotionPosts()
 
   const sorted = allBlogPosts.sort(
     (a: { data: BlogPostData }, b: { data: BlogPostData }) => {
@@ -39,9 +40,7 @@ export type Tag = {
 }
 
 export async function getTagList(): Promise<Tag[]> {
-  const allBlogPosts = await getCollection<'posts'>('posts', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true
-  })
+  const allBlogPosts = await getNotionPosts()
 
   const countMap: { [key: string]: number } = {}
   allBlogPosts.map((post: { data: { tags: string[] } }) => {
@@ -65,11 +64,9 @@ export type Category = {
 }
 
 export async function getCategoryList(): Promise<Category[]> {
-  const allBlogPosts = await getCollection<'posts'>('posts', ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true
-  })
+  const allBlogPosts = await getNotionPosts()
   const count: { [key: string]: number } = {}
-  allBlogPosts.map((post: { data: { category: string | number } }) => {
+  allBlogPosts.map((post: { data: { category?: string } }) => {
     if (!post.data.category) {
       const ucKey = i18n(I18nKey.uncategorized)
       count[ucKey] = count[ucKey] ? count[ucKey] + 1 : 1
