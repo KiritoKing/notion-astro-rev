@@ -1,6 +1,7 @@
 import { LinkPreset, type NavBarLink } from '@/types/config'
 import I18nKey from '@i18n/i18nKey'
 import { i18n } from '@i18n/translation'
+import { url } from '@utils/url-utils'
 
 export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
   [LinkPreset.Home]: {
@@ -9,7 +10,8 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
   },
   [LinkPreset.About]: {
     name: i18n(I18nKey.about),
-    url: '/about/',
+    url: url('/about'),
+    external: true,
   },
   [LinkPreset.Archive]: {
     name: i18n(I18nKey.archive),
