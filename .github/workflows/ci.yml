@@ -45,7 +45,7 @@ jobs:
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
   lint-and-check:
-    name: 代码检查与构建测试
+    name: 代码检查
     runs-on: ubuntu-latest
     needs: setup
 
@@ -91,6 +91,9 @@ jobs:
 
       - name: 生成 Astro 类型
         run: pnpm astro sync
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
 
       - name: 运行 TypeScript 类型检查
         run: pnpm type-check
