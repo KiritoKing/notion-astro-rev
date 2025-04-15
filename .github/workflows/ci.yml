@@ -96,6 +96,8 @@ jobs:
     name: E2E 测试
     needs: setup
     runs-on: ubuntu-latest
+    env:
+      CI: 'true' # 设置 CI 环境变量为 true，用于测试脚本中区分环境
 
     steps:
       - name: 检出代码
@@ -105,7 +107,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
 
       - name: 安装 pnpm
         uses: pnpm/action-setup@v3
@@ -121,6 +122,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+      - name: 验证 pnpm 安装
+        run: |
+          which pnpm || echo "pnpm not found in PATH"
+          echo "PATH=$PATH"
+
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
@@ -130,8 +136,8 @@ jobs:
       - name: 安装 Playwright 浏览器
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: 运行 E2E 测试
-        run: pnpm exec playwright test
+      - name: 运行 URL 重定向测试
+        run: pnpm run test:e2e
 
       - name: 保存 Playwright 报告
         uses: actions/upload-artifact@v4
