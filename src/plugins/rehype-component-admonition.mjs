@@ -1,5 +1,5 @@
 /// <reference types="mdast" />
-import { h } from 'hastscript'
+import { h } from 'hastscript';
 
 /**
  * Creates an admonition component.
@@ -15,18 +15,18 @@ export function AdmonitionComponent(properties, children, type) {
     return h(
       'div',
       { class: 'hidden' },
-      'Invalid admonition directive. (Admonition directives must be of block type ":::note{name="name"} <content> :::")',
-    )
+      'Invalid admonition directive. (Admonition directives must be of block type ":::note{name="name"} <content> :::")'
+    );
 
-  let label = null
+  let label = null;
   if (properties && properties['has-directive-label']) {
-    label = children[0] // The first child is the label
-    children = children.slice(1)
-    label.tagName = 'div' // Change the tag <p> to <div>
+    label = children[0]; // The first child is the label
+    children = children.slice(1);
+    label.tagName = 'div'; // Change the tag <p> to <div>
   }
 
-  return h(`blockquote`, { class: `admonition bdm-${type}` }, [
-    h('span', { class: `bdm-title` }, label ? label : type.toUpperCase()),
+  return h('blockquote', { class: `admonition bdm-${type}` }, [
+    h('span', { class: 'bdm-title' }, label ? label : type.toUpperCase()),
     ...children,
-  ])
+  ]);
 }

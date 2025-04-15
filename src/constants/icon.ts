@@ -1,4 +1,4 @@
-import type { Favicon } from '@/types/config.ts'
+import type { Favicon } from '@/types/config.ts';
 
 export const defaultFavicons: Favicon[] = [
   {
@@ -41,4 +41,4 @@ export const defaultFavicons: Favicon[] = [
     theme: 'dark',
     sizes: '192x192',
   },
-]
+];

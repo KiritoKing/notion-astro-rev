@@ -1,10 +1,5 @@
-import type {
-  LicenseConfig,
-  NavBarConfig,
-  ProfileConfig,
-  SiteConfig,
-} from './types/config'
-import { LinkPreset } from './types/config'
+import type { LicenseConfig, NavBarConfig, ProfileConfig, SiteConfig } from './types/config';
+import { LinkPreset } from './types/config';
 
 export const siteConfig: SiteConfig = {
   title: "ChlorineC's Blog",
@@ -42,7 +37,7 @@ export const siteConfig: SiteConfig = {
   analytics: {
     gTagId: 'G-VKMW6WV2NC',
   },
-}
+};
 
 export const navBarConfig: NavBarConfig = {
   links: [
@@ -55,7 +50,7 @@ export const navBarConfig: NavBarConfig = {
       external: true, // Show an external link icon and will open in a new tab
     },
   ],
-}
+};
 
 export const profileConfig: ProfileConfig = {
   avatar: 'assets/images/avatar.jpeg', // Relative to the /src directory. Relative to the /public directory if it starts with '/'
@@ -80,10 +75,10 @@ export const profileConfig: ProfileConfig = {
       url: 'https://github.com/KiritoKing',
     },
   ],
-}
+};
 
 export const licenseConfig: LicenseConfig = {
   enable: true,
   name: 'CC BY-NC-SA 4.0',
   url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
-}
+};

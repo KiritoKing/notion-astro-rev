@@ -1,5 +1,5 @@
 /// <reference types="mdast" />
-import { h } from 'hastscript'
+import { h } from 'hastscript';
 
 /**
  * Creates a GitHub Card component.
@@ -13,46 +13,31 @@ export function GithubCardComponent(properties, children) {
   if (Array.isArray(children) && children.length !== 0)
     return h('div', { class: 'hidden' }, [
       'Invalid directive. ("github" directive must be leaf type "::github{repo="owner/repo"}")',
-    ])
+    ]);
 
   if (!properties.repo || !properties.repo.includes('/'))
-    return h(
-      'div',
-      { class: 'hidden' },
-      'Invalid repository. ("repo" attributte must be in the format "owner/repo")',
-    )
+    return h('div', { class: 'hidden' }, 'Invalid repository. ("repo" attributte must be in the format "owner/repo")');
 
-  const repo = properties.repo
-  const cardUuid = `GC${Math.random().toString(36).slice(-6)}` // Collisions are not important
+  const repo = properties.repo;
+  const cardUuid = `GC${Math.random().toString(36).slice(-6)}`; // Collisions are not important
 
-  const nAvatar = h(`div#${cardUuid}-avatar`, { class: 'gc-avatar' })
-  const nLanguage = h(
-    `span#${cardUuid}-language`,
-    { class: 'gc-language' },
-    'Waiting...',
-  )
+  const nAvatar = h(`div#${cardUuid}-avatar`, { class: 'gc-avatar' });
+  const nLanguage = h(`span#${cardUuid}-language`, { class: 'gc-language' }, 'Waiting...');
 
-  const nTitle = h(`div`, { class: 'gc-titlebar' }, [
+  const nTitle = h('div', { class: 'gc-titlebar' }, [
     h('div', { class: 'gc-titlebar-left' }, [
-      h('div', { class: 'gc-owner' }, [
-        nAvatar,
-        h('div', { class: 'gc-user' }, repo.split('/')[0]),
-      ]),
+      h('div', { class: 'gc-owner' }, [nAvatar, h('div', { class: 'gc-user' }, repo.split('/')[0])]),
       h('div', { class: 'gc-divider' }, '/'),
       h('div', { class: 'gc-repo' }, repo.split('/')[1]),
     ]),
     h('div', { class: 'github-logo' }),
-  ])
+  ]);
 
-  const nDescription = h(
-    `div#${cardUuid}-description`,
-    { class: 'gc-description' },
-    'Waiting for api.github.com...',
-  )
+  const nDescription = h(`div#${cardUuid}-description`, { class: 'gc-description' }, 'Waiting for api.github.com...');
 
-  const nStars = h(`div#${cardUuid}-stars`, { class: 'gc-stars' }, '00K')
-  const nForks = h(`div#${cardUuid}-forks`, { class: 'gc-forks' }, '0K')
-  const nLicense = h(`div#${cardUuid}-license`, { class: 'gc-license' }, '0K')
+  const nStars = h(`div#${cardUuid}-stars`, { class: 'gc-stars' }, '00K');
+  const nForks = h(`div#${cardUuid}-forks`, { class: 'gc-forks' }, '0K');
+  const nLicense = h(`div#${cardUuid}-license`, { class: 'gc-license' }, '0K');
 
   const nScript = h(
     `script#${cardUuid}-script`,
@@ -82,8 +67,8 @@ export function GithubCardComponent(properties, children) {
         c.classList.add("fetch-error");
          console.warn("[GITHUB-CARD] (Error) Loading card for ${repo} | ${cardUuid}.")
       })
-    `,
-  )
+    `
+  );
 
   return h(
     `a#${cardUuid}-card`,
@@ -93,11 +78,6 @@ export function GithubCardComponent(properties, children) {
       target: '_blank',
       repo,
     },
-    [
-      nTitle,
-      nDescription,
-      h('div', { class: 'gc-infobar' }, [nStars, nForks, nLicense, nLanguage]),
-      nScript,
-    ],
-  )
+    [nTitle, nDescription, h('div', { class: 'gc-infobar' }, [nStars, nForks, nLicense, nLanguage]), nScript]
+  );
 }
