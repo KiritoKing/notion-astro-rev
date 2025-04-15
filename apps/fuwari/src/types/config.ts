@@ -30,6 +30,10 @@ export type SiteConfig = {
   analytics?: {
     gTagId?: string
   }
+
+  seo?: {
+    googleSiteVerificationId?: string
+  }
 }
 
 export type Favicon = {

@@ -64,8 +64,16 @@ export default defineConfig({
     svelte(),
     sitemap(),
     Compress({
-      CSS: false,
+      CSS: true,
+      HTML: {
+        'html-minifier-terser': {
+          removeAttributeQuotes: false,
+        },
+      },
       Image: false,
+      JavaScript: true,
+      SVG: false,
+      Logger: 1,
       Action: {
         Passed: async () => true, // https://github.com/PlayForm/Compress/issues/376
       },

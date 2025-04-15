@@ -106,6 +106,16 @@ const bannerOffset =
 
     <meta name='viewport' content='width=device-width' />
     <meta name='generator' content={Astro.generator} />
+
+    {
+      siteConfig.seo?.googleSiteVerificationId && (
+        <meta
+          name='google-site-verification'
+          content={siteConfig.seo.googleSiteVerificationId}
+        />
+      )
+    }
+
     {
       favicons.map(favicon => (
         <link

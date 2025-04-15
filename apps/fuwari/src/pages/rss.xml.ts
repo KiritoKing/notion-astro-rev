@@ -13,7 +13,7 @@ export async function GET(context: APIContext) {
   return rss({
     title: siteConfig.title,
     description: siteConfig.subtitle || 'No description',
-    site: context.site ?? 'https://fuwari.vercel.app',
+    site: context.site || '',
     items: blog.map(post => {
       return {
         title: post.data.title,
@@ -25,6 +25,6 @@ export async function GET(context: APIContext) {
         }),
       }
     }),
-    customData: `<language>${siteConfig.lang}</language>`,
+    // customData: `<language>${siteConfig.lang}</language>`,
   })
 }
