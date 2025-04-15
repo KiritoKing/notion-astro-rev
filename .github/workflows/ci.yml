@@ -48,6 +48,9 @@ jobs:
     name: 代码检查
     runs-on: ubuntu-latest
     needs: setup
+    env:
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
 
     steps:
       - name: 检出代码
@@ -91,9 +94,6 @@ jobs:
 
       - name: 生成 Astro 类型
         run: pnpm astro sync
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
 
       - name: 运行 TypeScript 类型检查
         run: pnpm type-check
@@ -104,6 +104,8 @@ jobs:
     needs: setup
     env:
       CI: 'true' # 设置 CI 环境变量为 true，用于测试脚本中区分环境
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
 
     steps:
       - name: 检出代码
