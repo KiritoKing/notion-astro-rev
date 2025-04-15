@@ -23,13 +23,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
 
       - name: 安装 pnpm
         uses: pnpm/action-setup@v3
+        id: pnpm-install
         with:
           version: 8
           run_install: false
+
+      - name: 验证 pnpm 安装
+        run: |
+          echo "PNPM_HOME=$PNPM_HOME"
+          export PATH="$PNPM_HOME:$PATH"
+          which pnpm || echo "pnpm not found in PATH"
+          pnpm --version || echo "pnpm command failed"
 
       - name: 获取 pnpm 缓存目录
         id: pnpm-cache
@@ -54,9 +61,17 @@ jobs:
 
       - name: 安装 pnpm
         uses: pnpm/action-setup@v3
+        id: pnpm-install
         with:
           version: 8
           run_install: false
+
+      - name: 验证 pnpm 安装
+        run: |
+          echo "PNPM_HOME=$PNPM_HOME"
+          export PATH="$PNPM_HOME:$PATH"
+          which pnpm || echo "pnpm not found in PATH"
+          pnpm --version || echo "pnpm command failed"
 
       - name: 设置 pnpm 缓存
         uses: actions/cache@v4
@@ -110,9 +125,17 @@ jobs:
 
       - name: 安装 pnpm
         uses: pnpm/action-setup@v3
+        id: pnpm-install
         with:
           version: 8
           run_install: false
+
+      - name: 验证 pnpm 安装
+        run: |
+          echo "PNPM_HOME=$PNPM_HOME"
+          export PATH="$PNPM_HOME:$PATH"
+          which pnpm || echo "pnpm not found in PATH"
+          pnpm --version || echo "pnpm command failed"
 
       - name: 设置 pnpm 缓存
         uses: actions/cache@v4
@@ -137,7 +160,9 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: 运行 URL 重定向测试
-        run: pnpm run test:e2e
+        run: |
+          export PATH="$PNPM_HOME:$PATH"
+          pnpm exec playwright test tests/e2e/url-redirects.spec.ts
 
       - name: 保存 Playwright 报告
         uses: actions/upload-artifact@v4
