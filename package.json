@@ -12,7 +12,10 @@
     "lint:quiet": "eslint --cache --quiet ./src",
     "preview": "astro preview",
     "start": "astro dev",
-    "type-check": "tsc --noEmit --isolatedDeclarations"
+    "type-check": "tsc --noEmit --isolatedDeclarations",
+    "prepare": "husky",
+    "lint-staged": "lint-staged",
+    "commitlint": "commitlint --edit"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -63,6 +66,8 @@
     "@astrojs/ts-plugin": "^1.10.4",
     "@astrolib/analytics": "^0.6.1",
     "@biomejs/biome": "1.8.3",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.24.0",
     "@rollup/plugin-yaml": "^4.1.2",
@@ -80,6 +85,8 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-svelte": "^3.5.1",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
     "postcss-import": "^16.1.0",
     "postcss-nesting": "^13.0.1",
     "prettier-plugin-astro": "^0.14.1",

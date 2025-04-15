@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# 使用 commitlint 检查提交消息
+pnpm commitlint --edit ${1}

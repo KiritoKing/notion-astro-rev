@@ -2,6 +2,7 @@
 dist/
 .output/
 *.tsbuildinfo
+.eslintcache
 
 # dependencies
 node_modules/
