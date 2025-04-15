@@ -84,6 +84,7 @@ const config = [
   ...tseslint.configs.recommended,
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+    ignores: ['tests/**/*.ts'], // 忽略测试文件，它们将使用单独的配置
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
@@ -181,6 +182,22 @@ const config = [
       // 对于配置文件，我们允许更宽松的规则
       '@typescript-eslint/no-unused-vars': 'off',
       'no-unused-vars': 'off',
+    },
+  },
+
+  // 测试文件的 TypeScript 配置
+  {
+    files: ['tests/**/*.ts'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: './tests/tsconfig.json',
+      },
+    },
+    rules: {
+      // 为测试文件设置更宽松的规则
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
 

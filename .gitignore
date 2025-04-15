@@ -26,6 +26,11 @@ pnpm-debug.log*
 .cache
 .vercel
 
+# e2e
+test-results
+playwright-report
+playwright-results
+
 # notion-astro-loader downloaded
 src/assets/images/notion
 
