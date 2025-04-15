@@ -1,3 +1,4 @@
+// @ts-check
 import sitemap from '@astrojs/sitemap'
 import svelte from '@astrojs/svelte'
 import tailwind from '@astrojs/tailwind'
@@ -61,7 +62,9 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    syntaxHighlight: 'prism',
+    shikiConfig: {
+      theme: 'dracula-soft',
+    },
     remarkPlugins: [
       remarkMath,
       remarkReadingTime,

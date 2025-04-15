@@ -1,6 +1,6 @@
 import { defineCollection } from 'astro:content'
 import { notionLoader } from '@chlorinec-pkgs/notion-astro-loader'
-import rehypePrism from 'rehype-prism'
+import rehypeShiki from '@shikijs/rehype'
 
 const database = defineCollection({
   loader: notionLoader({
@@ -14,7 +14,14 @@ const database = defineCollection({
       },
     },
     sorts: [{ property: 'date', direction: 'descending' }],
-    rehypePlugins: [rehypePrism],
+    rehypePlugins: [
+      [
+        rehypeShiki,
+        {
+          theme: 'dracula-soft',
+        },
+      ],
+    ],
     experimentalCacheImageInData: true,
     experimentalRootSourceAlias: '~',
   }),
