@@ -358,6 +358,9 @@ importers:
       '@astrojs/ts-plugin':
         specifier: ^1.10.4
         version: 1.10.4
+      '@astrolib/analytics':
+        specifier: ^0.6.1
+        version: 0.6.1(astro@5.1.6(@types/node@22.13.4)(jiti@1.21.7)(lightningcss@1.27.0)(rollup@2.79.2)(stylus@0.63.0)(terser@5.36.0)(typescript@5.7.3)(yaml@2.7.0))
       '@biomejs/biome':
         specifier: 1.8.3
         version: 1.8.3
@@ -7633,6 +7636,10 @@ snapshots:
   '@astrolib/analytics@0.6.1(astro@5.0.3(@types/node@22.13.4)(jiti@1.21.7)(lightningcss@1.27.0)(rollup@4.34.7)(stylus@0.63.0)(terser@5.36.0)(typescript@5.7.3)(yaml@2.7.0))':
     dependencies:
       astro: 5.0.3(@types/node@22.13.4)(jiti@1.21.7)(lightningcss@1.27.0)(rollup@4.34.7)(stylus@0.63.0)(terser@5.36.0)(typescript@5.7.3)(yaml@2.7.0)
+
+  '@astrolib/analytics@0.6.1(astro@5.1.6(@types/node@22.13.4)(jiti@1.21.7)(lightningcss@1.27.0)(rollup@2.79.2)(stylus@0.63.0)(terser@5.36.0)(typescript@5.7.3)(yaml@2.7.0))':
+    dependencies:
+      astro: 5.1.6(@types/node@22.13.4)(jiti@1.21.7)(lightningcss@1.27.0)(rollup@2.79.2)(stylus@0.63.0)(terser@5.36.0)(typescript@5.7.3)(yaml@2.7.0)
 
   '@astrolib/seo@1.0.0-beta.8(astro@5.0.3(@types/node@22.13.4)(jiti@1.21.7)(lightningcss@1.27.0)(rollup@4.34.7)(stylus@0.63.0)(terser@5.36.0)(typescript@5.7.3)(yaml@2.7.0))':
     dependencies:
