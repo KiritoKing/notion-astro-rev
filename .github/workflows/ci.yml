@@ -1,0 +1,150 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  # 允许手动触发工作流
+  workflow_dispatch:
+
+# 定义共享的设置步骤
+jobs:
+  setup:
+    name: 环境设置
+    runs-on: ubuntu-latest
+    outputs:
+      pnpm-store-path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+          run_install: false
+
+      - name: 获取 pnpm 缓存目录
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+  lint-and-check:
+    name: 代码检查与构建测试
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+          run_install: false
+
+      - name: 设置 pnpm 缓存
+        uses: actions/cache@v4
+        with:
+          path: ${{ needs.setup.outputs.pnpm-store-path }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 检查代码格式
+        run: pnpm exec prettier --check "./src/**/*.{js,jsx,ts,tsx,json,md,mdx,css,html,yml,yaml}"
+
+      - name: 运行 ESLint 检查
+        run: pnpm lint:quiet
+
+      - name: 运行 TypeScript 类型检查
+        run: pnpm type-check
+
+      - name: 验证提交消息格式
+        run: |
+          # 如果是 PR，检查所有提交消息
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            git fetch origin ${{ github.base_ref }} --depth=1
+            pnpm commitlint --from $(git merge-base origin/${{ github.base_ref }} HEAD) --to HEAD
+          # 如果是 push，只检查最新的提交消息
+          elif [ "${{ github.event_name }}" == "push" ]; then
+            pnpm commitlint --from HEAD~1 --to HEAD
+          fi
+
+      - name: 构建测试
+        run: pnpm build
+
+  e2e-tests:
+    name: E2E 测试
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+          run_install: false
+
+      - name: 设置 pnpm 缓存
+        uses: actions/cache@v4
+        with:
+          path: ${{ needs.setup.outputs.pnpm-store-path }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 构建项目
+        run: pnpm build
+
+      - name: 安装 Playwright 浏览器
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: 运行 E2E 测试
+        run: pnpm exec playwright test
+
+      - name: 保存 Playwright 报告
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: 保存测试截图
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-screenshots
+          path: playwright-results/
+          retention-days: 30

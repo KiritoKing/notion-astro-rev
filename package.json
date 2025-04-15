@@ -15,7 +15,9 @@
     "type-check": "tsc --noEmit --isolatedDeclarations",
     "prepare": "husky",
     "lint-staged": "lint-staged",
-    "commitlint": "commitlint --edit"
+    "commitlint": "commitlint --edit",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -70,10 +72,12 @@
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.24.0",
+    "@playwright/test": "^1.51.1",
     "@rollup/plugin-yaml": "^4.1.2",
     "@shikijs/rehype": "^3.2.2",
     "@types/markdown-it": "^14.1.2",
     "@types/mdast": "^4.0.4",
+    "@types/node": "^22.14.1",
     "@types/sanitize-html": "^2.13.0",
     "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.2",
