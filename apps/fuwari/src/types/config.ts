@@ -26,6 +26,10 @@ export type SiteConfig = {
   }
 
   favicon: Favicon[]
+
+  analytics?: {
+    gTagId?: string
+  }
 }
 
 export type Favicon = {

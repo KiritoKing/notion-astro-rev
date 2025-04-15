@@ -39,6 +39,9 @@ export const siteConfig: SiteConfig = {
       sizes: '180x180',
     },
   ],
+  analytics: {
+    gTagId: 'G-VKMW6WV2NC',
+  },
 }
 
 export const navBarConfig: NavBarConfig = {

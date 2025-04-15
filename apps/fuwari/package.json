@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "@astrojs/ts-plugin": "^1.10.4",
+    "@astrolib/analytics": "^0.6.1",
     "@biomejs/biome": "1.8.3",
     "@rollup/plugin-yaml": "^4.1.2",
     "@shikijs/rehype": "^3.2.2",

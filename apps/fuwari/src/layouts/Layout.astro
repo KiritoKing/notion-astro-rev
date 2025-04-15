@@ -5,6 +5,8 @@ import '@fontsource/roboto/700.css'
 
 import { profileConfig, siteConfig } from '@/config'
 import ConfigCarrier from '@components/ConfigCarrier.astro'
+import { GoogleAnalytics } from '@astrolib/analytics'
+
 import {
   AUTO_MODE,
   BANNER_HEIGHT,
@@ -164,6 +166,12 @@ const bannerOffset =
       }}
     ></style>
     <!-- defines global css variables. This will be applied to <html> <body> and some other elements idk why -->
+
+    {
+      siteConfig.analytics?.gTagId && (
+        <GoogleAnalytics id={String(siteConfig.analytics.gTagId)} />
+      )
+    }
 
     <slot name='head' />
 
