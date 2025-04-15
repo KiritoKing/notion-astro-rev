@@ -1,3 +1,4 @@
 dist
 node_modules
 src/assets
+pnpm-lock.yaml

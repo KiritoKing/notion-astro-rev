@@ -89,6 +89,9 @@ jobs:
       - name: 运行 ESLint 检查
         run: pnpm lint:quiet
 
+      - name: 生成 Astro 类型
+        run: pnpm astro sync
+
       - name: 运行 TypeScript 类型检查
         run: pnpm type-check
 
