@@ -15,6 +15,9 @@ for (const [newUrl, oldUrls] of Object.entries(urlMap)) {
         // 设置较长的超时时间
         test.setTimeout(30000);
 
+        // 检查是否在 CI 环境中运行
+        const isCI = process.env.CI === 'true';
+
         try {
           // 访问旧 URL，等待导航完成
           await page.goto(`/${oldUrl}`, { waitUntil: 'networkidle' });
@@ -41,10 +44,16 @@ for (const [newUrl, oldUrls] of Object.entries(urlMap)) {
             if (html.includes('Redirecting') || html.includes('http-equiv="refresh"')) {
               console.log('检测到重定向页面');
 
-              // 在本地开发环境中，我们可能没有实现完整的重定向
-              // 所以跳过这个测试
-              test.skip();
-              return;
+              // 在 CI 环境中，我们希望测试失败而不是跳过
+              if (isCI) {
+                console.error(`CI 环境中重定向测试失败: ${oldUrl} -> ${newUrl}`);
+                expect(finalUrl).toContain(`/${newUrl}`); // 这将导致测试失败
+              } else {
+                // 在本地开发环境中，我们可能没有实现完整的重定向
+                // 所以跳过这个测试
+                test.skip();
+                return;
+              }
             }
           }
 
@@ -66,7 +75,13 @@ for (const [newUrl, oldUrls] of Object.entries(urlMap)) {
           expect(mainContent).not.toBeNull();
         } catch (error) {
           console.error(`测试出错: ${error instanceof Error ? error.message : String(error)}`);
-          test.skip();
+
+          // 在 CI 环境中，我们希望测试失败而不是跳过
+          if (isCI) {
+            throw error; // 在 CI 环境中重新抛出错误，导致测试失败
+          } else {
+            test.skip(); // 在本地环境中跳过测试
+          }
         }
       });
     }
