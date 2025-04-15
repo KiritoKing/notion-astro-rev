@@ -1,6 +1,7 @@
 # build output
 dist/
 .output/
+*.tsbuildinfo
 
 # dependencies
 node_modules/
@@ -13,15 +14,17 @@ pnpm-debug.log*
 
 
 # environment variables
-.env
-.env.production
+.env*
 
 # macOS-specific files
 .DS_Store
 
-
+# chore things
 .astro
 .wrangler
 .cache
+.vercel
 
-*.tsbuildinfo
+# notion-astro-loader downloaded
+src/assets/images/notion
+
