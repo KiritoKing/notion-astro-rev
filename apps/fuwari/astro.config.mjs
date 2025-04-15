@@ -19,12 +19,22 @@ import { GithubCardComponent } from './src/plugins/rehype-component-github-card.
 import { parseDirectiveNode } from './src/plugins/remark-directive-rehype.js'
 import { remarkExcerpt } from './src/plugins/remark-excerpt.js'
 import { remarkReadingTime } from './src/plugins/remark-reading-time.mjs'
+import { getRedirects } from './migration/index.mjs'
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://fuwari.vercel.app/',
+  site: 'https://chlorinec.top/',
+  redirects: getRedirects(),
   base: '/',
-  trailingSlash: 'always',
+  // trailingSlash: 'always',
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+      config: {
+        limitInputPixels: false, // 禁用输入大小限制
+      },
+    },
+  },
   integrations: [
     tailwind({
       nesting: true,
