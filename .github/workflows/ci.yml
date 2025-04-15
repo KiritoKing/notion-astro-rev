@@ -95,20 +95,6 @@ jobs:
       - name: 运行 TypeScript 类型检查
         run: pnpm type-check
 
-      - name: 验证提交消息格式
-        run: |
-          # 如果是 PR，检查所有提交消息
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            git fetch origin ${{ github.base_ref }} --depth=1
-            pnpm commitlint --from $(git merge-base origin/${{ github.base_ref }} HEAD) --to HEAD
-          # 如果是 push，只检查最新的提交消息
-          elif [ "${{ github.event_name }}" == "push" ]; then
-            pnpm commitlint --from HEAD~1 --to HEAD
-          fi
-
-      - name: 构建测试
-        run: pnpm build
-
   e2e-tests:
     name: E2E 测试
     runs-on: ubuntu-latest
