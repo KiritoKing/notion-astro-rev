@@ -1,6 +1,6 @@
-import { defineCollection } from 'astro:content'
-import { notionLoader } from '@chlorinec-pkgs/notion-astro-loader'
-import rehypeShiki from '@shikijs/rehype'
+import { notionLoader } from '@chlorinec-pkgs/notion-astro-loader';
+import rehypeShiki from '@shikijs/rehype';
+import { defineCollection } from 'astro:content';
 
 const database = defineCollection({
   loader: notionLoader({
@@ -25,8 +25,8 @@ const database = defineCollection({
     experimentalCacheImageInData: true,
     experimentalRootSourceAlias: '~',
   }),
-})
+});
 
 export const collections = {
   notion: database,
-}
+};

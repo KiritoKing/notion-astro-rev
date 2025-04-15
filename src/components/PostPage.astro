@@ -1,24 +1,24 @@
 ---
-import { getPostUrlBySlug } from '@utils/url-utils'
-import PostCard from './PostCard.astro'
-import type { PostType } from '@utils/content-utils'
-import type { Page } from 'astro'
+import { getPostUrlBySlug } from '@utils/url-utils';
+import PostCard from './PostCard.astro';
+import type { PostType } from '@utils/content-utils';
+import type { Page } from 'astro';
 
 interface Props {
-  page: Page<PostType>
+  page: Page<PostType>;
 }
 
-const { page } = Astro.props
+const { page } = Astro.props;
 
-let delay = 0
-const interval = 50
+let delay = 0;
+const interval = 50;
 ---
 
 <div
-  class='transition flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-1 md:py-0 md:bg-transparent md:gap-4 mb-4'
+  class="mb-4 flex flex-col rounded-[var(--radius-large)] bg-[var(--card-bg)] py-1 transition md:gap-4 md:bg-transparent md:py-0"
 >
   {
-    page.data.map(entry => {
+    page.data.map((entry) => {
       return (
         <PostCard
           entry={entry}
@@ -31,10 +31,10 @@ const interval = 50
           image={entry.data.image}
           description={entry.data.description}
           draft={entry.data.draft ?? false}
-          class:list='onload-animation'
+          class:list="onload-animation"
           style={`animation-delay: calc(var(--content-delay) + ${delay++ * interval}ms);`}
         />
-      )
+      );
     })
   }
 </div>

@@ -1,5 +1,5 @@
-import Key from '../i18nKey'
-import type { Translation } from '../translation'
+import Key from '../i18nKey';
+import type { Translation } from '../translation';
 
 export const th: Translation = {
   [Key.home]: 'หน้าแรก',
@@ -35,4 +35,4 @@ export const th: Translation = {
   [Key.author]: 'ผู้เขียน',
   [Key.publishedAt]: 'เผยแพร่เมื่อ',
   [Key.license]: 'สัญญาอนุญาต',
-}
+};

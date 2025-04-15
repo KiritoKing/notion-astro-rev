@@ -20,5 +20,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "scripts/**/*", "migration/**/*"]
+  "include": ["src/**/*", "scripts/**/*", "migration/**/*", "./*"]
 }
