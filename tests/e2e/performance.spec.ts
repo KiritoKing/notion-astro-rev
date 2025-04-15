@@ -15,6 +15,10 @@ const performanceThresholds = {
   loadTime: 3000, // 页面加载时间阈值（毫秒）
   resourceCount: 100, // 资源数量阈值
   transferSize: 3 * 1024 * 1024, // 传输大小阈值（3MB）
+  firstContentfulPaint: 1500, // 首次内容绘制阈值（毫秒）
+  largestContentfulPaint: 2500, // 最大内容绘制阈值（毫秒）
+  cumulativeLayoutShift: 0.1, // 累积布局偏移阈值
+  totalBlockingTime: 300, // 总阻塞时间阈值（毫秒）
 };
 
 // 格式化文件大小
@@ -44,6 +48,10 @@ test.describe('页面性能测试', () => {
           domContentLoaded: 0,
           firstPaint: 0,
           firstContentfulPaint: 0,
+          largestContentfulPaint: 0,
+          cumulativeLayoutShift: 0,
+          totalBlockingTime: 0,
+          timeToInteractive: 0,
         },
         resources: {
           total: 0,
@@ -52,6 +60,12 @@ test.describe('页面性能测试', () => {
         },
         status: 'pass',
         warnings: [],
+        scores: {
+          performance: 0,
+          accessibility: 0,
+          bestPractices: 0,
+          seo: 0,
+        },
       };
 
       // 开始计时
@@ -78,21 +92,102 @@ test.describe('页面性能测试', () => {
         };
       });
 
-      // 获取 First Paint 和 First Contentful Paint
-      const paintMetrics = await browserPage.evaluate(() => {
-        const entries = performance.getEntriesByType('paint');
-        const firstPaint = entries.find((entry) => entry.name === 'first-paint');
-        const firstContentfulPaint = entries.find((entry) => entry.name === 'first-contentful-paint');
+      // 获取更多性能指标
+      const webVitals = await browserPage.evaluate(() => {
+        // 获取基本绘制指标
+        const paintEntries = performance.getEntriesByType('paint');
+        const firstPaint = paintEntries.find((entry) => entry.name === 'first-paint');
+        const firstContentfulPaint = paintEntries.find((entry) => entry.name === 'first-contentful-paint');
+
+        // 尝试获取 LCP（最大内容绘制）
+        let largestContentfulPaint = 0;
+        const lcpEntries = performance.getEntriesByType('largest-contentful-paint');
+        if (lcpEntries && lcpEntries.length > 0) {
+          largestContentfulPaint = lcpEntries[lcpEntries.length - 1].startTime;
+        }
+
+        // 尝试获取 CLS（累积布局偏移）
+        let cumulativeLayoutShift = 0;
+        try {
+          const layoutShiftEntries = performance.getEntriesByType('layout-shift');
+          if (layoutShiftEntries && layoutShiftEntries.length > 0) {
+            // 由于 TypeScript 类型限制，使用 any 类型处理
+            cumulativeLayoutShift = (layoutShiftEntries as any[]).reduce(
+              (total, entry) => total + (entry.value || 0),
+              0
+            );
+          }
+        } catch (e) {
+          // 如果不支持，忽略错误
+          console.log('无法获取布局偏移数据', e);
+        }
+
+        // 尝试获取 TBT（总阻塞时间）
+        let totalBlockingTime = 0;
+        const longTaskEntries = performance.getEntriesByType('longtask');
+        if (longTaskEntries && longTaskEntries.length > 0) {
+          totalBlockingTime = longTaskEntries.reduce((total, entry) => {
+            return total + (entry.duration - 50); // 50ms 是长任务的阈值
+          }, 0);
+        }
+
+        // 估算 TTI（可交互时间）
+        let timeToInteractive = 0;
+        try {
+          const navigationEntry = performance.getEntriesByType('navigation')[0] as any;
+          if (navigationEntry && navigationEntry.domInteractive) {
+            timeToInteractive = navigationEntry.domInteractive + totalBlockingTime;
+          }
+        } catch (e) {
+          console.log('无法获取可交互时间数据', e);
+        }
+
         return {
           firstPaint: firstPaint ? firstPaint.startTime : 0,
           firstContentfulPaint: firstContentfulPaint ? firstContentfulPaint.startTime : 0,
+          largestContentfulPaint,
+          cumulativeLayoutShift,
+          totalBlockingTime,
+          timeToInteractive,
         };
       });
 
       // 更新性能指标
       performanceData.metrics.domContentLoaded = performanceMetrics.domContentLoaded;
-      performanceData.metrics.firstPaint = paintMetrics.firstPaint;
-      performanceData.metrics.firstContentfulPaint = paintMetrics.firstContentfulPaint;
+      performanceData.metrics.firstPaint = webVitals.firstPaint;
+      performanceData.metrics.firstContentfulPaint = webVitals.firstContentfulPaint;
+      performanceData.metrics.largestContentfulPaint = webVitals.largestContentfulPaint;
+      performanceData.metrics.cumulativeLayoutShift = webVitals.cumulativeLayoutShift;
+      performanceData.metrics.totalBlockingTime = webVitals.totalBlockingTime;
+      performanceData.metrics.timeToInteractive = webVitals.timeToInteractive;
+
+      // 计算简单的性能分数 (0-100)
+      const calculateScore = (value: number, threshold: number, isLowerBetter = true) => {
+        if (value === 0) return null; // 无数据
+        return isLowerBetter
+          ? Math.max(0, Math.min(100, 100 - (value / threshold) * 100))
+          : Math.max(0, Math.min(100, (value / threshold) * 100));
+      };
+
+      // 计算性能分数
+      const fcp = calculateScore(
+        performanceData.metrics.firstContentfulPaint,
+        performanceThresholds.firstContentfulPaint
+      );
+      const lcp = calculateScore(
+        performanceData.metrics.largestContentfulPaint,
+        performanceThresholds.largestContentfulPaint
+      );
+      const cls = calculateScore(
+        performanceData.metrics.cumulativeLayoutShift,
+        performanceThresholds.cumulativeLayoutShift
+      );
+      const tbt = calculateScore(performanceData.metrics.totalBlockingTime, performanceThresholds.totalBlockingTime);
+
+      // 综合性能分数
+      if (fcp && lcp && cls && tbt) {
+        performanceData.scores!.performance = Math.round(fcp * 0.15 + lcp * 0.35 + cls * 0.25 + tbt * 0.25);
+      }
 
       // 收集资源信息
       const resourcesInfo = await browserPage.evaluate(() => {
@@ -156,6 +251,31 @@ test.describe('页面性能测试', () => {
         );
       }
 
+      // 检查 Web Vitals 指标
+      if (performanceData.metrics.firstContentfulPaint > performanceThresholds.firstContentfulPaint) {
+        performanceData.warnings.push(
+          `首次内容绘制 (${formatTime(performanceData.metrics.firstContentfulPaint)}) 超过阈值 (${formatTime(performanceThresholds.firstContentfulPaint)})`
+        );
+      }
+
+      if (performanceData.metrics.largestContentfulPaint > performanceThresholds.largestContentfulPaint) {
+        performanceData.warnings.push(
+          `最大内容绘制 (${formatTime(performanceData.metrics.largestContentfulPaint)}) 超过阈值 (${formatTime(performanceThresholds.largestContentfulPaint)})`
+        );
+      }
+
+      if (performanceData.metrics.cumulativeLayoutShift > performanceThresholds.cumulativeLayoutShift) {
+        performanceData.warnings.push(
+          `累积布局偏移 (${performanceData.metrics.cumulativeLayoutShift.toFixed(3)}) 超过阈值 (${performanceThresholds.cumulativeLayoutShift})`
+        );
+      }
+
+      if (performanceData.metrics.totalBlockingTime > performanceThresholds.totalBlockingTime) {
+        performanceData.warnings.push(
+          `总阻塞时间 (${formatTime(performanceData.metrics.totalBlockingTime)}) 超过阈值 (${formatTime(performanceThresholds.totalBlockingTime)})`
+        );
+      }
+
       // 如果有警告，标记为警告状态
       if (performanceData.warnings.length > 0) {
         performanceData.status = 'warning';
@@ -201,6 +321,10 @@ interface PerformanceData {
     domContentLoaded: number;
     firstPaint: number;
     firstContentfulPaint: number;
+    largestContentfulPaint?: number;
+    cumulativeLayoutShift?: number;
+    totalBlockingTime?: number;
+    timeToInteractive?: number;
   };
   resources: {
     total: number;
@@ -209,6 +333,12 @@ interface PerformanceData {
   };
   status: string;
   warnings: string[];
+  scores?: {
+    performance?: number;
+    accessibility?: number;
+    bestPractices?: number;
+    seo?: number;
+  };
 }
 
 // 生成可读性更好的报告
@@ -226,13 +356,38 @@ function generateReadableReport(data: PerformanceData): string {
     `DOM 内容加载: ${formatTime(metrics.domContentLoaded)}`,
     `首次绘制: ${formatTime(metrics.firstPaint)}`,
     `首次内容绘制: ${formatTime(metrics.firstContentfulPaint)}`,
+  ];
+
+  // 添加高级指标（如果有数据）
+  if (metrics.largestContentfulPaint) {
+    lines.push(`最大内容绘制: ${formatTime(metrics.largestContentfulPaint)}`);
+  }
+
+  if (metrics.cumulativeLayoutShift !== undefined) {
+    lines.push(`累积布局偏移: ${metrics.cumulativeLayoutShift.toFixed(3)}`);
+  }
+
+  if (metrics.totalBlockingTime) {
+    lines.push(`总阻塞时间: ${formatTime(metrics.totalBlockingTime)}`);
+  }
+
+  if (metrics.timeToInteractive) {
+    lines.push(`可交互时间: ${formatTime(metrics.timeToInteractive)}`);
+  }
+
+  // 添加性能分数（如果有）
+  if (data.scores && data.scores.performance) {
+    lines.push(`性能分数: ${data.scores.performance}/100`);
+  }
+
+  lines.push(
     '',
     '--- 资源统计 ---',
     `总资源数: ${resources.total}`,
     `总传输大小: ${formatSize(resources.size)}`,
     '',
-    '--- 资源类型明细 ---',
-  ];
+    '--- 资源类型明细 ---'
+  );
 
   // 添加资源类型明细
   Object.entries(resources.byType)
