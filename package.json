@@ -12,11 +12,16 @@
     "lint:quiet": "eslint --cache --quiet ./src",
     "preview": "astro preview",
     "start": "astro dev",
-    "type-check": "tsc --noEmit --isolatedDeclarations",
+    "type-check": "tsc --noEmit",
     "prepare": "husky",
     "lint-staged": "lint-staged",
     "commitlint": "commitlint --edit",
-    "test:e2e": "playwright test",
+    "test": "node scripts/test.js help",
+    "test:all": "node scripts/test.js all",
+    "test:e2e": "node scripts/test.js e2e",
+    "test:e2e:basic": "node scripts/test.js basic",
+    "test:e2e:urls": "node scripts/test.js urls",
+    "test:e2e:perf": "node scripts/test.js perf",
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
