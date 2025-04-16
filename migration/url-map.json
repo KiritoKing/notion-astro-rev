@@ -1,150 +1,224 @@
 {
   "posts/blog-solution": [
     "2023/04/22/Development/blog-solution",
-    "post/development/blog-solution"
+    "post/development/blog-solution",
+    "/blog-solution",
+    "/blog/blog-solution"
   ],
   "posts/bun-hands-on": [
     "2023/10/24/Development/bun-hands-on",
-    "post/development/bun-hands-on"
+    "post/development/bun-hands-on",
+    "/bun-hands-on",
+    "/blog/bun-hands-on"
   ],
   "posts/covariant-and-contravarirant": [
     "2023/01/24/Development/covariant-and-contravarirant",
-    "post/development/covariant-and-contravarirant"
+    "post/development/covariant-and-contravarirant",
+    "/covariant-and-contravarirant",
+    "/blog/covariant-and-contravarirant"
   ],
   "posts/deep-dive-react-hooks": [
     "2023/06/1/Development/deep-dive-react-hooks",
-    "post/development/deep-dive-react-hooks"
+    "post/development/deep-dive-react-hooks",
+    "/deep-dive-react-hooks",
+    "/blog/deep-dive-react-hooks"
   ],
   "posts/deep-dive-react-redux": [
     "2023/08/14/Development/deep-dive-react-redux",
-    "post/development/deep-dive-react-redux"
+    "post/development/deep-dive-react-redux",
+    "/deep-dive-react-redux",
+    "/blog/deep-dive-react-redux"
   ],
   "posts/do-u-need-memo-and-callback": [
     "2023/08/24/Development/do-u-need-memo-and-callback",
-    "post/development/do-u-need-memo-and-callback"
+    "post/development/do-u-need-memo-and-callback",
+    "/do-u-need-memo-and-callback",
+    "/blog/do-u-need-memo-and-callback"
   ],
   "posts/edm": [
     "2023/03/20/Development/edm",
-    "post/development/edm"
+    "post/development/edm",
+    "/edm",
+    "/blog/edm"
   ],
   "posts/front-end-without-toolchain": [
     "2024/03/30/Development/front-end-without-toolchain",
-    "post/development/front-end-without-toolchain"
+    "post/development/front-end-without-toolchain",
+    "/front-end-without-toolchain",
+    "/blog/front-end-without-toolchain"
   ],
   "posts/hands-on-docker": [
     "2023/07/11/Development/hands-on-docker",
-    "post/development/hands-on-docker"
+    "post/development/hands-on-docker",
+    "/hands-on-docker",
+    "/blog/hands-on-docker"
   ],
   "posts/how-node-resolve-modules": [
     "2024/02/18/Development/how-node-resolve-modules",
-    "post/development/how-node-resolve-modules"
+    "post/development/how-node-resolve-modules",
+    "/how-node-resolve-modules",
+    "/blog/how-node-resolve-modules"
   ],
   "posts/html-form": [
     "2023/05/31/Development/html-form",
-    "post/development/html-form"
+    "post/development/html-form",
+    "/html-form",
+    "/blog/html-form"
   ],
   "posts/javascript-fundamentals": [
     "2023/05/16/Development/javascript-fundamentals",
-    "post/development/javascript-fundamentals"
+    "post/development/javascript-fundamentals",
+    "/javascript-fundamentals",
+    "/blog/javascript-fundamentals"
   ],
   "posts/js-debounce-and-throttle": [
     "2023/05/24/Development/js-debounce-and-throttle",
-    "post/development/js-debounce-and-throttle"
+    "post/development/js-debounce-and-throttle",
+    "/js-debounce-and-throttle",
+    "/blog/js-debounce-and-throttle"
   ],
   "posts/js-event-loop": [
     "2023/04/26/Development/js-event-loop",
-    "post/development/js-event-loop"
+    "post/development/js-event-loop",
+    "/js-event-loop",
+    "/blog/js-event-loop"
   ],
   "posts/microservice-hands-on": [
     "2023/05/25/Development/microservice-hands-on",
-    "post/development/microservice-hands-on"
+    "post/development/microservice-hands-on",
+    "/microservice-hands-on",
+    "/blog/microservice-hands-on"
   ],
   "posts/mobile-web-dev": [
     "2023/08/6/Development/mobile-web-dev",
-    "post/development/mobile-web-dev"
+    "post/development/mobile-web-dev",
+    "/mobile-web-dev",
+    "/blog/mobile-web-dev"
   ],
   "posts/monorepo": [
     "2023/05/26/Development/monorepo",
-    "post/development/monorepo"
+    "post/development/monorepo",
+    "/monorepo",
+    "/blog/monorepo"
   ],
   "posts/npm-peer-dependency": [
     "2023/05/24/Development/npm-peer-dependency",
-    "post/development/npm-peer-dependency"
+    "post/development/npm-peer-dependency",
+    "/npm-peer-dependency",
+    "/blog/npm-peer-dependency"
   ],
   "posts/network-fundamentals": [
     "2023/05/18/Development/network-fundamentals",
-    "post/development/network-fundamentals"
+    "post/development/network-fundamentals",
+    "/network-fundamentals",
+    "/blog/network-fundamentals"
   ],
   "posts/personal-review-fe-in-2023": [
     "2024/01/30/Development/personal-review-fe-in-2023",
-    "post/development/personal-review-fe-in-2023"
+    "post/development/personal-review-fe-in-2023",
+    "/personal-review-fe-in-2023",
+    "/blog/personal-review-fe-in-2023"
   ],
   "posts/pnpm": [
     "2023/06/9/Development/pnpm",
-    "post/development/pnpm"
+    "post/development/pnpm",
+    "/pnpm",
+    "/blog/pnpm"
   ],
   "posts/npm": [
     "2023/06/6/Development/npm",
-    "post/development/npm"
+    "post/development/npm",
+    "/npm",
+    "/blog/npm"
   ],
   "posts/ref-callback": [
     "2023/09/4/Development/ref-callback",
-    "post/development/ref-callback"
+    "post/development/ref-callback",
+    "/ref-callback",
+    "/blog/ref-callback"
   ],
   "posts/shell-shebang": [
     "2023/07/13/Development/shell-shebang",
-    "post/development/shell-shebang"
+    "post/development/shell-shebang",
+    "/shell-shebang",
+    "/blog/shell-shebang"
   ],
   "posts/ssr-from-scratch": [
     "2023/09/21/Development/ssr-from-scratch",
-    "post/development/ssr-from-scratch"
+    "post/development/ssr-from-scratch",
+    "/ssr-from-scratch",
+    "/blog/ssr-from-scratch"
   ],
   "posts/what-is-best-leetcode-lang": [
     "2023/04/12/Development/what-is-best-leetcode-lang",
-    "post/development/what-is-best-leetcode-lang"
+    "post/development/what-is-best-leetcode-lang",
+    "/what-is-best-leetcode-lang",
+    "/blog/what-is-best-leetcode-lang"
   ],
   "posts/web-socket": [
     "2023/07/9/Development/web-socket",
-    "post/development/web-socket"
+    "post/development/web-socket",
+    "/web-socket",
+    "/blog/web-socket"
   ],
   "posts/yarn-berry": [
     "2023/06/8/Development/yarn-berry",
-    "post/development/yarn-berry"
+    "post/development/yarn-berry",
+    "/yarn-berry",
+    "/blog/yarn-berry"
   ],
   "posts/评好逸恶劳大学生": [
     "2022/01/28/Life/评好逸恶劳大学生",
-    "post/life/评好逸恶劳大学生"
+    "post/life/评好逸恶劳大学生",
+    "/评好逸恶劳大学生",
+    "/blog/评好逸恶劳大学生"
   ],
   "posts/20岁随笔": [
     "2021/12/2/Life/20岁随笔",
-    "post/life/20岁随笔"
+    "post/life/20岁随笔",
+    "/20岁随笔",
+    "/blog/20岁随笔"
   ],
   "posts/permutation": [
     "2023/04/19/Research/permutation",
-    "post/research/permutation"
+    "post/research/permutation",
+    "/permutation",
+    "/blog/permutation"
   ],
   "posts/KeePass": [
     "2023/05/23/Technology/KeePass",
-    "post/technology/keepass"
+    "post/technology/keepass",
+    "/KeePass",
+    "/blog/KeePass"
   ],
   "posts/hands-on-csx": [
     "2023/04/11/Technology/hands-on-csx",
-    "post/technology/hands-on-csx"
+    "post/technology/hands-on-csx",
+    "/hands-on-csx",
+    "/blog/hands-on-csx"
   ],
   "posts/python-dev-env": [
     "2023/07/9/Technology/python-dev-env",
-    "post/technology/python-dev-env"
+    "post/technology/python-dev-env",
+    "/python-dev-env",
+    "/blog/python-dev-env"
   ],
   "posts/reshaper-alternatives": [
     "2023/02/14/Technology/reshaper-alternatives",
-    "post/technology/reshaper-alternatives"
+    "post/technology/reshaper-alternatives",
+    "/reshaper-alternatives",
+    "/blog/reshaper-alternatives"
   ],
   "posts/shell-optimize": [
     "2023/08/6/Technology/shell-optimize",
-    "post/technology/shell-optimize"
+    "post/technology/shell-optimize",
+    "/shell-optimize",
+    "/blog/shell-optimize"
   ],
   "posts/win-dev-drive-hands-on": [
     "2023/11/15/Technology/win-dev-drive-hands-on",
-    "post/technology/win-dev-drive-hands-on"
+    "post/technology/win-dev-drive-hands-on",
+    "/win-dev-drive-hands-on",
+    "/blog/win-dev-drive-hands-on"
   ]
 }
