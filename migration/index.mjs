@@ -1,7 +1,7 @@
 import urlMap from './url-map.json' with { type: 'json' }
 
 function normalizeUrl(url) {
-  return `/${url}`
+  return url.startsWith('/') ? url : `/${url}`
 }
 
 /**
