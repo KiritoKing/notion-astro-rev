@@ -1,4 +1,11 @@
 {
+  "nvm-auto-switch": ["/blog/nvm-auto-switch", "/nvm-auto-switch"],
+  "my-ai-tools-recommendation": ["/blog/my-ai-tools-recommendation", "/my-ai-tools-recommendation"],
+  "module-for-browsers": ["/blog/module-for-browsers", "/module-for-browsers"],
+  "all-about-dts": ["/blog/all-about-dts", "/all-about-dts"],
+  "vscode-profile": ["/blog/vscode-profile", "/vscode-profile"],
+  "my-brand-new-blog-system": ["/blog/my-brand-new-blog-system", "/my-brand-new-blog-system"],
+  "arc-browser-alternative": ["/blog/arc-browser-alternative", "/arc-browser-alternative"],
   "blog-solution": [
     "2023/04/22/Development/blog-solution",
     "post/development/blog-solution",
