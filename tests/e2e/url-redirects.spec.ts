@@ -11,7 +11,7 @@ const urlMap = JSON.parse(fs.readFileSync(urlMapPath, 'utf-8'));
 for (const [newUrl, oldUrls] of Object.entries(urlMap)) {
   test.describe(`重定向测试: ${newUrl}`, () => {
     for (const oldUrl of oldUrls as string[]) {
-      test(`从 /${oldUrl} 重定向到 /${newUrl}`, async ({ page }) => {
+      test(`从 ${oldUrl} 重定向到 /${newUrl}`, async ({ page }) => {
         // 设置较长的超时时间
         test.setTimeout(30000);
 
@@ -20,7 +20,9 @@ for (const [newUrl, oldUrls] of Object.entries(urlMap)) {
 
         try {
           // 访问旧 URL，等待导航完成
-          await page.goto(`/${oldUrl}`, { waitUntil: 'networkidle' });
+          // 确保 oldUrl 格式正确，如果以 / 开头则保留，否则添加 /
+          const urlToVisit = oldUrl.startsWith('/') ? oldUrl : `/${oldUrl}`;
+          await page.goto(urlToVisit, { waitUntil: 'networkidle' });
 
           // 等待一段时间，确保重定向完成
           await page.waitForTimeout(5000);
@@ -30,7 +32,9 @@ for (const [newUrl, oldUrls] of Object.entries(urlMap)) {
           console.log(`最终 URL: ${finalUrl}`);
 
           // 如果最终 URL 包含目标路径，测试通过
-          if (finalUrl.includes(`/${newUrl}`)) {
+          // 确保 newUrl 格式正确，如果以 / 开头则保留，否则添加 /
+          const targetUrl = newUrl.startsWith('/') ? newUrl : `/${newUrl}`;
+          if (finalUrl.includes(targetUrl)) {
             console.log(`重定向成功：${oldUrl} -> ${newUrl}`);
           } else {
             // 如果没有重定向到目标 URL，检查页面内容
@@ -47,7 +51,8 @@ for (const [newUrl, oldUrls] of Object.entries(urlMap)) {
               // 在 CI 环境中，我们希望测试失败而不是跳过
               if (isCI) {
                 console.error(`CI 环境中重定向测试失败: ${oldUrl} -> ${newUrl}`);
-                expect(finalUrl).toContain(`/${newUrl}`); // 这将导致测试失败
+                const targetUrl = newUrl.startsWith('/') ? newUrl : `/${newUrl}`;
+                expect(finalUrl).toContain(targetUrl); // 这将导致测试失败
               } else {
                 // 在本地开发环境中，我们可能没有实现完整的重定向
                 // 所以跳过这个测试
@@ -62,9 +67,11 @@ for (const [newUrl, oldUrls] of Object.entries(urlMap)) {
           if (newUrl.match(/[\u4e00-\u9fa5]/)) {
             // 检查是否包含中文
             const decodedUrl = decodeURIComponent(finalUrl);
-            expect(decodedUrl).toContain(`/${newUrl}`);
+            const targetUrl = newUrl.startsWith('/') ? newUrl : `/${newUrl}`;
+            expect(decodedUrl).toContain(targetUrl);
           } else {
-            expect(finalUrl).toContain(`/${newUrl}`);
+            const targetUrl = newUrl.startsWith('/') ? newUrl : `/${newUrl}`;
+            expect(finalUrl).toContain(targetUrl);
           }
 
           // 检查页面内容是否正确加载
