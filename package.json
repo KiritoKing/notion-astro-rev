@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "build": "astro build && pagefind --site dist",
+    "build": "node ./scripts/generate-redirects.mjs && astro build && pagefind --site dist",
     "commitlint": "commitlint --edit",
     "dev": "astro dev",
     "format": "prettier --write ./src",

@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+
 import urlMap from './url-map.json' with { type: 'json' };
 
 function normalizeUrl(url) {
@@ -17,4 +20,37 @@ export function getRedirects() {
     });
   });
   return ret;
+}
+
+/**
+ * Writes a _redirects file to the public directory for use with Netlify/Cloudflare Pages
+ * @param {string} [publicDir='./public'] - Path to the public directory
+ * @returns {void}
+ */
+export function writeRedirectsFile(publicDir = './public') {
+  const redirects = getRedirects();
+  let redirectsContent = '';
+
+  // Convert Astro redirects format to Netlify/Cloudflare Pages format
+  Object.entries(redirects).forEach(([source, destination]) => {
+    // If destination is a string, use 301 (permanent) redirect
+    if (typeof destination === 'string') {
+      redirectsContent += `${source} ${destination} 301\n`;
+    }
+    // If destination is an object with status property
+    else if (typeof destination === 'object' && destination.status) {
+      redirectsContent += `${source} ${destination.destination} ${destination.status}\n`;
+    }
+  });
+
+  // Ensure public directory exists
+  if (!fs.existsSync(publicDir)) {
+    fs.mkdirSync(publicDir, { recursive: true });
+  }
+
+  // Write the _redirects file
+  const redirectsPath = path.join(publicDir, '_redirects');
+  fs.writeFileSync(redirectsPath, redirectsContent);
+
+  console.log(`✅ Generated _redirects file at ${redirectsPath}`);
 }

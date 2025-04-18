@@ -34,3 +34,5 @@ playwright-results
 # notion-astro-loader downloaded
 src/assets/images/notion
 
+# Cloudflare/Netlify redirects
+public/_redirects
