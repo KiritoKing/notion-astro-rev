@@ -55,15 +55,15 @@
   }
   .btn-plain {
     @apply relative flex items-center justify-center bg-none text-black/75 transition hover:text-[var(--primary)] dark:text-white/75 dark:hover:text-[var(--primary)];
-    &:not(.scale-animation) {
-      @apply hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)];
-    }
-    &.scale-animation {
-      @apply expand-animation;
-      &.current-theme-btn {
-        @apply text-[var(--primary)] before:scale-100 before:bg-[var(--btn-plain-bg-hover)] before:opacity-100;
-      }
-    }
+  }
+  .btn-plain:not(.scale-animation) {
+    @apply hover:bg-[var(--btn-plain-bg-hover)] active:bg-[var(--btn-plain-bg-active)];
+  }
+  .btn-plain.scale-animation {
+    @apply expand-animation;
+  }
+  .btn-plain.scale-animation.current-theme-btn {
+    @apply text-[var(--primary)] before:scale-100 before:bg-[var(--btn-plain-bg-hover)] before:opacity-100;
   }
   .btn-regular {
     @apply flex items-center justify-center bg-[var(--btn-regular-bg)] text-[var(--btn-content)] transition hover:bg-[var(--btn-regular-bg-hover)] active:bg-[var(--btn-regular-bg-active)] dark:text-white/75;

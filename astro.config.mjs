@@ -36,9 +36,7 @@ export default defineConfig({
     },
   },
   integrations: [
-    tailwind({
-      nesting: true,
-    }),
+    tailwind(),
     swup({
       theme: false,
       animationClass: 'transition-swup-', // see https://swup.js.org/options/#animationselector
@@ -64,7 +62,7 @@ export default defineConfig({
     svelte(),
     sitemap(),
     Compress({
-      CSS: false,
+      CSS: true,
       HTML: {
         'html-minifier-terser': {
           removeAttributeQuotes: false,
