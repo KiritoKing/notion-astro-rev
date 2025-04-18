@@ -1,105 +1,107 @@
-.custom-md {
-  h1 {
-    @apply text-3xl;
-  }
+.custom-md h1 {
+  @apply text-3xl;
+}
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    .anchor {
-      @apply -m-0.5 ml-[0.2ch] select-none p-0.5 no-underline opacity-0 transition !important;
+.custom-md h1 .anchor,
+.custom-md h2 .anchor,
+.custom-md h3 .anchor,
+.custom-md h4 .anchor,
+.custom-md h5 .anchor,
+.custom-md h6 .anchor {
+  @apply -m-0.5 ml-[0.2ch] select-none p-0.5 no-underline opacity-0 transition !important;
+}
 
-      .anchor-icon {
-        @apply mx-[0.45ch] !important;
-      }
-    }
+.custom-md h1 .anchor .anchor-icon,
+.custom-md h2 .anchor .anchor-icon,
+.custom-md h3 .anchor .anchor-icon,
+.custom-md h4 .anchor .anchor-icon,
+.custom-md h5 .anchor .anchor-icon,
+.custom-md h6 .anchor .anchor-icon {
+  @apply mx-[0.45ch] !important;
+}
 
-    &:hover {
-      .anchor {
-        @apply opacity-100 !important;
-      }
-    }
-  }
+.custom-md h1:hover .anchor,
+.custom-md h2:hover .anchor,
+.custom-md h3:hover .anchor,
+.custom-md h4:hover .anchor,
+.custom-md h5:hover .anchor,
+.custom-md h6:hover .anchor {
+  @apply opacity-100 !important;
+}
 
-  a:not(.no-styling) {
-    @apply link relative bg-none font-medium text-[var(--primary)] underline decoration-[var(--link-underline)] decoration-dashed decoration-1 underline-offset-4;
+.custom-md a:not(.no-styling) {
+  @apply link relative bg-none font-medium text-[var(--primary)] underline decoration-[var(--link-underline)] decoration-dashed decoration-1 underline-offset-4;
+}
 
-    &:hover,
-    &:active {
-      @apply decoration-transparent;
-    }
-  }
+.custom-md a:not(.no-styling):hover,
+.custom-md a:not(.no-styling):active {
+  @apply decoration-transparent;
+}
 
-  code {
-    @apply overflow-hidden rounded-md bg-[var(--inline-code-bg)] px-1 py-0.5 text-[var(--inline-code-color)];
+.custom-md code {
+  @apply overflow-hidden rounded-md bg-[var(--inline-code-bg)] px-1 py-0.5 text-[var(--inline-code-color)];
+  font-family:
+    'JetBrains Mono Variable',
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    Liberation Mono,
+    Courier New,
+    monospace;
+  counter-reset: line;
+}
 
-    font-family:
-      'JetBrains Mono Variable',
-      ui-monospace,
-      SFMono-Regular,
-      Menlo,
-      Monaco,
-      Consolas,
-      Liberation Mono,
-      Courier New,
-      monospace;
-    &:before {
-      content: none;
-    }
-    &:after {
-      content: none;
-    }
+.custom-md code:before {
+  content: none;
+}
 
-    counter-reset: line;
-    span.line {
-      &:before {
-        @apply mr-4 inline-block w-4 text-white/25;
-        content: counter(line);
-        counter-increment: line;
-        direction: rtl;
-      }
-      &:last-child:empty,
-      &:last-child:has(> span:empty:only-child) {
-        display: none;
-      }
-    }
-  }
+.custom-md code:after {
+  content: none;
+}
 
-  pre {
-    @apply bg-[var(--codeblock-bg)] !important;
-    @apply rounded-xl px-5;
+.custom-md code span.line:before {
+  @apply mr-4 inline-block w-4 text-white/25;
+  content: counter(line);
+  counter-increment: line;
+  direction: rtl;
+}
 
-    code {
-      @apply bg-transparent p-0 text-sm text-inherit;
+.custom-md code span.line:last-child:empty,
+.custom-md code span.line:last-child:has(> span:empty:only-child) {
+  display: none;
+}
 
-      ::selection {
-        @apply bg-[var(--codeblock-selection)];
-      }
-    }
-  }
+.custom-md pre {
+  @apply bg-[var(--codeblock-bg)] !important;
+  @apply rounded-xl px-5;
+}
 
-  ul,
-  ol {
-    li::marker {
-      @apply text-[var(--primary)];
-    }
-  }
+.custom-md pre code {
+  @apply bg-transparent p-0 text-sm text-inherit;
+}
 
-  blockquote {
-    @apply relative border-transparent not-italic;
-    font-weight: inherit;
+.custom-md pre code ::selection {
+  @apply bg-[var(--codeblock-selection)];
+}
 
-    &:before {
-      @apply absolute -left-1 block h-full w-1 rounded-full bg-[var(--btn-regular-bg)] transition content-[''];
-    }
+.custom-md ul li::marker,
+.custom-md ol li::marker {
+  @apply text-[var(--primary)];
+}
 
-    /* Remove the double quotes from default styles */
-    p:before,
-    p:after {
-      @apply content-none;
-    }
-  }
+.custom-md blockquote {
+  @apply relative border-transparent not-italic;
+  font-weight: inherit;
+}
+
+.custom-md blockquote:before {
+  @apply absolute -left-1 block h-full w-1 rounded-full bg-[var(--btn-regular-bg)] transition content-[''];
+}
+
+/* Remove the double quotes from default styles */
+.custom-md blockquote p:before,
+.custom-md blockquote p:after {
+  @apply content-none;
 }
