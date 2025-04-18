@@ -72,7 +72,7 @@ const coverWidth = '28%';
     </div>
 
     <!-- word count and read time  -->
-    <div class="flex gap-4 text-sm text-black/30 transition dark:text-white/30">
+    <!-- <div class="flex gap-4 text-sm text-black/30 transition dark:text-white/30">
       <div>
         {'0 Words'}
         {' ' + i18n(I18nKey.wordsCount)}
@@ -83,46 +83,50 @@ const coverWidth = '28%';
         {' ' + i18n(I18nKey.minutesCount)}
       </div>
     </div>
-  </div>
+  </div> -->
 
-  {
-    hasCover && (
-      <a
-        href={url}
-        aria-label={title}
-        class:list={[
-          'group',
-          'mx-4 -mb-2 mt-4 max-h-[20vh] md:mx-0 md:mb-0 md:mt-0 md:max-h-none',
-          'relative overflow-hidden rounded-xl active:scale-95 md:absolute md:bottom-3 md:right-3 md:top-3 md:w-[var(--coverWidth)]',
-        ]}
-      >
-        <div class="pointer-events-none absolute z-10 h-full w-full transition group-hover:bg-black/30 group-active:bg-black/50" />
-        <div class="pointer-events-none absolute z-20 flex h-full w-full items-center justify-center">
+    {
+      hasCover && (
+        <a
+          href={url}
+          aria-label={title}
+          class:list={[
+            'group',
+            'mx-4 -mb-2 mt-4 max-h-[20vh] md:mx-0 md:mb-0 md:mt-0 md:max-h-none',
+            'relative overflow-hidden rounded-xl active:scale-95 md:absolute md:bottom-3 md:right-3 md:top-3 md:w-[var(--coverWidth)]',
+          ]}
+        >
+          <div class="pointer-events-none absolute z-10 h-full w-full transition group-hover:bg-black/30 group-active:bg-black/50" />
+          <div class="pointer-events-none absolute z-20 flex h-full w-full items-center justify-center">
+            <Icon
+              name="material-symbols:chevron-right-rounded"
+              class="scale-50 text-5xl text-white opacity-0 transition group-hover:scale-100 group-hover:opacity-100"
+            />
+          </div>
+          <ImageWrapper src={image} alt="Cover Image of the Post" class="h-full w-full" />
+        </a>
+      )
+    }
+
+    {
+      !hasCover && (
+        <a
+          href={url}
+          aria-label={title}
+          class="btn-regular absolute bottom-3 right-3 top-3 !hidden w-[3.25rem] rounded-xl bg-[var(--enter-btn-bg)] hover:bg-[var(--enter-btn-bg-hover)] active:scale-95 active:bg-[var(--enter-btn-bg-active)] md:!flex"
+        >
           <Icon
             name="material-symbols:chevron-right-rounded"
-            class="scale-50 text-5xl text-white opacity-0 transition group-hover:scale-100 group-hover:opacity-100"
+            class="mx-auto text-4xl text-[var(--primary)] transition"
           />
-        </div>
-        <ImageWrapper src={image} alt="Cover Image of the Post" class="h-full w-full" />
-      </a>
-    )
-  }
+        </a>
+      )
+    }
+  </div>
+  <div
+    class="mx-6 border-t-[1px] border-dashed border-black/10 transition last:border-t-0 dark:border-white/[0.15] md:hidden"
+  >
+  </div>
 
-  {
-    !hasCover && (
-      <a
-        href={url}
-        aria-label={title}
-        class="btn-regular absolute bottom-3 right-3 top-3 !hidden w-[3.25rem] rounded-xl bg-[var(--enter-btn-bg)] hover:bg-[var(--enter-btn-bg-hover)] active:scale-95 active:bg-[var(--enter-btn-bg-active)] md:!flex"
-      >
-        <Icon name="material-symbols:chevron-right-rounded" class="mx-auto text-4xl text-[var(--primary)] transition" />
-      </a>
-    )
-  }
+  <style define:vars={{ coverWidth }}></style>
 </div>
-<div
-  class="mx-6 border-t-[1px] border-dashed border-black/10 transition last:border-t-0 dark:border-white/[0.15] md:hidden"
->
-</div>
-
-<style define:vars={{ coverWidth }}></style>
