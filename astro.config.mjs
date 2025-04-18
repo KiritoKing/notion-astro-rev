@@ -64,7 +64,7 @@ export default defineConfig({
     svelte(),
     sitemap(),
     Compress({
-      CSS: true,
+      CSS: false,
       HTML: {
         'html-minifier-terser': {
           removeAttributeQuotes: false,
