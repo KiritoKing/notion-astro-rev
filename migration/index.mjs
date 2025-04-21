@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-import urlMap from './url-map.json' with { type: 'json' };
+// Read and parse JSON file using fs instead of 'with' syntax for Node.js 18 compatibility
+const urlMap = JSON.parse(fs.readFileSync(new URL('./url-map.json', import.meta.url), 'utf8'));
 
 function normalizeUrl(url) {
   return url.startsWith('/') ? url : `/${url}`;
