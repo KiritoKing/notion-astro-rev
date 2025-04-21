@@ -174,3 +174,7 @@
 .notion-callout > .notion-callout-icon {
   margin-right: 0.8rem;
 }
+
+.giscus {
+  @apply pt-4 lg:pt-6;
+}
