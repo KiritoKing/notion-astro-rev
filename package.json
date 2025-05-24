@@ -16,7 +16,9 @@
     "preview": "astro preview",
     "start": "astro dev",
     "test:e2e": "playwright test",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf .astro dist node_modules/.astro",
+    "clean:image": "rimraf .astro dist node_modules/.astro src/assets/images/notion"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -27,7 +29,7 @@
     "@astrojs/ts-plugin": "^1.10.4",
     "@astrolib/analytics": "^0.6.1",
     "@biomejs/biome": "1.8.3",
-    "@chlorinec-pkgs/notion-astro-loader": "*",
+    "@chlorinec-pkgs/notion-astro-loader": "^1.1.2",
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
     "@eslint/eslintrc": "^3.3.1",
@@ -95,5 +97,8 @@
     "unpic": "^3.22.0",
     "wrangler": "*"
   },
-  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321"
+  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321",
+  "devDependencies": {
+    "rimraf": "^6.0.1"
+  }
 }
