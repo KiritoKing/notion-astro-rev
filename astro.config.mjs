@@ -62,10 +62,20 @@ export default defineConfig({
     svelte(),
     sitemap(),
     Compress({
-      CSS: true,
+      CSS: {
+        lightningcss: {
+          minify: true,
+          sourceMap: false,
+          drafts: {
+            nesting: true,
+          },
+          errorRecovery: true, // 添加错误恢复选项
+        },
+      },
       HTML: {
         'html-minifier-terser': {
           removeAttributeQuotes: false,
+          decodeEntities: true, // 解码 HTML 实体
         },
       },
       Image: false,
